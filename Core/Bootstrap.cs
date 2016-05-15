@@ -43,18 +43,18 @@ namespace LeagueSharp.SDK
 
         #region Public Methods and Operators
 
+        
         /// <summary>
-        ///     External attachment handle for the Sandbox to load in the SDK library.
+        /// Initializes the whole SDK. It is safe to call in your code at any point.
         /// </summary>
-        /// <param name="args">
-        ///     The additional arguments the loader passes.
-        /// </param>
+        /// <param name="args">Not currently used or needed.</param>
+        /// <returns>true if SDK is loaded, false if it is not</returns>
         [PermissionSet(SecurityAction.Assert, Unrestricted = true)]
-        public static void Init(string[] args)
+        public static bool Init(string[] args = null)
         {
             if (initialized)
             {
-                return;
+                return true;
             }
 
             initialized = true;
@@ -65,48 +65,51 @@ namespace LeagueSharp.SDK
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             // Initial notification.
-            Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
+            Logging.Write()(LogLevel.Info, "[-- SDKEx Bootstrap Loading --]");
 
             // Load Resource Content.
             ResourceLoader.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Resources Initialized.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Resources Initialized.");
 
             // Load GameObjects.
             GameObjects.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] GameObjects Initialized.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] GameObjects Initialized.");
 
             // Create L# menu
             Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp", true).Attach();
             MenuCustomizer.Initialize(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] LeagueSharp Menu Created.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] LeagueSharp Menu Created.");
 
             // Load the Orbwalker
             Variables.Orbwalker = new Orbwalker(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Orbwalker Initialized.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Orbwalker Initialized.");
 
             // Load the TargetSelector.
             Variables.TargetSelector = new TargetSelector(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] TargetSelector Initialized.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] TargetSelector Initialized.");
 
             // Load the Notifications
             Notifications.Initialize(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Notifications Initialized.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Notifications Initialized.");
 
             // Load the ThemeManager
             ThemeManager.Initialize(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] ThemeManager Initialized.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] ThemeManager Initialized.");
 
             // Load Damages.
             Damage.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] Damage Library Initialized.");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Damage Library Initialized.");
 
             // Load Language
             MultiLanguage.LoadTranslation();
-            Logging.Write()(LogLevel.Info, "[SDK Bootstrap] MultiLanguage Initialized");
+            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] MultiLanguage Initialized");
 
             // Final notification.
-            Logging.Write()(LogLevel.Info, "[-- SDK Bootstrap Loading --]");
-        }
+            Logging.Write()(LogLevel.Info, "[-- SDKEx Bootstrap Loading --]");
+
+            // Tell the developer everything succeeded
+            return initialized;
+    ;    }
 
         #endregion
     }
