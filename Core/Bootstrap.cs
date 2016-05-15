@@ -109,7 +109,7 @@ namespace LeagueSharp.SDK
 
             // Tell the developer everything succeeded
             return initialized;
-    ;    }
+        }
 
         #endregion
     }
