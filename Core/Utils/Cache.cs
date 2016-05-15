@@ -162,7 +162,7 @@ namespace LeagueSharp.SDK.Utils
         public override bool Add(string key, object value, DateTimeOffset absoluteExpiration, string regionName = null)
         {
             return this.Add(
-                new CacheItem(key, value),
+                new CacheItem(key, value, regionName),
                 new CacheItemPolicy() { AbsoluteExpiration = absoluteExpiration });
         }
 
@@ -508,11 +508,21 @@ namespace LeagueSharp.SDK.Utils
                 this.InternalCache[DefaultCacheRegionName].ToDictionary(x => x.Key, x => x.Value.Value).GetEnumerator();
         }
 
+        /// <summary>
+        /// Adds or gets an existing cache region.
+        /// </summary>
+        /// <param name="item">The cache item.</param>
+        /// <returns></returns>
         private Dictionary<string, CacheEntryItem> AddOrGetExistingCacheRegion(CacheItem item)
         {
             return this.AddOrGetExistingCacheRegion(item.RegionName);
         }
 
+        /// <summary>
+        /// Adds or gets an existing cache region.
+        /// </summary>
+        /// <param name="regionName">Name of the region.</param>
+        /// <returns></returns>
         private Dictionary<string, CacheEntryItem> AddOrGetExistingCacheRegion(string regionName)
         {
             Dictionary<string, CacheEntryItem> cacheRegion;
@@ -528,10 +538,14 @@ namespace LeagueSharp.SDK.Utils
             return cacheRegion;
         }
 
+        /// <summary>
+        /// Validates the policy.
+        /// </summary>
+        /// <param name="item">The item.</param>
         private void ValidatePolicy(CacheEntryItem item)
         {
-            if (DateTime.Now - item.LastAccessed < item.SlidingExpiration
-                && item.Expiration.Ticks - DateTime.Now.Ticks > 0)
+            if ((item.SlidingExpiration != new TimeSpan() && DateTime.Now - item.LastAccessed < item.SlidingExpiration)
+                || (item.Expiration != new DateTimeOffset() && item.Expiration.Ticks - DateTimeOffset.Now.Ticks > 0))
             {
                 item.LastAccessed = DateTime.Now;
                 return;
@@ -539,7 +553,7 @@ namespace LeagueSharp.SDK.Utils
 
             item.EntryRemovedCallback(
                 new CacheEntryRemovedArguments(this, CacheEntryRemovedReason.Expired, item.ToCacheItem()));
-            this.InternalCache[item.RegionName].Remove(item.Key);
+            this.InternalCache[item.RegionName ?? DefaultCacheRegionName].Remove(item.Key);
         }
 
         #endregion
@@ -556,13 +570,15 @@ namespace LeagueSharp.SDK.Utils
         {
             this.Key = item.Key;
             this.Value = item.Value;
-            this.RegionName = item.RegionName;
+            this.RegionName = item.RegionName ?? Cache.DefaultCacheRegionName;
 
             this.Expiration = policy.AbsoluteExpiration;
             this.ChangeMonitors = policy.ChangeMonitors;
-            this.EntryRemovedCallback = policy.RemovedCallback;
-            this.EntryUpdateCallback = policy.UpdateCallback;
+            this.EntryRemovedCallback = policy.RemovedCallback ?? delegate { };
+            this.EntryUpdateCallback = policy.UpdateCallback ?? delegate { };
             this.SlidingExpiration = policy.SlidingExpiration;
+
+            this.LastAccessed = DateTime.Now;
         }
 
         #endregion
