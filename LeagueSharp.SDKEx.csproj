@@ -399,7 +399,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="LeagueSharp.SDKEX.snk" />
+    <None Include="LeagueSharp.SDKEx.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
