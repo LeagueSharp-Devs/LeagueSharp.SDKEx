@@ -2,10 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Resources;
-    using System.Security.Cryptography;
-    using System.Text;
 
     using LeagueSharp.Sandbox;
     using LeagueSharp.SDK.Enumerations;
@@ -39,7 +36,7 @@
             try
             {
                 var languageStrings =
-                    new ResourceManager("LeagueSharp.SDK.Properties.Resources", typeof(Resources).Assembly).GetString(
+                    new ResourceManager("LeagueSharp.SDK.Properties.Translations", typeof(Resources).Assembly).GetString(
                         languageName + "Json");
 
                 if (string.IsNullOrEmpty(languageStrings))
@@ -70,6 +67,10 @@
                 {
                     LoadLanguage("Chinese");
                 }
+                else if (selectLanguage == "Traditional-Chinese")
+                {
+                    LoadLanguage("TraditionalChinese");
+                }
                 else
                 {
                     // ignore
@@ -93,23 +94,6 @@
             return translations.ContainsKey(textToTranslateToLower)
                        ? translations[textToTranslateToLower]
                        : (translations.ContainsKey(textToTranslate) ? translations[textToTranslate] : textToTranslate);
-        }
-
-        #endregion
-
-        #region Methods
-
-        private static string DesDecrypt(string decryptString, string key)
-        {
-            var keyBytes = Encoding.UTF8.GetBytes(key.Substring(0, 8));
-            var keyIV = keyBytes;
-            var inputByteArray = Convert.FromBase64String(decryptString);
-            var provider = new DESCryptoServiceProvider();
-            var mStream = new MemoryStream();
-            var cStream = new CryptoStream(mStream, provider.CreateDecryptor(keyBytes, keyIV), CryptoStreamMode.Write);
-            cStream.Write(inputByteArray, 0, inputByteArray.Length);
-            cStream.FlushFinalBlock();
-            return Encoding.UTF8.GetString(mStream.ToArray());
         }
 
         #endregion
