@@ -392,6 +392,11 @@
     <Compile Include="Third_Party\MoreLinq\Trace.cs" />
     <Compile Include="Third_Party\MoreLinq\Zip.cs" />
     <Compile Include="Third_Party\MoreLinq\ZipLongest.cs" />
+    <Compile Include="Properties\Translations.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Translations.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="LeagueSharp.SDKEx.snk" />
@@ -415,6 +420,11 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Translations.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translations.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
