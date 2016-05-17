@@ -7,7 +7,7 @@
     <ProjectGuid>{84C40F29-82FB-42CC-9E75-A229D875DC40}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LeagueSharp.SDK</RootNamespace>
+    <RootNamespace>LeagueSharp.SDKEx</RootNamespace>
     <AssemblyName>LeagueSharp.SDKEx</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
