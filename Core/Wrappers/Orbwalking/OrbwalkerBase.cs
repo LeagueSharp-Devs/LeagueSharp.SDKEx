@@ -184,6 +184,11 @@ namespace LeagueSharp.SDK
         /// </summary>
         protected bool MovementState { get; set; } = true;
 
+        /// <summary>
+        ///     Force orbwalker to orbwalk to a point. Set to null to stop forcing.
+        /// </summary>
+        public Vector3? ForceOrbwalkingPoint { get; set; } = null;
+
         #endregion
 
         #region Public Methods and Operators
@@ -452,7 +457,7 @@ namespace LeagueSharp.SDK
 
             if (!this.InActiveMode.Equals(this.ActiveMode))
             {
-                this.Orbwalk();
+                this.Orbwalk(null, this.ForceOrbwalkingPoint);
             }
         }
 
