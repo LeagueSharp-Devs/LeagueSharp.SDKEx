@@ -25,7 +25,9 @@ namespace LeagueSharp.SDK.Utils
     using System.Reflection;
     using System.Runtime.Serialization;
 
-    using LeagueSharp.SDK.Enumerations;
+    using NLog;
+
+    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     /// <summary>
     ///     The storage, main purpose is to save share-able settings between assemblies.
@@ -350,7 +352,7 @@ namespace LeagueSharp.SDK.Utils
                     }
                     catch (Exception e)
                     {
-                        Logging.Write()(LogLevel.Error, "Unable to save field {0}\n{1}", field.Name, e);
+                        LogManager.GetCurrentClassLogger().Error(e, $"Unable to save field {field.Name}");
                     }
                 }
 
@@ -371,7 +373,7 @@ namespace LeagueSharp.SDK.Utils
                     }
                     catch (Exception e)
                     {
-                        Logging.Write()(LogLevel.Error, "Unable to save property {0}\n{1}", property.Name, e);
+                        LogManager.GetCurrentClassLogger().Error(e, $"Unable to save property {property.Name}");
                     }
                 }
             }

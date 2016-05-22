@@ -25,6 +25,8 @@ namespace LeagueSharp.SDK
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
+    using NLog;
+
     /// <summary>
     ///     Provides an event for when the game starts.
     /// </summary>
@@ -66,7 +68,7 @@ namespace LeagueSharp.SDK
                 }
                 catch (Exception e)
                 {
-                    Logging.Write()(LogLevel.Fatal, "Failure to invoke invocation.\n{0}", e);
+                    LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
         }

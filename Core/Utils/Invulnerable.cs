@@ -24,6 +24,8 @@ namespace LeagueSharp.SDK.Utils
 
     using LeagueSharp.SDK.Enumerations;
 
+    using NLog;
+
     /// <summary>
     ///     Invulnerable utility class
     /// </summary>
@@ -201,7 +203,7 @@ namespace LeagueSharp.SDK.Utils
             }
             catch (Exception ex)
             {
-                Logging.Write()(LogLevel.Error, ex);
+                LogManager.GetCurrentClassLogger().Error(ex);
             }
             return false;
         }

@@ -24,6 +24,8 @@ namespace LeagueSharp.SDK.Utils
 
     using LeagueSharp.SDK.Enumerations;
 
+    using NLog;
+
     internal static class ResourceLoader
     {
         #region Public Methods and Operators
@@ -63,7 +65,7 @@ namespace LeagueSharp.SDK.Utils
                     }
                     catch (Exception e)
                     {
-                        Logging.Write()(LogLevel.Error, e);
+                        LogManager.GetCurrentClassLogger().Error(e);
                     }
                 }
             }

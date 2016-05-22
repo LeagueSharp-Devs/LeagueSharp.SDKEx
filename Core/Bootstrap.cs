@@ -17,14 +17,24 @@
 
 namespace LeagueSharp.SDK
 {
+    using System;
+    using System.Diagnostics;
     using System.Globalization;
+    using System.Linq;
+    using System.Reflection;
     using System.Security.Permissions;
     using System.Threading;
 
-    using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.UI.Skins;
     using LeagueSharp.SDK.Utils;
+
+    using NLog;
+    using NLog.Config;
+    using NLog.Layouts;
+    using NLog.Targets;
+
+    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -43,7 +53,6 @@ namespace LeagueSharp.SDK
 
         #region Public Methods and Operators
 
-        
         /// <summary>
         /// Initializes the whole SDK. It is safe to call in your code at any point.
         /// </summary>
@@ -64,48 +73,72 @@ namespace LeagueSharp.SDK
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
+            // Add file logger target and file logging rule
+            var fileTarget = new FileTarget();
+            LogManager.Configuration.AddTarget("file", fileTarget);
+            fileTarget.FileName = Constants.LogDirectory + "/${shortdate}.log";
+            fileTarget.Layout = "${longdate} ${uppercase:${level}} ${message}";
+            fileTarget.ReplaceFileContentsOnEachWrite = true;
+            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Debug, fileTarget));
+
+            var logger = LogManager.GetCurrentClassLogger();
+            
+            // Log unhandled exceptions
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+                { 
+                    var exception = eventArgs.ExceptionObject as Exception;
+
+                    // Check if exception came from us
+                    if (exception != null && exception.Source.Equals(Assembly.GetExecutingAssembly().FullName))
+                    {
+                        // Get the logger from the class that threw the exception and log it
+                        LogManager.GetCurrentClassLogger(new StackTrace().GetFrame(1).GetMethod().DeclaringType)
+                            .Fatal(exception);
+                    }
+                };
+
             // Initial notification.
-            Logging.Write()(LogLevel.Info, "[-- SDKEx Bootstrap Loading --]");
+            logger.Info("SDKEx Loading");
 
             // Load Resource Content.
             ResourceLoader.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Resources Initialized.");
+            logger.Info("Resources Initialized.");
 
             // Load GameObjects.
             GameObjects.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] GameObjects Initialized.");
+            logger.Info("GameObjects Initialized.");
 
             // Create L# menu
             Variables.LeagueSharpMenu = new Menu("LeagueSharp", "LeagueSharp", true).Attach();
             MenuCustomizer.Initialize(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] LeagueSharp Menu Created.");
+            logger.Info("LeagueSharp Menu Created.");
 
             // Load the Orbwalker
             Variables.Orbwalker = new Orbwalker(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Orbwalker Initialized.");
+            logger.Info("Orbwalker Initialized.");
 
             // Load the TargetSelector.
             Variables.TargetSelector = new TargetSelector(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] TargetSelector Initialized.");
+            logger.Info("TargetSelector Initialized.");
 
             // Load the Notifications
             Notifications.Initialize(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Notifications Initialized.");
+            logger.Info("Notifications Initialized.");
 
             // Load the ThemeManager
             ThemeManager.Initialize(Variables.LeagueSharpMenu);
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] ThemeManager Initialized.");
+            logger.Info("ThemeManager Initialized.");
 
             // Load Damages.
             Damage.Initialize();
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] Damage Library Initialized.");
+            logger.Info("Damage Library Initialized.");
 
             // Load Language
             MultiLanguage.LoadTranslation();
-            Logging.Write()(LogLevel.Info, "[SDKEx Bootstrap] MultiLanguage Initialized");
+            logger.Info("Translations Initialized.");
 
             // Final notification.
-            Logging.Write()(LogLevel.Info, "[-- SDKEx Bootstrap Loading --]");
+            logger.Info($"SDKEx Version {Assembly.GetExecutingAssembly().GetName().Version} Loaded!");
 
             // Tell the developer everything succeeded
             return initialized;

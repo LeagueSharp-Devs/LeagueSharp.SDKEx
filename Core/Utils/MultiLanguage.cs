@@ -5,10 +5,13 @@
     using System.Resources;
 
     using LeagueSharp.Sandbox;
-    using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Properties;
 
     using Newtonsoft.Json;
+
+    using NLog;
+
+    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     /// <summary>
     ///     Provides multi-lingual strings.
@@ -49,7 +52,7 @@
             }
             catch (Exception ex)
             {
-                Logging.Write()(LogLevel.Error, $"[MultiLanguage] Load Language Catch Exception：{ex.Message}");
+                LogManager.GetCurrentClassLogger().Fatal(ex);
                 return false;
             }
         }
@@ -78,7 +81,7 @@
             }
             catch (Exception ex)
             {
-                Logging.Write()(LogLevel.Error, $"[MultiLanguage] Load Translation Catch Exception：{ex.Message}");
+                LogManager.GetCurrentClassLogger().Fatal(ex);
             }
         }
 

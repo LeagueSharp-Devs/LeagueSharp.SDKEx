@@ -22,6 +22,8 @@ namespace LeagueSharp.SDK.Utils
 
     using LeagueSharp.SDK.Enumerations;
 
+    using NLog;
+
     /// <summary>
     ///     Dynamic instantiation from classes
     /// </summary>
@@ -82,7 +84,7 @@ namespace LeagueSharp.SDK.Utils
             }
             catch (Exception ex)
             {
-                Logging.Write()(LogLevel.Error, ex);
+                LogManager.GetCurrentClassLogger().Error(ex);
             }
             return null;
         }

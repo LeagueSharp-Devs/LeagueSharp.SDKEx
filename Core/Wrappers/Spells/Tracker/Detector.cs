@@ -8,6 +8,8 @@
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
+    using NLog;
+
     using SharpDX;
 
     public class Detector
@@ -180,10 +182,8 @@
                 }
                 catch (Exception)
                 {
-                    Logging.Write()(
-                        LogLevel.Warn,
-                        "Wrong SpellType for Skillshot {0}, a Missile Type was expected",
-                        skillshot.SData.SpellName);
+                    LogManager.GetCurrentClassLogger()
+                        .Warn($"Wrong SpellType for SkillShot {skillshot.SData.SpellName}, a missile type was expected but instead got a {missile.GetType().Name}.");
                 }
             }
 

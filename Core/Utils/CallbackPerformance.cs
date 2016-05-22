@@ -21,7 +21,9 @@ namespace LeagueSharp.SDK.Utils
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
 
-    using LeagueSharp.SDK.Enumerations;
+    using NLog;
+
+    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     /// <summary>
     ///     Performance class, measures how much time does a function takes to execute.
@@ -57,20 +59,17 @@ namespace LeagueSharp.SDK.Utils
 
                 stopwatch.Stop();
 
-                Logging.Write()(
-                    LogLevel.Info,
-                    "{0} has taken {1} elapsed milliseconds to execute, and was executed successfuly.",
-                    memberName,
-                    stopwatch.ElapsedMilliseconds);
+                LogManager.GetCurrentClassLogger()
+                    .Info(
+                        $"{memberName} has taken {stopwatch.ElapsedMilliseconds} elapsed milliseconds to execute, and was executed successfuly.");
 
                 return stopwatch.ElapsedMilliseconds;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Logging.Write()(
-                    LogLevel.Error,
-                    "{0} had an error during execution and was unable to be measured.",
-                    memberName);
+                LogManager.GetCurrentClassLogger()
+                    .Error(e, $"{memberName} had an error during execution and was unable to be measured.");
+
                 return -1L;
             }
         }
@@ -99,20 +98,17 @@ namespace LeagueSharp.SDK.Utils
 
                 stopwatch.Stop();
 
-                Logging.Write()(
-                    LogLevel.Info,
-                    "{0} has taken {1} elapsed ticks to execute, and was executed successfuly.",
-                    memberName,
-                    stopwatch.ElapsedTicks);
+                LogManager.GetCurrentClassLogger()
+                    .Info(
+                        $"{memberName} has taken {stopwatch.ElapsedTicks} elapsed ticks to execute, and was executed successfuly.");
 
                 return stopwatch.ElapsedTicks;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Logging.Write()(
-                    LogLevel.Error,
-                    "{0} had an error during execution and was unable to be measured.",
-                    memberName);
+                LogManager.GetCurrentClassLogger()
+                    .Error(e, $"{memberName} had an error during execution and was unable to be measured.");
+
                 return -1L;
             }
         }
@@ -141,20 +137,17 @@ namespace LeagueSharp.SDK.Utils
 
                 stopwatch.Stop();
 
-                Logging.Write()(
-                    LogLevel.Info,
-                    "{0} has taken {1} elapsed time span to execute, and was executed successfuly.",
-                    memberName,
-                    stopwatch.Elapsed);
+                LogManager.GetCurrentClassLogger()
+                    .Info(
+                        $"{memberName} has taken {stopwatch.Elapsed} elapsed time span to execute, and was executed successfuly.");
 
                 return stopwatch.Elapsed;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Logging.Write()(
-                    LogLevel.Error,
-                    "{0} had an error during execution and was unable to be measured.",
-                    memberName);
+                LogManager.GetCurrentClassLogger()
+                    .Error(e, $"{memberName} had an error during execution and was unable to be measured.");
+
                 return TimeSpan.Zero;
             }
         }

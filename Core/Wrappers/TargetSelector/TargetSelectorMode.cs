@@ -27,6 +27,8 @@ namespace LeagueSharp.SDK
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 
+    using NLog;
+
     /// <summary>
     ///     The mode menu for the TargetSelector
     /// </summary>
@@ -185,7 +187,7 @@ namespace LeagueSharp.SDK
             }
             catch (Exception ex)
             {
-                Logging.Write()(LogLevel.Error, ex);
+                LogManager.GetCurrentClassLogger().Error(ex);
             }
 
             return new List<Obj_AI_Hero>();

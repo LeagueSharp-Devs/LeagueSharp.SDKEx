@@ -8,9 +8,12 @@
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
+    using NLog;
+
     using SharpDX;
 
     using Color = System.Drawing.Color;
+    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     public class Skillshot : BaseSpell
     {
@@ -77,11 +80,10 @@
 
                     if (this.StartPosition == Vector2.Zero)
                     {
-                        Logging.Write()(
-                            LogLevel.Warn,
-                            "[Skillshot] Couldn't find the start position for skillshot: {0}, FromObject: {1}",
-                            this,
-                            this.SData.FromObject);
+                        LogManager.GetCurrentClassLogger()
+                            .Warn(
+                                $"Couldn't find the start position for skillshot: {this}, FromObject: {this.SData.FromObject}");
+  
                         return false;
                     }
                 }

@@ -25,6 +25,8 @@ namespace LeagueSharp.SDK
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.Utils;
 
+    using NLog;
+
     using SharpDX;
 
     /// <summary>
@@ -209,7 +211,7 @@ namespace LeagueSharp.SDK
         /// <param name="exception">Exception to log.</param>
         public static void Log(this Exception exception)
         {
-            Logging.Write(true)(LogLevel.Error, exception.Message);
+            LogManager.GetCurrentClassLogger().Error(exception);
         }
 
         /// <summary>

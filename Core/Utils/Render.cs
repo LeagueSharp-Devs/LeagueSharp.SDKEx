@@ -8,13 +8,14 @@
     using System.Linq;
     using System.Threading;
 
-    using LeagueSharp.SDK.Enumerations;
+    using NLog;
 
     using SharpDX;
     using SharpDX.Direct3D9;
 
     using Color = System.Drawing.Color;
     using Font = SharpDX.Direct3D9.Font;
+    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     /// <summary>
     ///     The render class allows you to draw stuff using SharpDX easier.
@@ -139,7 +140,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logging.Write()(LogLevel.Error, "[SDK.Render] Cannot prepare RenderObjects for drawing. Ex:" + e);
+                    LogManager.GetCurrentClassLogger().Error(e, "Could not prepare RenderObjects for drawing.");
                 }
             }
         }
@@ -659,7 +660,7 @@
                 catch (Exception e)
                 {
                     vertices = null;
-                    Logging.Write()(LogLevel.Error, "SDK.Render.Circle.DrawCircle: " + e);
+                    LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
 
@@ -681,7 +682,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logging.Write()(LogLevel.Error, "SDK.Render.Circle.OnEndScene: " + e);
+                    LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
 
@@ -857,7 +858,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logging.Write()(LogLevel.Error, "SDK.Render.Line.OnEndScene: " + e);
+                    LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
 
@@ -1021,7 +1022,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logging.Write()(LogLevel.Error, "SDK.Render.Rectangle.OnEndScene: " + e);
+                    LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
 
@@ -1498,7 +1499,7 @@
                 catch (Exception e)
                 {
                     this.Reset();
-                    Logging.Write()(LogLevel.Error, "SDK.Render.Sprite.OnEndScene: " + e);
+                    LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
 
@@ -1978,7 +1979,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logging.Write()(LogLevel.Error, "SDK.Render.Text.OnEndScene: " + e);
+                    LogManager.GetCurrentClassLogger().Error(e);
                 }
             }
 

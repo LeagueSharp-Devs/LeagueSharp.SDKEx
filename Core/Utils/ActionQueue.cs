@@ -7,6 +7,8 @@
 
     using LeagueSharp.SDK.Enumerations;
 
+    using NLog;
+
     /// <summary>
     ///     Queues actions.
     /// </summary>
@@ -117,7 +119,7 @@
                     }
                     catch (Exception e)
                     {
-                        Logging.Write()(LogLevel.Error, "An ActionQueue item threw an exception.\n{0}", e);
+                        LogManager.GetCurrentClassLogger().Error(e, "An ActionQueue item threw an exception.");
                     }
                 }
             }

@@ -23,6 +23,8 @@ namespace LeagueSharp.SDK.Utils
 
     using LeagueSharp.SDK.Enumerations;
 
+    using NLog;
+
     /// <summary>
     ///     Performance block class, for block method performance logging.
     /// </summary>
@@ -166,7 +168,7 @@ namespace LeagueSharp.SDK.Utils
                         break;
                 }
 
-                Logging.Write()(LogLevel.Info, format, this.memberName, argument);
+                LogManager.GetCurrentClassLogger().Info(format, this.memberName, argument);
             }
 
             this.stopwatch = null;
