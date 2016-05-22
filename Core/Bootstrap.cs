@@ -22,6 +22,7 @@ namespace LeagueSharp.SDK
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Security.Permissions;
     using System.Threading;
 
@@ -33,8 +34,6 @@ namespace LeagueSharp.SDK
     using NLog.Config;
     using NLog.Layouts;
     using NLog.Targets;
-
-    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     /// <summary>
     ///     Bootstrap is an initialization pointer for the AppDomainManager to initialize the library correctly once loaded in
@@ -73,13 +72,54 @@ namespace LeagueSharp.SDK
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
-            // Add file logger target and file logging rule
-            var fileTarget = new FileTarget();
-            LogManager.Configuration.AddTarget("file", fileTarget);
-            fileTarget.FileName = Constants.LogDirectory + "/${shortdate}.log";
-            fileTarget.Layout = "${longdate} ${uppercase:${level}} ${message}";
-            fileTarget.ReplaceFileContentsOnEachWrite = true;
-            LogManager.Configuration.LoggingRules.Add(new LoggingRule("*", NLog.LogLevel.Debug, fileTarget));
+            // Setup logging
+            var config = new LoggingConfiguration();
+
+            var fileTarget = new FileTarget
+                                 {
+                                     FileName = Constants.LogDirectory + "\\${shortdate}.log",
+                                     Layout = "${longdate} ${uppercase:${level}} ${message}",
+                                     ReplaceFileContentsOnEachWrite = true
+                                 };
+
+            config.AddTarget("file", fileTarget);
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, fileTarget));
+
+            var coloredConsoleTarget = new ColoredConsoleTarget
+            {
+                UseDefaultRowHighlightingRules = false,
+                Layout =
+                    "${longdate}|${pad:padding=5:inner=${level:uppercase=true}}| ${callsite:className=true:fileName=false:includeSourcePath=false:methodName=false:cleanNamesOfAnonymousDelegates=false:skipFrames=-1}: ${message}",
+            };
+
+            coloredConsoleTarget.RowHighlightingRules.Add(
+                new ConsoleRowHighlightingRule()
+                    { Condition = "Level == LogLevel.Trace", ForegroundColor = ConsoleOutputColor.DarkGray });
+
+            coloredConsoleTarget.RowHighlightingRules.Add(
+                new ConsoleRowHighlightingRule()
+                    { Condition = "Level == LogLevel.Debug", ForegroundColor = ConsoleOutputColor.Gray });
+
+            coloredConsoleTarget.RowHighlightingRules.Add(
+                new ConsoleRowHighlightingRule()
+                    { Condition = "Level == LogLevel.Info", ForegroundColor = ConsoleOutputColor.White });
+
+            coloredConsoleTarget.RowHighlightingRules.Add(
+                new ConsoleRowHighlightingRule()
+                    { Condition = "Level == LogLevel.Warn", ForegroundColor = ConsoleOutputColor.Yellow });
+
+            coloredConsoleTarget.RowHighlightingRules.Add(
+                new ConsoleRowHighlightingRule()
+                    { Condition = "Level == LogLevel.Error", ForegroundColor = ConsoleOutputColor.Red });
+
+            coloredConsoleTarget.RowHighlightingRules.Add(
+                new ConsoleRowHighlightingRule()
+                    { Condition = "Level == LogLevel.Fatal", ForegroundColor = ConsoleOutputColor.Red });
+
+            config.AddTarget("coloredConsole", coloredConsoleTarget);
+            config.AddRule(LogLevel.Trace, LogLevel.Fatal, coloredConsoleTarget);
+
+            LogManager.Configuration = config;
 
             var logger = LogManager.GetCurrentClassLogger();
             
@@ -141,7 +181,7 @@ namespace LeagueSharp.SDK
             logger.Info($"SDKEx Version {Assembly.GetExecutingAssembly().GetName().Version} Loaded!");
 
             // Tell the developer everything succeeded
-            return initialized;
+            return initialized;           
         }
 
         #endregion

@@ -165,7 +165,7 @@ namespace NLog
                     if (this.config == null)
                     {
                         // Try to load default configuration.
-                        this.config = XmlLoggingConfiguration.AppConfig;
+                        //this.config = XmlLoggingConfiguration.AppConfig;
                     }
 #endif
                     // Retest the condition as we might have loaded a config.

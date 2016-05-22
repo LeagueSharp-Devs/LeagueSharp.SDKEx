@@ -58,7 +58,7 @@
       <HintPath>C:\Program Files (x86)\LeagueSharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.8.0.4-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\LeagueSharp\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SharpDX, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
@@ -673,7 +673,6 @@
     <Compile Include="Third_Party\NLog\NLogConfigurationException.cs" />
     <Compile Include="Third_Party\NLog\NLogRuntimeException.cs" />
     <Compile Include="Third_Party\NLog\NLogTraceListener.cs" />
-    <Compile Include="Third_Party\NLog\Resources\Resource.Designer.cs" />
     <Compile Include="Third_Party\NLog\Targets\ArchiveNumberingMode.cs" />
     <Compile Include="Third_Party\NLog\Targets\AspResponseTarget.cs" />
     <Compile Include="Third_Party\NLog\Targets\ChainsawTarget.cs" />
@@ -755,11 +754,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Logger2.cs</LastGenOutput>
     </Content>
-    <Content Include="Third_Party\NLog\Resources\NLog.ico" />
     <None Include="LeagueSharp.SDKEx.snk" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
