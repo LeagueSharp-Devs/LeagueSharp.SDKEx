@@ -762,7 +762,7 @@ namespace LeagueSharp.SDK
                 {
                     amount *= 1
                               - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1]
-                              / (source is Obj_AI_Turret ? 2 : 1);
+                                      / (source is Obj_AI_Turret ? 2 : 1);
                 }
 
                 // Urgot R
