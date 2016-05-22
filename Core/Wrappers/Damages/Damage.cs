@@ -701,9 +701,10 @@ namespace LeagueSharp.SDK
                 }
 
                 // Alistar R
-                if (targetHero.HasBuff("Ferocious Howl"))
+                if (targetHero.HasBuff("FerociousHowl"))
                 {
-                    amount *= 0.3;
+                    amount *= 0.6
+                              - new[] { 0.1, 0.2, 0.3 }[targetHero.Spellbook.GetSpell(SpellSlot.R).Level - 1];
                 }
 
                 // Amumu E
@@ -716,8 +717,7 @@ namespace LeagueSharp.SDK
                 if (targetHero.HasBuff("BraumShieldRaise"))
                 {
                     amount *= 1
-                              - new[] { 0.3, 0.325, 0.35, 0.375, 0.4 }[
-                                  targetHero.Spellbook.GetSpell(SpellSlot.E).Level - 1];
+                              - new[] { 0.3, 0.325, 0.35, 0.375, 0.4 }[targetHero.Spellbook.GetSpell(SpellSlot.E).Level - 1];
                 }
 
                 // Galio R
@@ -736,8 +736,7 @@ namespace LeagueSharp.SDK
                 if (targetHero.HasBuff("GragasWSelf"))
                 {
                     amount *= 1
-                              - new[] { 0.1, 0.12, 0.14, 0.16, 0.18 }[
-                                  targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1];
+                              - new[] { 0.1, 0.12, 0.14, 0.16, 0.18 }[targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1];
                 }
 
                 // Kassadin P
@@ -762,8 +761,8 @@ namespace LeagueSharp.SDK
                 if (targetHero.HasBuff("Meditate"))
                 {
                     amount *= 1
-                              - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1
-                                    ] / (source is Obj_AI_Turret ? 2 : 1);
+                              - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[targetHero.Spellbook.GetSpell(SpellSlot.W).Level - 1]
+                              / (source is Obj_AI_Turret ? 2 : 1);
                 }
 
                 // Urgot R
