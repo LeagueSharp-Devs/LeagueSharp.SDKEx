@@ -58,14 +58,14 @@ namespace LeagueSharp.SDK.Utils
         #region Public Properties
 
         /// <summary>
-        ///     Gets the textual representation of the input.
-        /// </summary>
-        public char Char => Convert.ToChar(this.args.WParam);
-
-        /// <summary>
         ///     Gets the Cursor Position
         /// </summary>
         public Vector2 Cursor { get; private set; }
+
+        /// <summary>
+        ///     Gets the textual representation of the input.
+        /// </summary>
+        public char Char => Convert.ToChar(this.args.WParam);
 
         /// <summary>
         ///     Gets the full name of the mapped key.

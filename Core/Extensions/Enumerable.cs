@@ -22,9 +22,6 @@ namespace LeagueSharp.SDK
     using System.ComponentModel;
     using System.Linq;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
-
     using NLog;
 
     using SharpDX;

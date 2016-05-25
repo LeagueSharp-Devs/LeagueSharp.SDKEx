@@ -15,7 +15,6 @@
 
     using Color = System.Drawing.Color;
     using Font = SharpDX.Direct3D9.Font;
-    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     /// <summary>
     ///     The render class allows you to draw stuff using SharpDX easier.

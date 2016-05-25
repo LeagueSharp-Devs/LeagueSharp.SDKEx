@@ -509,7 +509,7 @@ namespace LeagueSharp.SDK.Utils
         }
 
         /// <summary>
-        /// Adds or gets an existing cache region.
+        ///     Adds or gets an existing cache region.
         /// </summary>
         /// <param name="item">The cache item.</param>
         /// <returns></returns>
@@ -519,7 +519,7 @@ namespace LeagueSharp.SDK.Utils
         }
 
         /// <summary>
-        /// Adds or gets an existing cache region.
+        ///     Adds or gets an existing cache region.
         /// </summary>
         /// <param name="regionName">Name of the region.</param>
         /// <returns></returns>
@@ -539,7 +539,7 @@ namespace LeagueSharp.SDK.Utils
         }
 
         /// <summary>
-        /// Validates the policy.
+        ///     Validates the policy.
         /// </summary>
         /// <param name="item">The item.</param>
         private void ValidatePolicy(CacheEntryItem item)

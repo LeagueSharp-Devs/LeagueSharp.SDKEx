@@ -5,8 +5,6 @@
     using System.Collections.Generic;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Enumerations;
-
     using NLog;
 
     /// <summary>

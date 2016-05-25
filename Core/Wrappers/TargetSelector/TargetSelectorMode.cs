@@ -23,7 +23,6 @@ namespace LeagueSharp.SDK
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 

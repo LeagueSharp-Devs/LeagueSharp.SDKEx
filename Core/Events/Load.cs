@@ -22,9 +22,6 @@ namespace LeagueSharp.SDK
     using System.Linq;
     using System.Reflection;
 
-    using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
-
     using NLog;
 
     /// <summary>

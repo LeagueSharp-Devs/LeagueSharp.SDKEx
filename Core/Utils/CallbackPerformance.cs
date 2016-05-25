@@ -23,8 +23,6 @@ namespace LeagueSharp.SDK.Utils
 
     using NLog;
 
-    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
-
     /// <summary>
     ///     Performance class, measures how much time does a function takes to execute.
     /// </summary>

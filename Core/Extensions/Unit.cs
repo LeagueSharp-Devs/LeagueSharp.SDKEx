@@ -48,14 +48,14 @@ namespace LeagueSharp.SDK
             };
 
         /// <summary>
-        ///     Turrets Tier Three
-        /// </summary>
-        private static readonly string[] TurretsTierThree = { "SRUAP_Turret_Order3", "SRUAP_Turret_Chaos3" };
-
-        /// <summary>
         ///     Turrets Tier Two
         /// </summary>
         private static readonly string[] TurretsTierTwo = { "SRUAP_Turret_Order2", "SRUAP_Turret_Chaos2" };
+
+        /// <summary>
+        ///     Turrets Tier Three
+        /// </summary>
+        private static readonly string[] TurretsTierThree = { "SRUAP_Turret_Order3", "SRUAP_Turret_Chaos3" };
 
         #endregion
 

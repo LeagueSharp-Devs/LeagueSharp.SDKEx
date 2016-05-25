@@ -95,17 +95,19 @@ namespace LeagueSharp.SDK
             ActiveSpellsList.Add(
                 new GapCloserEventArgs
                     {
-                        Start = args.Start, End = args.End, Target = args.Target,
-                        Sender = hero, TickCount = Variables.TickCount,
+                        Start = args.Start, End = args.End, Target = args.Target, Sender = hero,
+                        TickCount = Variables.TickCount,
                         SkillType =
                             (args.Target != null && args.Target.IsValid)
                                 ? GapcloserType.Targeted
                                 : GapcloserType.Skillshot,
                         Slot = args.Slot,
-                        IsDirectedToPlayer = (hero.Distance(ObjectManager.Player) < 1500 || args.End.Distance(ObjectManager.Player.Position) < 800) &&
-                            ((args.Target != null && args.Target.IsValid && args.Target.IsMe)
-                            || args.End.DistanceToPlayer() < args.Start.DistanceToPlayer()
-                            || hero.IsFacing(GameObjects.Player)),
+                        IsDirectedToPlayer =
+                            (hero.Distance(ObjectManager.Player) < 1500
+                             || args.End.Distance(ObjectManager.Player.Position) < 800)
+                            && ((args.Target != null && args.Target.IsValid && args.Target.IsMe)
+                                || args.End.DistanceToPlayer() < args.Start.DistanceToPlayer()
+                                || hero.IsFacing(GameObjects.Player)),
                         SpellName = args.SData.Name
                     });
         }
@@ -147,10 +149,6 @@ namespace LeagueSharp.SDK
             ///     Gets or sets the position at which the enemy will be upon spell completion.
             /// </summary>
             public Vector3 End { get; set; }
-            
-            /// <summary>
-            ///     Gets or sets the target of the gapcloser spell. It can be null!
-            public GameObject Target { get; set; }
 
             /// <summary>
             ///     Gets or sets a value indicating whether is directed to player.
@@ -181,6 +179,10 @@ namespace LeagueSharp.SDK
             ///     Gets or sets the start.
             /// </summary>
             public Vector3 Start { get; set; }
+
+            /// <summary>
+            ///     Gets or sets the target of the gapcloser spell. It can be null!
+            public GameObject Target { get; set; }
 
             /// <summary>
             ///     Gets or sets the tick count.

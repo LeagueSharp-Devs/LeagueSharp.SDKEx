@@ -6,14 +6,12 @@
     using LeagueSharp.Data.DataTypes;
     using LeagueSharp.SDK.Clipper;
     using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
 
     using NLog;
 
     using SharpDX;
 
     using Color = System.Drawing.Color;
-    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
 
     public class Skillshot : BaseSpell
     {
@@ -83,7 +81,7 @@
                         LogManager.GetCurrentClassLogger()
                             .Warn(
                                 $"Couldn't find the start position for skillshot: {this}, FromObject: {this.SData.FromObject}");
-  
+
                         return false;
                     }
                 }

@@ -138,6 +138,11 @@ namespace LeagueSharp.SDK
         public CastConditionDelegate CastCondition { get; set; }
 
         /// <summary>
+        ///     Gets or sets a value indicating whether collision.
+        /// </summary>
+        public bool Collision { get; set; }
+
+        /// <summary>
         ///     Gets or sets the charged buff name.
         /// </summary>
         public string ChargedBuffName { get; set; }
@@ -161,11 +166,6 @@ namespace LeagueSharp.SDK
         ///     Gets or sets the charge duration.
         /// </summary>
         public int ChargeDuration { get; set; }
-
-        /// <summary>
-        ///     Gets or sets a value indicating whether collision.
-        /// </summary>
-        public bool Collision { get; set; }
 
         /// <summary>
         ///     Gets or sets the damage type.

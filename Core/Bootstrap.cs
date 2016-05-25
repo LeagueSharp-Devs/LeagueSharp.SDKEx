@@ -20,9 +20,7 @@ namespace LeagueSharp.SDK
     using System;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Linq;
     using System.Reflection;
-    using System.Runtime.CompilerServices;
     using System.Security.Permissions;
     using System.Threading;
 
@@ -32,7 +30,6 @@ namespace LeagueSharp.SDK
 
     using NLog;
     using NLog.Config;
-    using NLog.Layouts;
     using NLog.Targets;
 
     /// <summary>
@@ -53,7 +50,7 @@ namespace LeagueSharp.SDK
         #region Public Methods and Operators
 
         /// <summary>
-        /// Initializes the whole SDK. It is safe to call in your code at any point.
+        ///     Initializes the whole SDK. It is safe to call in your code at any point.
         /// </summary>
         /// <param name="args">Not currently used or needed.</param>
         /// <returns>true if SDK is loaded, false if it is not</returns>
@@ -86,11 +83,11 @@ namespace LeagueSharp.SDK
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, fileTarget));
 
             var coloredConsoleTarget = new ColoredConsoleTarget
-            {
-                UseDefaultRowHighlightingRules = false,
-                Layout =
-                    "${longdate}|${pad:padding=5:inner=${level:uppercase=true}}| ${callsite:className=true:fileName=false:includeSourcePath=false:methodName=false:cleanNamesOfAnonymousDelegates=false:skipFrames=-1}: ${message}",
-            };
+                                           {
+                                               UseDefaultRowHighlightingRules = false,
+                                               Layout =
+                                                   "${longdate}|${pad:padding=5:inner=${level:uppercase=true}}| ${callsite:className=true:fileName=false:includeSourcePath=false:methodName=false:cleanNamesOfAnonymousDelegates=false:skipFrames=-1}: ${message}",
+                                           };
 
             coloredConsoleTarget.RowHighlightingRules.Add(
                 new ConsoleRowHighlightingRule()
@@ -122,10 +119,10 @@ namespace LeagueSharp.SDK
             LogManager.Configuration = config;
 
             var logger = LogManager.GetCurrentClassLogger();
-            
+
             // Log unhandled exceptions
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
-                { 
+                {
                     var exception = eventArgs.ExceptionObject as Exception;
 
                     // Check if exception came from us
@@ -178,10 +175,10 @@ namespace LeagueSharp.SDK
             logger.Info("Translations Initialized.");
 
             // Final notification.
-            logger.Info($"SDKEx Version {Assembly.GetExecutingAssembly().GetName().Version} Loaded!");
+            logger.Info($"SDKEx Version {Variables.KitVersion} Loaded!");
 
             // Tell the developer everything succeeded
-            return initialized;           
+            return initialized;
         }
 
         #endregion

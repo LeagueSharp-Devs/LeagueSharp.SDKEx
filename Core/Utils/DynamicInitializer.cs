@@ -20,8 +20,6 @@ namespace LeagueSharp.SDK.Utils
     using System;
     using System.Reflection.Emit;
 
-    using LeagueSharp.SDK.Enumerations;
-
     using NLog;
 
     /// <summary>

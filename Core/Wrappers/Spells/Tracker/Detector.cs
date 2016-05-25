@@ -183,7 +183,8 @@
                 catch (Exception)
                 {
                     LogManager.GetCurrentClassLogger()
-                        .Warn($"Wrong SpellType for SkillShot {skillshot.SData.SpellName}, a missile type was expected but instead got a {missile.GetType().Name}.");
+                        .Warn(
+                            $"Wrong SpellType for SkillShot {skillshot.SData.SpellName}, a missile type was expected but instead got a {missile.GetType().Name}.");
                 }
             }
 

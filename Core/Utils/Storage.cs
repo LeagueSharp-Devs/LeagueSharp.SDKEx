@@ -27,8 +27,6 @@ namespace LeagueSharp.SDK.Utils
 
     using NLog;
 
-    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
-
     /// <summary>
     ///     The storage, main purpose is to save share-able settings between assemblies.
     /// </summary>

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
 
     using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
 
     using NLog;
 

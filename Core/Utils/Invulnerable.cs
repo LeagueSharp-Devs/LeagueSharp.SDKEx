@@ -22,8 +22,6 @@ namespace LeagueSharp.SDK.Utils
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using LeagueSharp.SDK.Enumerations;
-
     using NLog;
 
     /// <summary>

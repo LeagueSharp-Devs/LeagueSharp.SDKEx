@@ -136,6 +136,11 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
+        ///     Force orbwalker to orbwalk to a point. Set to null to stop forcing.
+        /// </summary>
+        public Vector3? ForceOrbwalkingPoint { get; set; } = null;
+
+        /// <summary>
         ///     Gets or sets the last auto attack command tick.
         /// </summary>
         public int LastAutoAttackCommandTick { get; protected set; }
@@ -183,11 +188,6 @@ namespace LeagueSharp.SDK
         ///     Gets or sets a value indicating whether attack.
         /// </summary>
         protected bool MovementState { get; set; } = true;
-
-        /// <summary>
-        ///     Force orbwalker to orbwalk to a point. Set to null to stop forcing.
-        /// </summary>
-        public Vector3? ForceOrbwalkingPoint { get; set; } = null;
 
         #endregion
 
@@ -450,7 +450,8 @@ namespace LeagueSharp.SDK
         /// </param>
         private void OnGameUpdate(EventArgs args)
         {
-            if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead || MenuGUI.IsShopOpen)
+            if (GameObjects.Player == null || !GameObjects.Player.IsValid || GameObjects.Player.IsDead
+                || MenuGUI.IsShopOpen)
             {
                 return;
             }

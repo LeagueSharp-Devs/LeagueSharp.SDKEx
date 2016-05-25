@@ -11,8 +11,6 @@
 
     using NLog;
 
-    using LogLevel = LeagueSharp.SDK.Enumerations.LogLevel;
-
     /// <summary>
     ///     Provides multi-lingual strings.
     /// </summary>
@@ -39,8 +37,8 @@
             try
             {
                 var languageStrings =
-                    new ResourceManager("LeagueSharp.SDK.Properties.Translations", typeof(Resources).Assembly).GetString(
-                        languageName + "Json");
+                    new ResourceManager("LeagueSharp.SDK.Properties.Translations", typeof(Resources).Assembly).GetString
+                        (languageName + "Json");
 
                 if (string.IsNullOrEmpty(languageStrings))
                 {

@@ -34,9 +34,9 @@ namespace LeagueSharp.SDK.TSModes.Weights
         {
             this.BuffTypes = new List<BuffType>
                                  {
-                                     BuffType.Charm, BuffType.Knockback, BuffType.Suppression, BuffType.Fear,
-                                     BuffType.Taunt, BuffType.Stun, BuffType.Slow, BuffType.Silence, BuffType.Snare,
-                                     BuffType.Polymorph, BuffType.Snare
+                                     BuffType.Charm, BuffType.Knockup, BuffType.Suppression, BuffType.Flee, BuffType.Taunt,
+                                     BuffType.Stun, BuffType.Slow, BuffType.Silence, BuffType.Snare, BuffType.Polymorph,
+                                     BuffType.Blind
                                  };
         }
 
