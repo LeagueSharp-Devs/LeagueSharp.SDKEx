@@ -41,7 +41,9 @@ namespace LeagueSharp.SDK.Utils
                                                                         "SRU_ChaosMinionMelee", "SRU_ChaosMinionRanged",
                                                                         "SRU_OrderMinionMelee", "SRU_OrderMinionRanged",
                                                                         "HA_ChaosMinionMelee", "HA_ChaosMinionRanged",
-                                                                        "HA_OrderMinionMelee", "HA_OrderMinionRanged"
+                                                                        "HA_OrderMinionMelee", "HA_OrderMinionRanged",
+                                                                        "OdinRedSuperminion", "Odin_Red_Minion_Caster",
+                                                                        "OdinBlueSuperminion", "Odin_Blue_Minion_Caster"
                                                                     };
 
         private static readonly List<string> PetList = new List<string>
@@ -68,7 +70,8 @@ namespace LeagueSharp.SDK.Utils
         private static readonly List<string> SuperMinionList = new List<string>
                                                                    {
                                                                        "SRU_ChaosMinionSuper", "SRU_OrderMinionSuper",
-                                                                       "HA_ChaosMinionSuper", "HA_OrderMinionSuper"
+                                                                       "HA_ChaosMinionSuper", "HA_OrderMinionSuper",
+                                                                       "OdinRedUltraminion", "OdinBlueUltraminion"
                                                                    };
 
         #endregion
