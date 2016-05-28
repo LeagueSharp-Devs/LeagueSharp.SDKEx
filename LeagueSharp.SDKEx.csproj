@@ -111,6 +111,7 @@
     <Compile Include="Core\Enumerations\WindowsMessages.cs" />
     <Compile Include="Core\Events\Dash.cs" />
     <Compile Include="Core\Events\Events.cs" />
+    <Compile Include="Core\Events\GameObjectNotifier.cs" />
     <Compile Include="Core\Events\Load.cs" />
     <Compile Include="Core\Events\Gapcloser.cs" />
     <Compile Include="Core\Events\InterruptableSpell.cs" />
