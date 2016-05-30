@@ -83,7 +83,7 @@ namespace LeagueSharp.SDK.Utils
                                 ChampionName = "Kindred", MinHealthPercent = 10,
                                 CheckFunction = (target, type) => target.HealthPercent <= 10
                             }
-                    };)
+                    });
         }
 
         #endregion
