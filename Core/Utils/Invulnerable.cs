@@ -70,11 +70,9 @@ namespace LeagueSharp.SDK.Utils
                                 CheckFunction = (target, type) => target.HealthPercent <= 5
                             },
                         new InvulnerableEntry("JudicatorIntervention") { IsShield = true },
-                        new InvulnerableEntry("fizztrickslamsounddummy") { ChampionName = "Fizz" },
-                        new InvulnerableEntry("VladimirSanguinePool") { ChampionName = "Vladimir" },
                         new InvulnerableEntry("FioraW") { ChampionName = "Fiora" },
                         new InvulnerableEntry("JaxCounterStrike")
-                            { ChampionName = "Jax", DamageType = DamageType.Physical },
+                            { ChampionName = "Jax", IsShield = true, DamageType = DamageType.Physical },
                         new InvulnerableEntry("BlackShield") { IsShield = true, DamageType = DamageType.Magical },
                         new InvulnerableEntry("BansheesVeil") { IsShield = true, DamageType = DamageType.Magical },
                         new InvulnerableEntry("SivirE") { ChampionName = "Sivir", IsShield = true },
@@ -85,7 +83,7 @@ namespace LeagueSharp.SDK.Utils
                                 ChampionName = "Kindred", MinHealthPercent = 10,
                                 CheckFunction = (target, type) => target.HealthPercent <= 10
                             }
-                    });
+                    };)
         }
 
         #endregion
@@ -127,7 +125,7 @@ namespace LeagueSharp.SDK.Utils
                     {
                         if (hero.HasBuff(entry.BuffName))
                         {
-                            if (ignoreShields || !entry.IsShield)
+                            if (!ignoreShields || !entry.IsShield)
                             {
                                 if (entry.CheckFunction == null || ExecuteCheckFunction(entry, hero, damageType))
                                 {
