@@ -48,7 +48,7 @@
             var obj = sender as T;
             if (obj != null)
             {
-                OnDelete?.Invoke(null, obj);
+                OnCreate?.Invoke(null, obj);
             }
         }
 
@@ -57,7 +57,7 @@
             var obj = sender as T;
             if (obj != null)
             {
-                OnCreate?.Invoke(null, obj);
+                OnDelete?.Invoke(null, obj);
             }
         }
 
