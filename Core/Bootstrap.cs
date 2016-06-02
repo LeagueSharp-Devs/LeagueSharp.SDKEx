@@ -86,7 +86,7 @@ namespace LeagueSharp.SDK
                                            {
                                                UseDefaultRowHighlightingRules = false,
                                                Layout =
-                                                   "${longdate}|${pad:padding=5:inner=${level:uppercase=true}}| ${callsite:className=true:fileName=false:includeSourcePath=false:methodName=false:cleanNamesOfAnonymousDelegates=false:skipFrames=-1}: ${message}",
+                                                   "${longdate}|${pad:padding=5:inner=${level:uppercase=true}}| ${callsite:className=true:fileName=false:includeSourcePath=false:methodName=false:cleanNamesOfAnonymousDelegates=false:skipFrames=0}: ${message}",
                                            };
 
             coloredConsoleTarget.RowHighlightingRules.Add(
