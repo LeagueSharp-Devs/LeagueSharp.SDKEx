@@ -3,12 +3,12 @@
     using System;
 
     /// <summary>
-    ///     Raises events when a type of <see cref="GameObject"/> is created.
-    /// <example>
-    /// <code>
+    ///     Raises events when a type of <see cref="GameObject" /> is created.
+    ///     <example>
+    ///         <code>
     /// GameObjectNotifier&lt;Obj_AI_Minion&gt;.OnCreate += (sender, minion) => Game.PrintChat(minion.Name); 
     /// </code>
-    /// </example>
+    ///     </example>
     /// </summary>
     /// <typeparam name="T">The type of <see cref="GameObject" /></typeparam>
     public class GameObjectNotifier<T>

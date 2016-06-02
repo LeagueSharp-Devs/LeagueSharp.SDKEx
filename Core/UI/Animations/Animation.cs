@@ -18,19 +18,19 @@
 namespace LeagueSharp.SDK.Core.UI.Animations
 {
     /// <summary>
-    /// Animation base
+    ///     Animation base
     /// </summary>
     public class Animation
     {
         #region Fields
 
         /// <summary>
-        /// Duration which will be used for the specified mode
+        ///     Duration which will be used for the specified mode
         /// </summary>
         protected float duration;
 
         /// <summary>
-        /// Start time of a start method
+        ///     Start time of a start method
         /// </summary>
         protected float startTime;
 
@@ -39,10 +39,10 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Animation" /> class.
+        ///     Initializes a new instance of the <see cref="Animation" /> class.
         /// </summary>
         /// <param name="duration">Selected duration for the defined animation</param>
-        public Animation (float duration)
+        public Animation(float duration)
         {
             this.duration = duration;
         }
@@ -52,16 +52,16 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         #region Public Properties
 
         /// <summary>
-        /// Is caluclating a new value
+        ///     Is caluclating a new value
         /// </summary>
-        public bool IsWorking => this.startTime + this.duration > Game.ClockTime;
+        public bool IsWorking => this.startTime + this.duration > Game.Time;
 
         #endregion
 
-        #region Methods
+        #region Public Methods and Operators
 
         /// <summary>
-        /// Instant changes the value to the end value
+        ///     Instant changes the value to the end value
         /// </summary>
         public void Stop()
         {
@@ -70,10 +70,22 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Linear Methods
+        #region Methods
 
         /// <summary>
-        /// Calculates in a linear manner
+        ///     Calculates in a inverse linear manner
+        /// </summary>
+        /// <param name="curTime">Current Time (seconds)</param>
+        /// <param name="startVal">Start Value</param>
+        /// <param name="dur">Duration of the animation</param>
+        /// <returns>New calculated value</returns>
+        protected double InverseLinear(double curTime, double startVal, double dur)
+        {
+            return startVal - (curTime / dur) * startVal;
+        }
+
+        /// <summary>
+        ///     Calculates in a linear manner
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="startVal">Start Value</param>
@@ -85,19 +97,6 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             return endVal * curTime / dur + startVal;
         }
 
-        /// <summary>
-        /// Calculates in a inverse linear manner
-        /// </summary>
-        /// <param name="curTime">Current Time (seconds)</param>
-        /// <param name="startVal">Start Value</param>
-        /// <param name="dur">Duration of the animation</param>
-        /// <returns>New calculated value</returns>
-        protected double InverseLinear(double curTime, double startVal, double dur)
-        {
-            return startVal - (curTime / dur) * startVal;
-        }
-
         #endregion
-
     }
 }

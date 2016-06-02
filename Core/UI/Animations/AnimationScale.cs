@@ -20,52 +20,33 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     using SharpDX;
 
     /// <summary>
-    /// A implementation of a <see cref="Animation" />
+    ///     A implementation of a <see cref="Animation" />
     /// </summary>
     public class AnimationScale : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start Rectangle of the element which will get scaled
+        ///     Defines which Clip method will be used to calculate the new element rectangle
         /// </summary>
-        private Rectangle startValue;
+        private readonly Mode mode;
 
         /// <summary>
-        /// Final Rectangle of the element which will get scaled
+        ///     Final Rectangle of the element which will get scaled
         /// </summary>
         private Rectangle? endValue;
 
         /// <summary>
-        /// Defines which Clip method will be used to calculate the new element rectangle
+        ///     Start Rectangle of the element which will get scaled
         /// </summary>
-        private readonly Mode mode;
-
-        #endregion
-
-        #region Enums
-
-        /// <summary>
-        /// Contains 2 Modes
-        /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            /// Decrease height / width to 0
-            /// </summary>
-            ScaleDecrease,
-            /// <summary>
-            /// Increase height / width to max height / width
-            /// </summary>
-            ScaleIncrease,
-        }
+        private Rectangle startValue;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationScale" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationScale" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -76,7 +57,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationScale" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationScale" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -90,10 +71,30 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Methods
+        #region Enums
 
         /// <summary>
-        /// Returns the current rectangle of the element
+        ///     Contains 2 Modes
+        /// </summary>
+        public enum Mode
+        {
+            /// <summary>
+            ///     Decrease height / width to 0
+            /// </summary>
+            ScaleDecrease,
+
+            /// <summary>
+            ///     Increase height / width to max height / width
+            /// </summary>
+            ScaleIncrease,
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns the current rectangle of the element
         /// </summary>
         public Rectangle GetCurrentValue()
         {
@@ -101,11 +102,31 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             {
                 return this.endValue ?? this.startValue;
             }
-            return this.Calculate(Game.ClockTime - this.startTime, this.startValue, this.duration);
+            return this.Calculate(Game.Time - this.startTime, this.startValue, this.duration);
         }
 
         /// <summary>
-        /// Calculates the value of the specified mode
+        ///     Starts the animation
+        ///     After start you can get the current value in <see cref="AnimationScale.GetCurrentValue" /> method
+        /// </summary>
+        /// <param name="startVal">Starting Rectangle of the element</param>
+        public void Start(Rectangle startVal)
+        {
+            if (this.IsWorking)
+            {
+                this.Stop();
+            }
+
+            this.startValue = startVal;
+            this.startTime = Game.Time;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Calculates the value of the specified mode
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="startVal">Start Value</param>
@@ -127,27 +148,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationScale.GetCurrentValue" /> method
-        /// </summary>
-        /// <param name="startVal">Starting Rectangle of the element</param>
-        public void Start(Rectangle startVal)
-        {
-            if (this.IsWorking)
-            {
-                this.Stop();
-            }
-
-            this.startValue = startVal;
-            this.startTime = Game.ClockTime;
-        }
-
-        #endregion
-
-        #region Scale Methods
-
-        /// <summary>
-        /// Decreases the Width / Height until it reaches 0
+        ///     Decreases the Width / Height until it reaches 0
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Rectangle</param>
@@ -163,7 +164,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Increases the Width / Height from 0 to specified width / height
+        ///     Increases the Width / Height from 0 to specified width / height
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Rectangle</param>
@@ -179,6 +180,5 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         #endregion
-
     }
 }

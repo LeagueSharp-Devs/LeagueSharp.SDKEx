@@ -20,48 +20,33 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     using SharpDX;
 
     /// <summary>
-    /// A implementation of a <see cref="Animation" />
+    ///     A implementation of a <see cref="Animation" />
     /// </summary>
     public class AnimationResize : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start Rectangle of the element which will get resized
+        ///     Defines which Resize method will be used to calculate the new element rectangle
         /// </summary>
-        private Rectangle startValue;
+        private readonly Mode mode;
 
         /// <summary>
-        /// Final Rectangle of the element which will get resized
+        ///     Final Rectangle of the element which will get resized
         /// </summary>
         private Rectangle endValue;
 
         /// <summary>
-        /// Defines which Resize method will be used to calculate the new element rectangle
+        ///     Start Rectangle of the element which will get resized
         /// </summary>
-        private readonly Mode mode;
-
-        #endregion
-
-        #region Enums
-
-        /// <summary>
-        /// Contains 1 Modes
-        /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            /// Resizes Width and Height
-            /// </summary>
-            Resize,
-        }
+        private Rectangle startValue;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationResize" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationResize" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -72,7 +57,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationResize" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationResize" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -86,10 +71,25 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Methods
+        #region Enums
 
         /// <summary>
-        /// Returns the current rectangle of the element
+        ///     Contains 1 Modes
+        /// </summary>
+        public enum Mode
+        {
+            /// <summary>
+            ///     Resizes Width and Height
+            /// </summary>
+            Resize,
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns the current rectangle of the element
         /// </summary>
         public Rectangle GetCurrentValue()
         {
@@ -97,31 +97,12 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             {
                 return this.endValue;
             }
-            return this.Calculate(Game.ClockTime - this.startTime, this.startValue, this.endValue, this.duration);
+            return this.Calculate(Game.Time - this.startTime, this.startValue, this.endValue, this.duration);
         }
 
         /// <summary>
-        /// Calculates the value of the specified mode
-        /// </summary>
-        /// <param name="curTime">Current Time (seconds)</param>
-        /// <param name="startVal">Start Value</param>
-        /// <param name="endVal">Final Value</param>
-        /// <param name="dur">Duration of the animation</param>
-        /// <returns>Returns the calculated value of the specified mode</returns>
-        private Rectangle Calculate(double curTime, Rectangle startVal, Rectangle endVal, double dur)
-        {
-            switch (this.mode)
-            {
-                case Mode.Resize:
-                    return this.Resize(curTime, startVal, endVal, dur);
-
-            }
-            return this.endValue;
-        }
-
-        /// <summary>
-        /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationResize.GetCurrentValue" /> method
+        ///     Starts the animation
+        ///     After start you can get the current value in <see cref="AnimationResize.GetCurrentValue" /> method
         /// </summary>
         /// <param name="startVal">Starting Rectangle of the element</param>
         /// <param name="endVal">Final Rectangle of the element</param>
@@ -134,15 +115,33 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
             this.startValue = startVal;
             this.endValue = endVal;
-            this.startTime = Game.ClockTime;
+            this.startTime = Game.Time;
         }
 
         #endregion
 
-        #region Resize Methods
+        #region Methods
 
         /// <summary>
-        /// Decreases the Width / Height until it reaches 0
+        ///     Calculates the value of the specified mode
+        /// </summary>
+        /// <param name="curTime">Current Time (seconds)</param>
+        /// <param name="startVal">Start Value</param>
+        /// <param name="endVal">Final Value</param>
+        /// <param name="dur">Duration of the animation</param>
+        /// <returns>Returns the calculated value of the specified mode</returns>
+        private Rectangle Calculate(double curTime, Rectangle startVal, Rectangle endVal, double dur)
+        {
+            switch (this.mode)
+            {
+                case Mode.Resize:
+                    return this.Resize(curTime, startVal, endVal, dur);
+            }
+            return this.endValue;
+        }
+
+        /// <summary>
+        ///     Decreases the Width / Height until it reaches 0
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="startVal">Starting Rectangle</param>
@@ -157,6 +156,5 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         #endregion
-
     }
 }

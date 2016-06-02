@@ -20,52 +20,33 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     using SharpDX;
 
     /// <summary>
-    /// A implementation of a <see cref="Animation" />
+    ///     A implementation of a <see cref="Animation" />
     /// </summary>
     public class AnimationFade : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start Color of the element which will get faded
+        ///     Defines which Fade method will be used to calculate the new element color
         /// </summary>
-        private ColorBGRA startValue;
+        private readonly Mode mode;
 
         /// <summary>
-        /// Final Color of the element which will get faded
+        ///     Final Color of the element which will get faded
         /// </summary>
         private ColorBGRA? endValue;
 
         /// <summary>
-        /// Defines which Fade method will be used to calculate the new element color
+        ///     Start Color of the element which will get faded
         /// </summary>
-        private readonly Mode mode;
-
-        #endregion
-
-        #region Enums
-
-        /// <summary>
-        /// Contains 2 Modes
-        /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            /// FadeIn Transparency 100%
-            /// </summary>
-            FadeIn,
-            /// <summary>
-            /// FadeIn Transparency 0%
-            /// </summary>
-            FadeOut
-        }
+        private ColorBGRA startValue;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationFade" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationFade" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -76,7 +57,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationFade" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationFade" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -90,10 +71,30 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Methods
+        #region Enums
 
         /// <summary>
-        /// Returns the current color of the element
+        ///     Contains 2 Modes
+        /// </summary>
+        public enum Mode
+        {
+            /// <summary>
+            ///     FadeIn Transparency 100%
+            /// </summary>
+            FadeIn,
+
+            /// <summary>
+            ///     FadeIn Transparency 0%
+            /// </summary>
+            FadeOut
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns the current color of the element
         /// </summary>
         public ColorBGRA GetCurrentValue()
         {
@@ -101,11 +102,31 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             {
                 return this.endValue ?? this.startValue;
             }
-            return this.Calculate(Game.ClockTime - this.startTime, this.startValue, this.duration);
+            return this.Calculate(Game.Time - this.startTime, this.startValue, this.duration);
         }
 
         /// <summary>
-        /// Calculates the value of the specified mode
+        ///     Starts the animation
+        ///     After start you can get the current value in <see cref="AnimationFade.GetCurrentValue" /> method
+        /// </summary>
+        /// <param name="startVal">Starting Color of the element</param>
+        public void Start(ColorBGRA startVal)
+        {
+            if (this.IsWorking)
+            {
+                this.Stop();
+            }
+
+            this.startValue = startVal;
+            this.startTime = Game.Time;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Calculates the value of the specified mode
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="startVal">Start Value</param>
@@ -127,27 +148,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationFade.GetCurrentValue" /> method
-        /// </summary>
-        /// <param name="startVal">Starting Color of the element</param>
-        public void Start(ColorBGRA startVal)
-        {
-            if (this.IsWorking)
-            {
-                this.Stop();
-            }
-
-            this.startValue = startVal;
-            this.startTime = Game.ClockTime;
-        }
-
-        #endregion
-
-        #region Fade Methods
-
-        /// <summary>
-        /// Changes the transparency of a color to 100%
+        ///     Changes the transparency of a color to 100%
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Color</param>
@@ -159,7 +160,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Changes the transparency of a color to 0%
+        ///     Changes the transparency of a color to 0%
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Color</param>
@@ -171,6 +172,5 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         #endregion
-
     }
 }

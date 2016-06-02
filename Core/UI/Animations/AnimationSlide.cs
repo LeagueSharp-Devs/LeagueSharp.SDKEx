@@ -20,65 +20,38 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     using SharpDX;
 
     /// <summary>
-    /// A implementation of a <see cref="Animation" />
+    ///     A implementation of a <see cref="Animation" />
     /// </summary>
     public class AnimationSlide : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start Rectangle of the element which will get slided
+        ///     Distance for the element which get moved
         /// </summary>
-        private Vector2 startValue;
+        private readonly double distance;
 
         /// <summary>
-        /// Final Rectangle of the element which will get slided
-        /// </summary>
-        private Vector2? endValue;
-
-        /// <summary>
-        /// Defines which Slide method will be used to calculate the new element position
+        ///     Defines which Slide method will be used to calculate the new element position
         /// </summary>
         private readonly Mode mode;
 
         /// <summary>
-        /// Distance for the element which get moved
+        ///     Final Rectangle of the element which will get slided
         /// </summary>
-        private readonly double distance;
-
-        #endregion
-
-        #region Enums
+        private Vector2? endValue;
 
         /// <summary>
-        /// Contains 4 Modes
+        ///     Start Rectangle of the element which will get slided
         /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            /// Adjust to left
-            /// </summary>
-            Left,
-            /// <summary>
-            /// Adjust to top
-            /// </summary>
-            Top,
-            /// <summary>
-            /// Adjust to right
-            /// </summary>
-            Right,
-            /// <summary>
-            /// Adjust to bottom
-            /// </summary>
-            Bottom
-        }
+        private Vector2 startValue;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationSlide" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationSlide" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="distance">Distance for the defined animation</param>
@@ -91,7 +64,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationSlide" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationSlide" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="distance">Distance for the defined animation</param>
@@ -107,10 +80,40 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Methods
+        #region Enums
 
         /// <summary>
-        /// Returns the current rectangle of the element
+        ///     Contains 4 Modes
+        /// </summary>
+        public enum Mode
+        {
+            /// <summary>
+            ///     Adjust to left
+            /// </summary>
+            Left,
+
+            /// <summary>
+            ///     Adjust to top
+            /// </summary>
+            Top,
+
+            /// <summary>
+            ///     Adjust to right
+            /// </summary>
+            Right,
+
+            /// <summary>
+            ///     Adjust to bottom
+            /// </summary>
+            Bottom
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns the current rectangle of the element
         /// </summary>
         public Vector2 GetCurrentValue()
         {
@@ -118,11 +121,45 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             {
                 return this.endValue ?? this.startValue;
             }
-            return this.Calculate(Game.ClockTime - this.startTime, this.startValue, this.distance, this.duration);
+            return this.Calculate(Game.Time - this.startTime, this.startValue, this.distance, this.duration);
         }
 
         /// <summary>
-        /// Calculates the value of the specified mode
+        ///     Starts the animation
+        ///     After start you can get the current value in <see cref="AnimationSlide.GetCurrentValue" /> method
+        /// </summary>
+        /// <param name="startVal">Starting Position of the element</param>
+        public void Start(Vector2 startVal)
+        {
+            if (this.IsWorking)
+            {
+                this.Stop();
+            }
+
+            this.startValue = startVal;
+            this.startTime = Game.Time;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Moves element to bottom
+        /// </summary>
+        /// <param name="curTime">Current Time (seconds)</param>
+        /// <param name="val">Position</param>
+        /// <param name="dist">Distance</param>
+        /// <param name="dur">Duration</param>
+        /// <returns>New calculated rectangle</returns>
+        private Vector2 Bottom(double curTime, Vector2 val, double dist, double dur)
+        {
+            val.Y += (int)this.Linear(curTime, 0, dist, dur);
+            return val;
+        }
+
+        /// <summary>
+        ///     Calculates the value of the specified mode
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="startVal">Start Value</param>
@@ -153,27 +190,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationSlide.GetCurrentValue" /> method
-        /// </summary>
-        /// <param name="startVal">Starting Position of the element</param>
-        public void Start(Vector2 startVal)
-        {
-            if (this.IsWorking)
-            {
-                this.Stop();
-            }
-
-            this.startValue = startVal;
-            this.startTime = Game.ClockTime;
-        }
-
-        #endregion
-
-        #region Slide Methods
-
-        /// <summary>
-        /// Moves element to left
+        ///     Moves element to left
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Position</param>
@@ -187,21 +204,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Moves element to top
-        /// </summary>
-        /// <param name="curTime">Current Time (seconds)</param>
-        /// <param name="val">Position</param>
-        /// <param name="dist">Distance</param>
-        /// <param name="dur">Duration</param>
-        /// <returns>New calculated rectangle</returns>
-        private Vector2 Top(double curTime, Vector2 val, double dist, double dur)
-        {
-            val.Y -= (int)this.Linear(curTime, 0, dist, dur);
-            return val;
-        }
-
-        /// <summary>
-        /// Moves element to right
+        ///     Moves element to right
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Position</param>
@@ -215,20 +218,19 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Moves element to bottom
+        ///     Moves element to top
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Position</param>
         /// <param name="dist">Distance</param>
         /// <param name="dur">Duration</param>
         /// <returns>New calculated rectangle</returns>
-        private Vector2 Bottom(double curTime, Vector2 val, double dist, double dur)
+        private Vector2 Top(double curTime, Vector2 val, double dist, double dur)
         {
-            val.Y += (int)this.Linear(curTime, 0, dist, dur);
+            val.Y -= (int)this.Linear(curTime, 0, dist, dur);
             return val;
         }
 
         #endregion
-
     }
 }

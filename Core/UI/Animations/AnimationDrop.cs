@@ -20,97 +20,33 @@ namespace LeagueSharp.SDK.Core.UI.Animations
     using SharpDX;
 
     /// <summary>
-    /// A implementation of a <see cref="Animation" />
+    ///     A implementation of a <see cref="Animation" />
     /// </summary>
     public class AnimationDrop : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start AnimationDropData of the element which will get dropped
+        ///     Defines which Drop method will be used to calculate the new element AnimationDropData
         /// </summary>
-        private AnimationDropData startValue;
+        private readonly Mode mode;
 
         /// <summary>
-        /// Final AnimationDropData of the element which will get dropped
+        ///     Final AnimationDropData of the element which will get dropped
         /// </summary>
         private AnimationDropData endValue;
 
         /// <summary>
-        /// Defines which Drop method will be used to calculate the new element AnimationDropData
+        ///     Start AnimationDropData of the element which will get dropped
         /// </summary>
-        private readonly Mode mode;
-
-        #endregion
-
-        #region Enums
-
-        /// <summary>
-        /// Contains 4 Modes
-        /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            /// Vertically decrease height to 0
-            /// </summary>
-            VerticalDecrease,
-            /// <summary>
-            /// Vertically increase height to max height
-            /// </summary>
-            VerticalIncrease,
-            /// <summary>
-            /// Horizontally decrease width to 0
-            /// </summary>
-            HorizontalDecrease,
-            /// <summary>
-            /// Horizontally increase width to max width
-            /// </summary>
-            HorizontalIncrease
-        }
-
-        #endregion
-
-        #region Classes
-
-        /// <summary>
-        /// Data class for <see cref="AnimationDrop" /> class to save <see cref="SharpDX.Rectangle" /> and <see cref="SharpDX.ColorBGRA" />
-        /// </summary>
-        public class AnimationDropData
-        {
-            #region Fields
-
-            /// <summary>
-            /// Used to save rectangle data
-            /// </summary>
-            public Rectangle Rectangle;
-
-            /// <summary>
-            /// Used to save color data
-            /// </summary>
-            public ColorBGRA Color { get; set; }
-
-            #endregion
-
-            #region Constructors and Destructors
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="AnimationDropData" /> class.
-            /// </summary>
-            public AnimationDropData(Rectangle rectangle, ColorBGRA color)
-            {
-                this.Rectangle = rectangle;
-                this.Color = color;
-            }
-
-            #endregion
-        }
+        private AnimationDropData startValue;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationDrop" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationDrop" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -121,7 +57,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationDrop" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationDrop" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="duration">Selected duration for the defined animation</param>
@@ -135,10 +71,40 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Methods
+        #region Enums
 
         /// <summary>
-        /// Returns the current AnimationDropData of the element
+        ///     Contains 4 Modes
+        /// </summary>
+        public enum Mode
+        {
+            /// <summary>
+            ///     Vertically decrease height to 0
+            /// </summary>
+            VerticalDecrease,
+
+            /// <summary>
+            ///     Vertically increase height to max height
+            /// </summary>
+            VerticalIncrease,
+
+            /// <summary>
+            ///     Horizontally decrease width to 0
+            /// </summary>
+            HorizontalDecrease,
+
+            /// <summary>
+            ///     Horizontally increase width to max width
+            /// </summary>
+            HorizontalIncrease
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns the current AnimationDropData of the element
         /// </summary>
         public AnimationDropData GetCurrentValue()
         {
@@ -146,11 +112,31 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             {
                 return this.endValue ?? this.startValue;
             }
-            return this.Calculate(Game.ClockTime - this.startTime, this.startValue, this.duration);
+            return this.Calculate(Game.Time - this.startTime, this.startValue, this.duration);
         }
 
         /// <summary>
-        /// Calculates the value of the specified mode
+        ///     Starts the animation
+        ///     After start you can get the current value in <see cref="AnimationDrop.GetCurrentValue" /> method
+        /// </summary>
+        /// <param name="startVal">Starting AnimationDropData of the element</param>
+        public void Start(AnimationDropData startVal)
+        {
+            if (this.IsWorking)
+            {
+                this.Stop();
+            }
+
+            this.startValue = startVal;
+            this.startTime = Game.Time;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Calculates the value of the specified mode
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="startVal">Start Value</param>
@@ -180,27 +166,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationDrop.GetCurrentValue" /> method
-        /// </summary>
-        /// <param name="startVal">Starting AnimationDropData of the element</param>
-        public void Start(AnimationDropData startVal)
-        {
-            if (this.IsWorking)
-            {
-                this.Stop();
-            }
-
-            this.startValue = startVal;
-            this.startTime = Game.ClockTime;
-        }
-
-        #endregion
-
-        #region Drop Methods
-
-        /// <summary>
-        /// Decreases the Width until it reaches 0
+        ///     Decreases the Width until it reaches 0
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">AnimationDropData</param>
@@ -208,16 +174,16 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         /// <returns>New calculated AnimationDropData</returns>
         private AnimationDropData HorizontalDecrease(double curTime, AnimationDropData val, double dur)
         {
-            Rectangle rec = val.Rectangle;
+            var rec = val.Rectangle;
             Color col = val.Color;
             rec.Width = val.Rectangle.Width - (int)this.Linear(curTime, 0, val.Rectangle.Width, dur) - 1;
             col.A = (byte)(this.InverseLinear(curTime, val.Color.A, dur));
-            AnimationDropData data = new AnimationDropData(rec, col);
+            var data = new AnimationDropData(rec, col);
             return data;
         }
 
         /// <summary>
-        /// Increases the Width from 0 to specified width
+        ///     Increases the Width from 0 to specified width
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">AnimationDropData</param>
@@ -225,16 +191,20 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         /// <returns>New calculated AnimationDropData</returns>
         private AnimationDropData HorizontalIncrease(double curTime, AnimationDropData val, double dur)
         {
-            Rectangle rec = val.Rectangle;
+            var rec = val.Rectangle;
             Color col = val.Color;
             rec.Width = (int)this.Linear(curTime, 0, val.Rectangle.Width, dur) + 1;
-            col = new ColorBGRA(val.Color.B, val.Color.G, val.Color.R, (byte)this.Linear(curTime, val.Color.A, 255 - val.Color.A, dur));
-            AnimationDropData data = new AnimationDropData(rec, col);
+            col = new ColorBGRA(
+                val.Color.B,
+                val.Color.G,
+                val.Color.R,
+                (byte)this.Linear(curTime, val.Color.A, 255 - val.Color.A, dur));
+            var data = new AnimationDropData(rec, col);
             return data;
         }
 
         /// <summary>
-        /// Decreases the Height until it reaches 0
+        ///     Decreases the Height until it reaches 0
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">AnimationDropData</param>
@@ -242,16 +212,16 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         /// <returns>New calculated AnimationDropData</returns>
         private AnimationDropData VerticalDecrease(double curTime, AnimationDropData val, double dur)
         {
-            Rectangle rec = val.Rectangle;
+            var rec = val.Rectangle;
             Color col = val.Color;
             rec.Height = val.Rectangle.Height - (int)this.Linear(curTime, 0, val.Rectangle.Height, dur) - 1;
             col.A = (byte)(this.InverseLinear(curTime, val.Color.A, dur));
-            AnimationDropData data = new AnimationDropData(rec, col);
+            var data = new AnimationDropData(rec, col);
             return data;
         }
 
         /// <summary>
-        /// Increases the Height from 0 to specified height
+        ///     Increases the Height from 0 to specified height
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">AnimationDropData</param>
@@ -259,15 +229,56 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         /// <returns>New calculated AnimationDropData</returns>
         private AnimationDropData VerticalIncrease(double curTime, AnimationDropData val, double dur)
         {
-            Rectangle rec = val.Rectangle;
+            var rec = val.Rectangle;
             Color col = val.Color;
             rec.Height = (int)this.Linear(curTime, 0, val.Rectangle.Height, dur) + 1;
-            col = new ColorBGRA(val.Color.B, val.Color.G, val.Color.R, (byte)this.Linear(curTime, val.Color.A, 255 - val.Color.A, dur));
-            AnimationDropData data = new AnimationDropData(rec, col);
+            col = new ColorBGRA(
+                val.Color.B,
+                val.Color.G,
+                val.Color.R,
+                (byte)this.Linear(curTime, val.Color.A, 255 - val.Color.A, dur));
+            var data = new AnimationDropData(rec, col);
             return data;
         }
 
         #endregion
 
+        /// <summary>
+        ///     Data class for <see cref="AnimationDrop" /> class to save <see cref="SharpDX.Rectangle" /> and
+        ///     <see cref="SharpDX.ColorBGRA" />
+        /// </summary>
+        public class AnimationDropData
+        {
+            #region Fields
+
+            /// <summary>
+            ///     Used to save rectangle data
+            /// </summary>
+            public Rectangle Rectangle;
+
+            #endregion
+
+            #region Constructors and Destructors
+
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="AnimationDropData" /> class.
+            /// </summary>
+            public AnimationDropData(Rectangle rectangle, ColorBGRA color)
+            {
+                this.Rectangle = rectangle;
+                this.Color = color;
+            }
+
+            #endregion
+
+            #region Public Properties
+
+            /// <summary>
+            ///     Used to save color data
+            /// </summary>
+            public ColorBGRA Color { get; set; }
+
+            #endregion
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Gets the TickCount based on the game runtime clock.
         /// </summary>
-        public static int TickCount => (int)(Game.ClockTime * 1000);
+        public static int TickCount => (int)(Game.Time * 1000);
 
         #endregion
 

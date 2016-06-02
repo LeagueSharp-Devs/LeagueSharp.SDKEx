@@ -105,7 +105,7 @@ namespace LeagueSharp.SDK
         internal static PredictionOutput GetDashingPrediction(PredictionInput input)
         {
             var dashData = input.Unit.GetDashInfo();
-            var result = new PredictionOutput { Input = input };
+            var result = new PredictionOutput { Input = input, Hitchance = HitChance.Medium };
 
             // Normal dashes.
             if (!dashData.IsBlink)
@@ -115,7 +115,7 @@ namespace LeagueSharp.SDK
                 // Mid air:
                 var dashPred = GetPositionOnPath(
                     input,
-                    new List<Vector2> { input.Unit.ServerPosition.ToVector2(), endP.ToVector2() },
+                    new List<Vector3> { input.Unit.ServerPosition, endP }.ToVector2(),
                     dashData.Speed);
 
                 if (dashPred.Hitchance >= HitChance.High
@@ -202,7 +202,7 @@ namespace LeagueSharp.SDK
                 return new PredictionOutput
                            {
                                Input = input, UnitPosition = input.Unit.ServerPosition,
-                               CastPosition = input.Unit.ServerPosition, Hitchance = HitChance.High
+                               CastPosition = input.Unit.ServerPosition, Hitchance = HitChance.VeryHigh
                            };
             }
 
@@ -249,7 +249,7 @@ namespace LeagueSharp.SDK
                 if ((input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone)
                     && input.Unit.DistanceSquared(input.From) < 200 * 200)
                 {
-                    tDistance = dist - input.RealRadius;
+                    tDistance += input.RealRadius;
                 }
 
                 path = path.CutPath(tDistance);

@@ -17,67 +17,46 @@
 
 namespace LeagueSharp.SDK.Core.UI.Animations
 {
-    using System;
-
     using SharpDX;
 
     /// <summary>
-    /// A implementation of a <see cref="Animation" />
+    ///     A implementation of a <see cref="Animation" />
     /// </summary>
     public class AnimationShake : Animation
     {
         #region Fields
 
         /// <summary>
-        /// Start Rectangle of the element which will get shaked
-        /// </summary>
-        private Rectangle startValue;
-
-        /// <summary>
-        /// Final Rectangle of the element which will get shaked
-        /// </summary>
-        private Rectangle? endValue;
-
-        /// <summary>
-        /// Defines which Shake method will be used to calculate the new element rectangle
-        /// </summary>
-        private readonly Mode mode;
-
-        /// <summary>
-        /// Defines the distance from the start initial point to shake
+        ///     Defines the distance from the start initial point to shake
         /// </summary>
         private readonly double distance;
 
         /// <summary>
-        /// How many times the element should get shaked
+        ///     Defines which Shake method will be used to calculate the new element rectangle
+        /// </summary>
+        private readonly Mode mode;
+
+        /// <summary>
+        ///     How many times the element should get shaked
         /// </summary>
         private readonly int shakeTimes;
 
-        #endregion
-
-        #region Enums
+        /// <summary>
+        ///     Final Rectangle of the element which will get shaked
+        /// </summary>
+        private Rectangle? endValue;
 
         /// <summary>
-        /// Contains 2 Modes
+        ///     Start Rectangle of the element which will get shaked
         /// </summary>
-        public enum Mode
-        {
-            /// <summary>
-            /// Horizontal shake
-            /// </summary>
-            Horizontal,
-            /// <summary>
-            /// Vertical shake
-            /// </summary>
-            Vertical
-        }
+        private Rectangle startValue;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationShake" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationShake" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="distance">Shaking distance from main point</param>
@@ -92,7 +71,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnimationShake" /> class.
+        ///     Initializes a new instance of the <see cref="AnimationShake" /> class.
         /// </summary>
         /// <param name="mode">Selected mode for calculation</param>
         /// <param name="distance">Shaking distance from main point</param>
@@ -110,10 +89,30 @@ namespace LeagueSharp.SDK.Core.UI.Animations
 
         #endregion
 
-        #region Methods
+        #region Enums
 
         /// <summary>
-        /// Returns the current rectangle of the element
+        ///     Contains 2 Modes
+        /// </summary>
+        public enum Mode
+        {
+            /// <summary>
+            ///     Horizontal shake
+            /// </summary>
+            Horizontal,
+
+            /// <summary>
+            ///     Vertical shake
+            /// </summary>
+            Vertical
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns the current rectangle of the element
         /// </summary>
         public Rectangle GetCurrentValue()
         {
@@ -121,11 +120,36 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             {
                 return this.endValue ?? this.startValue;
             }
-            return this.Calculate(Game.ClockTime - this.startTime, this.startValue, this.distance, this.shakeTimes, this.duration);
+            return this.Calculate(
+                Game.Time - this.startTime,
+                this.startValue,
+                this.distance,
+                this.shakeTimes,
+                this.duration);
         }
 
         /// <summary>
-        /// Calculates the value of the specified mode
+        ///     Starts the animation
+        ///     After start you can get the current value in <see cref="AnimationShake.GetCurrentValue" /> method
+        /// </summary>
+        /// <param name="startVal">Starting Rectangle of the element</param>
+        public void Start(Rectangle startVal)
+        {
+            if (this.IsWorking)
+            {
+                this.Stop();
+            }
+
+            this.startValue = startVal;
+            this.startTime = Game.Time;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        ///     Calculates the value of the specified mode
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="startVal">Start Value</param>
@@ -149,70 +173,7 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         }
 
         /// <summary>
-        /// Starts the animation
-        /// After start you can get the current value in <see cref="AnimationShake.GetCurrentValue" /> method
-        /// </summary>
-        /// <param name="startVal">Starting Rectangle of the element</param>
-        public void Start(Rectangle startVal)
-        {
-            if (this.IsWorking)
-            {
-                this.Stop();
-            }
-
-            this.startValue = startVal;
-            this.startTime = Game.ClockTime;
-        }
-
-        #endregion
-
-        #region Shake Methods
-
-        /// <summary>
-        /// Shakes in vertical position
-        /// </summary>
-        /// <param name="curTime">Current Time (seconds)</param>
-        /// <param name="val">Color</param>
-        /// <param name="dist">Distance</param>
-        /// <param name="times">Shake Times</param>
-        /// <param name="dur">Duration</param>
-        /// <returns>New calculated color</returns>
-        private Rectangle Vertical(double curTime, Rectangle val, double dist, int times, double dur)
-        {
-            Rectangle retRec = val;
-            double b = this.Linear(curTime % (dur / times / 2), 0, dist, (dur / times) / 2);
-
-            if (curTime / ((dur / times) / 2) % 2 <= 1)
-            {
-                if (curTime / ((dur / times) / 2) < 1)
-                {
-                    retRec.Y += (int)b;
-                }
-                else
-                {
-                    retRec.Y -= (int)dist;
-                    retRec.Y += (int)b * 2;
-                }
-            }
-            else
-            {
-                if (curTime / ((dur / times) / 2) > times * 2 - 1)
-                {
-                    retRec.Y += (int)dist;
-                    retRec.Y -= (int)b;
-                }
-                else
-                {
-                    retRec.Y += (int)dist;
-                    retRec.Y -= (int)b * 2;
-                }
-            }
-
-            return retRec;
-        }
-
-        /// <summary>
-        /// Shakes in horizontal position
+        ///     Shakes in horizontal position
         /// </summary>
         /// <param name="curTime">Current Time (seconds)</param>
         /// <param name="val">Color</param>
@@ -222,8 +183,8 @@ namespace LeagueSharp.SDK.Core.UI.Animations
         /// <returns>New calculated color</returns>
         private Rectangle Horizontal(double curTime, Rectangle val, double dist, int times, double dur)
         {
-            Rectangle retRec = val;
-            double b = this.Linear(curTime % (dur / times / 2), 0, dist, (dur / times) / 2);
+            var retRec = val;
+            var b = this.Linear(curTime % (dur / times / 2), 0, dist, (dur / times) / 2);
 
             if (curTime / ((dur / times) / 2) % 2 <= 1)
             {
@@ -254,7 +215,49 @@ namespace LeagueSharp.SDK.Core.UI.Animations
             return retRec;
         }
 
-        #endregion
+        /// <summary>
+        ///     Shakes in vertical position
+        /// </summary>
+        /// <param name="curTime">Current Time (seconds)</param>
+        /// <param name="val">Color</param>
+        /// <param name="dist">Distance</param>
+        /// <param name="times">Shake Times</param>
+        /// <param name="dur">Duration</param>
+        /// <returns>New calculated color</returns>
+        private Rectangle Vertical(double curTime, Rectangle val, double dist, int times, double dur)
+        {
+            var retRec = val;
+            var b = this.Linear(curTime % (dur / times / 2), 0, dist, (dur / times) / 2);
 
+            if (curTime / ((dur / times) / 2) % 2 <= 1)
+            {
+                if (curTime / ((dur / times) / 2) < 1)
+                {
+                    retRec.Y += (int)b;
+                }
+                else
+                {
+                    retRec.Y -= (int)dist;
+                    retRec.Y += (int)b * 2;
+                }
+            }
+            else
+            {
+                if (curTime / ((dur / times) / 2) > times * 2 - 1)
+                {
+                    retRec.Y += (int)dist;
+                    retRec.Y -= (int)b;
+                }
+                else
+                {
+                    retRec.Y += (int)dist;
+                    retRec.Y -= (int)b * 2;
+                }
+            }
+
+            return retRec;
+        }
+
+        #endregion
     }
 }
