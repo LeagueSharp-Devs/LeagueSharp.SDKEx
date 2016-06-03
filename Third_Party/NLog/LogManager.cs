@@ -404,8 +404,30 @@ namespace NLog
         /// </summary>
         private static string GetClassFullName()
         {
-            var frame = new StackTrace(2);      
-            return frame.GetFrame(0).GetMethod().DeclaringType.FullName;
+            string className;
+            Type declaringType;
+            int framesToSkip = 2;
+
+            do
+            {
+#if SILVERLIGHT
+                StackFrame frame = new StackTrace().GetFrame(framesToSkip);
+#else
+                StackFrame frame = new StackFrame(framesToSkip, false);
+#endif
+                MethodBase method = frame.GetMethod();
+                declaringType = method.DeclaringType;
+                if (declaringType == null)
+                {
+                    className = method.Name;
+                    break;
+                }
+
+                framesToSkip++;
+                className = declaringType.FullName;
+            } while (declaringType.Module.Name.Equals("mscorlib.dll", StringComparison.OrdinalIgnoreCase));
+
+            return className;
         }
 
         private static void TurnOffLogging(object sender, EventArgs args)
