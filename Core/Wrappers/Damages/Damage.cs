@@ -239,10 +239,9 @@ namespace LeagueSharp.SDK
             }
 
             // Ninja Tabi
-            if (targetHero != null && !(source is Obj_AI_Turret)
-                && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
+            if (targetHero != null && !(source is Obj_AI_Turret) && Items.HasItem(3047, targetHero))
             {
-                dmgReduce *= 0.9;
+                dmgReduce *= 0.88;
             }
 
             dmgPhysical = source.CalculatePhysicalDamage(target, dmgPhysical);
@@ -434,10 +433,9 @@ namespace LeagueSharp.SDK
                     dmgPassive += source.GetPassiveDamageInfo(target, false).Value;
                     if (targetHero != null)
                     {
-                        if (spellData.IsModifiedDamage
-                            && new[] { 3047, 1316, 1318, 1315, 1317 }.Any(i => Items.HasItem(i, targetHero)))
+                        if (spellData.IsModifiedDamage && Items.HasItem(3047, targetHero))
                         {
-                            dmgReduce *= 0.9;
+                            dmgReduce *= 0.88;
                         }
                         if (source.GetFerocity(Ferocity.FervorofBattle).IsValid())
                         {

@@ -995,8 +995,9 @@ namespace LeagueSharp.SDK
                             (hero, @base) => hero.HasBuff("talonnoxiandiplomacybuff"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            hero.GetSpellDamage(@base, SpellSlot.Q)
-                            + (@base is Obj_AI_Hero ? hero.GetSpellDamage(@base, SpellSlot.Q, DamageStage.Empowered) : 0),
+                            @base is Obj_AI_Hero
+                                ? hero.GetSpellDamage(@base, SpellSlot.Q, DamageStage.Empowered)
+                                : hero.GetSpellDamage(@base, SpellSlot.Q),
                             true);
                         break;
                     case "Taric":
