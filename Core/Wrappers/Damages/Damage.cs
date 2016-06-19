@@ -865,7 +865,7 @@ namespace LeagueSharp.SDK
                 // DoubleEdgedSword
                 if (damageType != DamageType.True && hero.GetFerocity(Ferocity.DoubleEdgedSword).IsValid())
                 {
-                    amount *= hero.IsMelee() ? 1.03 : 1.02;
+                    amount *= 1.03;
                 }
 
                 // Oppressor
@@ -914,7 +914,7 @@ namespace LeagueSharp.SDK
             if (targetHero != null && damageType != DamageType.True
                 && targetHero.GetFerocity(Ferocity.DoubleEdgedSword).IsValid())
             {
-                amount *= targetHero.IsMelee() ? 1.015 : 1.02;
+                amount *= 1.015;
             }
 
             return amount;

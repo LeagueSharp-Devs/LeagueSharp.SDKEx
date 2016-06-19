@@ -161,7 +161,7 @@ namespace LeagueSharp.SDK
                 string.Empty,
                 (hero, @base) => hero.HasBuff("Mastery6261") && @base is Obj_AI_Hero,
                 DamageType.Magical,
-                (hero, @base) => (hero.IsMelee() ? 0.025 : 0.0125) * hero.MaxHealth);
+                (hero, @base) => (hero.IsMelee() ? 0.03 : 0.015) * hero.MaxHealth);
 
             var excluded = new List<string>();
             foreach (var name in GameObjects.Heroes.Select(h => h.ChampionName).Where(name => !excluded.Contains(name)))
