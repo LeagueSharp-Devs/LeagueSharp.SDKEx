@@ -105,6 +105,11 @@ namespace LeagueSharp.SDK
                     .FirstOrDefault(spellData => objectName.Contains(spellData.SourceObjectName));
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="championName">The Champion Name</param>
+        /// <returns></returns>
         public static SpellDatabaseEntry GetBySpellSlot(SpellSlot slot, string championName = "undefined")
         {
             var actualChampionName = championName.Equals("undefined")
@@ -115,6 +120,12 @@ namespace LeagueSharp.SDK
                     spellData => spellData.ChampionName == actualChampionName && spellData.Slot == slot);
         }
 
+        /// <summary>
+        ///     Get all spells corresponding to a spellslot (useful for nidalee, jayce, elise, leesin)
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="championName">The Champion Name</param>
+        /// <returns></returns>
         public static IEnumerable<SpellDatabaseEntry> GetAllSpellsOnSpellSlot(
             SpellSlot slot,
             string championName = "undefined")
@@ -125,6 +136,12 @@ namespace LeagueSharp.SDK
             return Spells.Where(spellData => spellData.ChampionName == actualChampionName && spellData.Slot == slot);
         }
 
+        /// <summary>
+        ///     Creates a spell from target spellslot
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="championName">The Champion Name</param>
+        /// <returns></returns>
         public static Spell MakeSpell(this SpellSlot slot, string championName = "undefined")
         {
             var spellData = GetBySpellSlot(slot, championName);

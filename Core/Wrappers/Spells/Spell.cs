@@ -78,6 +78,11 @@ namespace LeagueSharp.SDK
         /// </summary>
         public Spell() { }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Spell"/> class using SpellDatabase values!
+        /// </summary>
+        /// <param name="slot">The SpellSlot</param>
+        /// <param name="championName">The Champion Name</param>
         public Spell(SpellSlot slot, string championName = "undefined")
         {
             var spellData = SpellDatabase.GetBySpellSlot(slot, championName);
