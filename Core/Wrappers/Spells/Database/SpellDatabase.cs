@@ -106,6 +106,7 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
+        ///     Get the first spell on a spellslot (for champions with more than 1 spellslot use method GetAllSpellsOnSpellSlot)
         /// </summary>
         /// <param name="slot">The SpellSlot</param>
         /// <param name="championName">The Champion Name</param>
