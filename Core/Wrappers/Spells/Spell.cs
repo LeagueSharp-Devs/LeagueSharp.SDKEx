@@ -104,6 +104,7 @@ namespace LeagueSharp.SDK
                 Speed = spellData.MissileSpeed;
                 IsChargedSpell = true;
                 Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
+                return;
             }
             // Skillshot:
             if (spellData.CastType.Any(type => type == CastType.Position || type == CastType.Direction))
@@ -118,6 +119,7 @@ namespace LeagueSharp.SDK
                 Speed = spellData.MissileSpeed;
                 IsSkillshot = true;
                 Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
+                return;
             }
             // Targeted:
             Range = spellData.Range;
