@@ -83,9 +83,9 @@ namespace LeagueSharp.SDK
         /// </summary>
         /// <param name="slot">The SpellSlot</param>
         /// <param name="championName">The Champion Name</param>
-        public Spell(SpellSlot slot, string championName = "undefined")
+        public Spell(SpellSlot slot)
         {
-            var spellData = SpellDatabase.GetBySpellSlot(slot, championName);
+            var spellData = SpellDatabase.GetBySpellSlot(slot, ObjectManager.Player.CharData.BaseSkinName);
             // Charged Spell:
             if (spellData.ChargedSpellName != "")
             {
@@ -168,7 +168,7 @@ namespace LeagueSharp.SDK
         /// <param name="range">
         ///     Spell Range
         /// </param>
-        public Spell(SpellSlot slot, float range = float.MaxValue)
+        public Spell(SpellSlot slot, float range)
         {
             this.Slot = slot;
             this.Range = range;
