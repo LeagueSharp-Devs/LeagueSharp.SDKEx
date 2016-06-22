@@ -85,6 +85,7 @@ namespace LeagueSharp.SDK
         /// <param name="championName">The Champion Name</param>
         public Spell(SpellSlot slot)
         {
+            Slot = slot;
             var spellData = SpellDatabase.GetBySpellSlot(slot, ObjectManager.Player.CharData.BaseSkinName);
             // Charged Spell:
             if (spellData.ChargedSpellName != "")

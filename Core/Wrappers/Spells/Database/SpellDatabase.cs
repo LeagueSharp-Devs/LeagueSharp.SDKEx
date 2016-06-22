@@ -151,9 +151,10 @@ namespace LeagueSharp.SDK
             {
                 return new Spell
                            {
-                               ChargedBuffName = spellData.ChargedBuffName, ChargedMaxRange = spellData.ChargedMaxRange,
-                               ChargedMinRange = spellData.ChargedMinRange, ChargedSpellName = spellData.ChargedSpellName,
-                               ChargeDuration = spellData.ChargeDuration, Delay = spellData.Delay, Range = spellData.Range,
+                               Slot = slot, ChargedBuffName = spellData.ChargedBuffName,
+                               ChargedMaxRange = spellData.ChargedMaxRange, ChargedMinRange = spellData.ChargedMinRange,
+                               ChargedSpellName = spellData.ChargedSpellName, ChargeDuration = spellData.ChargeDuration,
+                               Delay = spellData.Delay, Range = spellData.Range,
                                Width =
                                    spellData.Radius > 0 && spellData.Radius < 30000
                                        ? spellData.Radius
@@ -169,23 +170,21 @@ namespace LeagueSharp.SDK
             if (spellData.CastType.Any(type => type == CastType.Position || type == CastType.Direction))
             {
                 return new Spell
-                {
-                    Delay = spellData.Delay,
-                    Range = spellData.Range,
-                    Width =
+                           {
+                               Slot = slot, Delay = spellData.Delay, Range = spellData.Range,
+                               Width =
                                    spellData.Radius > 0 && spellData.Radius < 30000
                                        ? spellData.Radius
                                        : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000),
-                    Collision =
+                               Collision =
                                    (spellData.CollisionObjects != null
                                     && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions)),
-                    Speed = spellData.MissileSpeed,
-                    IsSkillshot = true,
-                    Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
-                };
+                               Speed = spellData.MissileSpeed, IsSkillshot = true,
+                               Type = GetSkillshotTypeFromSpellType(spellData.SpellType)
+                           };
             }
             // Targeted:
-            return new Spell { Range = spellData.Range, Delay = spellData.Delay, Speed = spellData.MissileSpeed };
+            return new Spell { Range = spellData.Range, Delay = spellData.Delay, Speed = spellData.MissileSpeed, Slot = slot };
         }
 
         /// <summary>
