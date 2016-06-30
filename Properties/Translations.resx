@@ -3493,11 +3493,11 @@
 	"Killsteal E": "\u7528\u0020\u0045\u0020\u6436\u982d",
 	"Killsteal R": "\u4f7f\u7528\u0020\u0052\u0020\u6436\u982d",
 	"Buy Trinket": "\u8cfc\u8cb7\u98fe\u54c1",
-	"Festival Kassadin": "",
-	"Deep One Kassadin": "",
-	"Pre-Void Kassadin": "",
-	"Harbinger Kassadin": "",
-	"Cosmic Reaver Kassadin": ""
+	"Festival Kassadin": "\u72c2\u6b61\u7bc0 \u5361\u85a9\u4e01",
+	"Deep One Kassadin": "\u6d77\u5e95\u5169\u842c\u54e9 \u5361\u85a9\u4e01",
+	"Pre-Void Kassadin": "\u865b\u7a7a\u524d\u4e16 \u5361\u85a9\u4e01",
+	"Harbinger Kassadin": "\u865b\u7a7a\u9b54\u7532 \u5361\u85a9\u4e01",
+	"Cosmic Reaver Kassadin": "\u9280\u6cb3\u81f3\u5c0a \u5361\u85a9\u4e01"
 }
     </value>
   </data>
