@@ -468,8 +468,8 @@ namespace LeagueSharp.SDK
 
             var wayPoints = hero.GetWaypoints();
             var lastWaypoint = wayPoints.Last();
-            var heroServerPos = hero.ServerPosition.ToVector2();
             var heroPos = hero.Position;
+            var heroServerPos = hero.ServerPosition.ToVector2();
             var distHeroToWaypoint = heroServerPos.Distance(lastWaypoint);
             var distHeroToFrom = heroServerPos.Distance(input.From);
             var distFromToWaypoint = input.From.Distance(lastWaypoint);
@@ -478,7 +478,7 @@ namespace LeagueSharp.SDK
                         + (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon ? distHeroToFrom / input.Speed : 0);
             var moveArea = hero.MoveSpeed * delay;
             var fixRange = moveArea * 0.35f;
-            var minPath = 800 + moveArea;
+            var minPath = 1000;
 
             if (input.Type == SkillshotType.SkillshotCircle)
             {
@@ -490,7 +490,35 @@ namespace LeagueSharp.SDK
                 return HitChance.Medium;
             }
 
-            if (distHeroToWaypoint > 0 && distHeroToWaypoint < 50)
+            if (distHeroToWaypoint > 0)
+            {
+                if (angle < 20 || angle > 160 || (angle > 130 && distHeroToWaypoint > 400))
+                {
+                    return HitChance.VeryHigh;
+                }
+
+                var wallPoints = new List<Vector2>();
+
+                for (var i = 1; i <= 15; i++)
+                {
+                    var circleAngle = i * 2 * Math.PI / 15;
+                    var point = new Vector2(
+                        heroPos.X + 350 * (float)Math.Cos(circleAngle),
+                        heroPos.Y + 350 * (float)Math.Sin(circleAngle));
+
+                    if (point.IsWall())
+                    {
+                        wallPoints.Add(point);
+                    }
+                }
+
+                if (wallPoints.Count > 2 && !wallPoints.Any(i => heroPos.Distance(i) > lastWaypoint.Distance(i)))
+                {
+                    return HitChance.VeryHigh;
+                }
+            }
+
+            if (distHeroToWaypoint > 0 && distHeroToWaypoint < 100)
             {
                 return HitChance.Medium;
             }
@@ -512,6 +540,11 @@ namespace LeagueSharp.SDK
                 return HitChance.VeryHigh;
             }
 
+            if (GamePath.PathTracker.GetCurrentPath(hero).Time > 0.25d)
+            {
+                return HitChance.VeryHigh;
+            }
+
             if (distHeroToWaypoint > minPath)
             {
                 return HitChance.VeryHigh;
@@ -526,34 +559,6 @@ namespace LeagueSharp.SDK
                 && distHeroToWaypoint > fixRange)
             {
                 return HitChance.VeryHigh;
-            }
-
-            if (distHeroToWaypoint > 0)
-            {
-                if (angle < 20 || angle > 150)
-                {
-                    return HitChance.VeryHigh;
-                }
-
-                var wallPoints = new List<Vector2>();
-
-                for (var i = 1; i <= 15; i++)
-                {
-                    var circleAngle = i * 2 * Math.PI / 15;
-                    var point = new Vector2(
-                        heroPos.X + 450 * (float)Math.Cos(circleAngle),
-                        heroPos.Y + 450 * (float)Math.Sin(circleAngle));
-
-                    if (point.IsWall())
-                    {
-                        wallPoints.Add(point);
-                    }
-                }
-
-                if (wallPoints.Count > 2 && !wallPoints.Any(i => heroPos.Distance(i) > lastWaypoint.Distance(i)))
-                {
-                    return HitChance.VeryHigh;
-                }
             }
 
             return HitChance.Medium;
@@ -599,11 +604,6 @@ namespace LeagueSharp.SDK
             if (data.Path.Count < 3)
             {
                 return false;
-            }
-
-            if (data.Path[1].Tick == data.StopTick)
-            {
-                return true;
             }
 
             if (data.Path[2].Tick - data.Path[1].Tick < 180 && Variables.TickCount - data.Path[2].Tick < 90)

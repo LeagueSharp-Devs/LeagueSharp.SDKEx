@@ -977,10 +977,11 @@ namespace LeagueSharp.SDK
                     case "TahmKench":
                         AddPassiveAttack(
                             "TahmKench",
-                            (hero, @base) => hero.Spellbook.GetSpell(SpellSlot.R).Level > 0,
+                            (hero, @base) => true,
                             DamageType.Magical,
-                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.R),
-                            true);
+                            (hero, @base) =>
+                            ((hero.Level < 11 ? 0.01 : (hero.Level < 16 ? 0.0125 : 0.015)) * hero.MaxHealth)
+                            * Math.Min(Math.Max(0, @base.GetBuffCount("TahmKenchPDebuffCounter")) + 1, 3));
                         break;
                     case "Talon":
                         AddPassiveAttack(

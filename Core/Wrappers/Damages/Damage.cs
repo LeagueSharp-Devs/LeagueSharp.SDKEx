@@ -137,14 +137,14 @@ namespace LeagueSharp.SDK
                         GameObjects.Heroes.Any(
                             h => h.Team == hero.Team && !h.Compare(hero) && h.Distance(hero) < (eyeEquinox ? 850 : 1050)))
                     {
-                        var spoilwarDmg = 200;
+                        var spoilwarDmg = 195 + (5 * hero.Level);
                         if (Items.HasItem((int)ItemId.Targons_Brace, hero))
                         {
-                            spoilwarDmg = 240;
+                            spoilwarDmg = 200 + (10 * hero.Level);
                         }
                         else if (Items.HasItem((int)ItemId.Face_of_the_Mountain, hero) || eyeEquinox)
                         {
-                            spoilwarDmg = 400;
+                            spoilwarDmg = 320 + (20 * hero.Level);
                         }
                         if (target.Health < spoilwarDmg)
                         {

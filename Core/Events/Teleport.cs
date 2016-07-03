@@ -329,7 +329,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public int GetDuration(GameObjectTeleportEventArgs args)
         {
-            return 3500;
+            return 4500;
         }
 
         /// <summary>
