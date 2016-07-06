@@ -57,15 +57,15 @@
     <Reference Include="LeagueSharp.Sandbox">
       <HintPath>C:\Program Files (x86)\PlaySharp\System\LeagueSharp.Sandbox.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json">
       <HintPath>C:\Program Files (x86)\PlaySharp\System\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SharpDX, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+    <Reference Include="SharpDX">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\PlaySharp\System\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct3D9, Version=2.6.3.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+    <Reference Include="SharpDX.Direct3D9">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\PlaySharp\System\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
