@@ -76,56 +76,58 @@ namespace LeagueSharp.SDK
         /// <summary>
         ///     Initializes a new instance of the <see cref="Spell" /> class.
         /// </summary>
-        public Spell() { }
+        public Spell()
+        {
+        }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Spell"/> class using SpellDatabase values!
+        ///     Initializes a new instance of the <see cref="Spell" /> class using SpellDatabase values!
         /// </summary>
         /// <param name="slot">The SpellSlot</param>
         /// <param name="championName">The Champion Name</param>
         public Spell(SpellSlot slot)
         {
-            Slot = slot;
+            this.Slot = slot;
             var spellData = SpellDatabase.GetBySpellSlot(slot, ObjectManager.Player.CharData.BaseSkinName);
             // Charged Spell:
             if (spellData.ChargedSpellName != "")
             {
-                ChargedBuffName = spellData.ChargedBuffName;
-                ChargedMaxRange = spellData.ChargedMaxRange;
-                ChargedMinRange = spellData.ChargedMinRange;
-                ChargedSpellName = spellData.ChargedSpellName;
-                ChargeDuration = spellData.ChargeDuration;
-                Delay = spellData.Delay;
-                Range = spellData.Range;
-                Width = spellData.Radius > 0 && spellData.Radius < 30000
-                            ? spellData.Radius
-                            : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
-                Collision = (spellData.CollisionObjects != null
-                             && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions));
-                Speed = spellData.MissileSpeed;
-                IsChargedSpell = true;
-                Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
+                this.ChargedBuffName = spellData.ChargedBuffName;
+                this.ChargedMaxRange = spellData.ChargedMaxRange;
+                this.ChargedMinRange = spellData.ChargedMinRange;
+                this.ChargedSpellName = spellData.ChargedSpellName;
+                this.ChargeDuration = spellData.ChargeDuration;
+                this.Delay = spellData.Delay;
+                this.Range = spellData.Range;
+                this.Width = spellData.Radius > 0 && spellData.Radius < 30000
+                                 ? spellData.Radius
+                                 : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
+                this.Collision = (spellData.CollisionObjects != null
+                                  && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions));
+                this.Speed = spellData.MissileSpeed;
+                this.IsChargedSpell = true;
+                this.Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
                 return;
             }
             // Skillshot:
             if (spellData.CastType.Any(type => type == CastType.Position || type == CastType.Direction))
             {
-                Delay = spellData.Delay;
-                Range = spellData.Range;
-                Width = spellData.Radius > 0 && spellData.Radius < 30000
-                            ? spellData.Radius
-                            : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
-                Collision = (spellData.CollisionObjects != null
-                             && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions));
-                Speed = spellData.MissileSpeed;
-                IsSkillshot = true;
-                Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
+                this.Delay = spellData.Delay;
+                this.Range = spellData.Range;
+                this.Width = spellData.Radius > 0 && spellData.Radius < 30000
+                                 ? spellData.Radius
+                                 : ((spellData.Width > 0 && spellData.Width < 30000) ? spellData.Width : 30000);
+                this.Collision = (spellData.CollisionObjects != null
+                                  && spellData.CollisionObjects.Any(obj => obj == CollisionableObjects.Minions));
+                this.Speed = spellData.MissileSpeed;
+                this.IsSkillshot = true;
+                this.Type = SpellDatabase.GetSkillshotTypeFromSpellType(spellData.SpellType);
                 return;
             }
             // Targeted:
-            Range = spellData.Range;
-            Delay = spellData.Delay;
-            Speed = spellData.MissileSpeed;
+            this.Range = spellData.Range;
+            this.Delay = spellData.Delay;
+            this.Speed = spellData.MissileSpeed;
         }
 
         /// <summary>
@@ -140,7 +142,8 @@ namespace LeagueSharp.SDK
         /// <param name="hitChance">
         ///     Minimum Hit Chance
         /// </param>
-        [Obsolete("Most of values will be wrong! If you want to use SpellDb, use the Spell(SpellSlot) override instead!")]
+        [Obsolete("Most of values will be wrong! If you want to use SpellDb, use the Spell(SpellSlot) override instead!"
+            )]
         public Spell(SpellSlot slot, bool loadFromGame, HitChance hitChance = HitChance.Medium)
         {
             this.Slot = slot;
@@ -893,7 +896,7 @@ namespace LeagueSharp.SDK
 
             if (Math.Abs(this.Speed - float.MaxValue) > float.Epsilon)
             {
-                time += 1000 * unit.Distance(this.From) / this.Speed;
+                time += 1000 * Math.Max(unit.Distance(this.From) - GameObjects.Player.BoundingRadius, 0) / this.Speed;
             }
 
             return Health.GetPrediction(unit, (int)time);

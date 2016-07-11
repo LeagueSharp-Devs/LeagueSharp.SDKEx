@@ -121,7 +121,10 @@ namespace LeagueSharp.SDK
                                 minion.IsValidTarget(
                                     Math.Min(input.Range + input.Radius + 100, 2000),
                                     true,
-                                    input.RangeCheckFrom) && IsHitCollision(minion, input, position, 15)));
+                                    input.RangeCheckFrom)
+                                && (minion.Distance(input.From) < 10 + minion.BoundingRadius
+                                    || minion.Distance(position) < minion.BoundingRadius
+                                    || IsHitCollision(minion, input, position, minion.IsMoving ? 50 : 15))));
                 }
 
                 if (input.CollisionObjects.HasFlag(CollisionableObjects.Heroes))
@@ -195,13 +198,12 @@ namespace LeagueSharp.SDK
             }
 
             inputSub.Unit = collision;
-            var radius = inputSub.Unit.BoundingRadius;
-            var predPos = Movement.GetPrediction(inputSub, false, false).UnitPosition.ToVector2();
 
-            return (collision is Obj_AI_Minion
-                    && (predPos.Distance(inputSub.From) < 10 + radius || predPos.Distance(pos) < radius))
-                   || predPos.DistanceSquared(inputSub.From.ToVector2(), pos.ToVector2(), true)
-                   <= Math.Pow(inputSub.Radius + radius + extraRadius, 2);
+            return
+                Movement.GetPrediction(inputSub, false, false)
+                    .UnitPosition.ToVector2()
+                    .DistanceSquared(inputSub.From.ToVector2(), pos.ToVector2(), true)
+                <= Math.Pow(inputSub.Radius + inputSub.Unit.BoundingRadius + extraRadius, 2);
         }
 
         #endregion
