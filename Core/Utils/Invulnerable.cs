@@ -70,7 +70,7 @@ namespace LeagueSharp.SDK.Utils
                                 CheckFunction = (target, type) => target.HealthPercent <= 5
                             },
                         new InvulnerableEntry("JudicatorIntervention") { IsShield = true },
-                        new InvulnerableEntry("FioraW") { ChampionName = "Fiora" },
+                        new InvulnerableEntry("FioraW") { ChampionName = "Fiora", IsShield = true },
                         new InvulnerableEntry("JaxCounterStrike")
                             { ChampionName = "Jax", IsShield = true, DamageType = DamageType.Physical },
                         new InvulnerableEntry("BlackShield") { IsShield = true, DamageType = DamageType.Magical },
@@ -78,6 +78,7 @@ namespace LeagueSharp.SDK.Utils
                         new InvulnerableEntry("SivirE") { ChampionName = "Sivir", IsShield = true },
                         new InvulnerableEntry("NocturneShroudofDarkness") { ChampionName = "Nocturne", IsShield = true },
                         new InvulnerableEntry("malzaharpassiveshield") { ChampionName = "Malzahar", IsShield = true },
+                        new InvulnerableEntry("OlafRagnarock") { ChampionName = "Olaf", IsShield = true },
                         new InvulnerableEntry("KindredrNoDeathBuff")
                             {
                                 ChampionName = "Kindred", MinHealthPercent = 10,
