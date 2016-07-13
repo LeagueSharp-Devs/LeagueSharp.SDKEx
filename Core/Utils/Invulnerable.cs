@@ -78,7 +78,14 @@ namespace LeagueSharp.SDK.Utils
                         new InvulnerableEntry("SivirE") { ChampionName = "Sivir", IsShield = true },
                         new InvulnerableEntry("NocturneShroudofDarkness") { ChampionName = "Nocturne", IsShield = true },
                         new InvulnerableEntry("malzaharpassiveshield") { ChampionName = "Malzahar", IsShield = true },
-                        new InvulnerableEntry("OlafRagnarock") { ChampionName = "Olaf", IsShield = true },
+                        new InvulnerableEntry("OlafRagnarock")
+                            {
+                                ChampionName = "Olaf", IsShield = true,
+                                CheckFunction =
+                                    (target, type) =>
+                                    GameObjects.Player.CountEnemyHeroesInRange(
+                                        GameObjects.Player.GetRealAutoAttackRange()) > 1
+                            },
                         new InvulnerableEntry("KindredrNoDeathBuff")
                             {
                                 ChampionName = "Kindred", MinHealthPercent = 10,
