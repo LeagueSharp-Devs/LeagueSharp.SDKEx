@@ -112,6 +112,9 @@ namespace LeagueSharp.SDK
                 case DamageScalingType.MaxMana:
                     origin = sourceScale.MaxMana;
                     break;
+                case DamageScalingType.BonusMana:
+                    origin = ((Obj_AI_Hero)sourceScale).BonusMana;
+                    break;
             }
 
             var dmg = origin
