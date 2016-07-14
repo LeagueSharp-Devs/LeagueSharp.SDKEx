@@ -641,15 +641,7 @@ namespace LeagueSharp.SDK
                             @base.HasBuff("leonasunlight")
                             && @base.GetBuff("leonasunlight").Caster.NetworkId != hero.NetworkId,
                             DamageType.Magical,
-                            (hero, @base) =>
-                                {
-                                    var lvl = ((Obj_AI_Hero)@base.GetBuff("leonasunlight").Caster).Level - 1;
-                                    if ((lvl / 2) % 1 > 0)
-                                    {
-                                        lvl -= 1;
-                                    }
-                                    return 20 + (15 * lvl / 2);
-                                });
+                            (hero, @base) => 15 + (5 * hero.Level));
                         AddPassiveAttack(
                             "Leona",
                             (hero, @base) => hero.HasBuff("LeonaShieldOfDaybreak"),
@@ -673,7 +665,7 @@ namespace LeagueSharp.SDK
                             "Lux",
                             (hero, @base) => @base.HasBuff("LuxIlluminatingFraulein"),
                             DamageType.Magical,
-                            (hero, @base) => 10 + (8 * hero.Level) + (0.2 * hero.TotalMagicalDamage));
+                            (hero, @base) => 10 + (10 * hero.Level) + (0.2 * hero.TotalMagicalDamage));
                         break;
                     case "Malphite":
                         AddPassiveAttack(
@@ -807,7 +799,7 @@ namespace LeagueSharp.SDK
                             "Poppy",
                             (hero, @base) => hero.HasBuff("PoppyPassiveBuff"),
                             DamageType.Magical,
-                            (hero, @base) => 10 + (10 * hero.Level));
+                            (hero, @base) => (10 * hero.Level));
                         break;
                     case "RekSai":
                         AddPassiveAttack(
