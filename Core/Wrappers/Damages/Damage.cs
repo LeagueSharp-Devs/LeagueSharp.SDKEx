@@ -656,18 +656,27 @@ namespace LeagueSharp.SDK
             double amount,
             DamageType damageType)
         {
+            var sourceHero = source as Obj_AI_Hero;
             var targetHero = target as Obj_AI_Hero;
 
-            if (source is Obj_AI_Hero)
+            if (source.HasBuff("sonapassivedebuff"))
+            {
+                amount *= 1
+                          - (0.25
+                             + (((Obj_AI_Hero)source.GetBuff("sonapassivedebuff").Caster).TotalMagicalDamage / 100
+                                * 0.04));
+            }
+
+            if (sourceHero != null)
             {
                 // Exhaust
-                if (source.HasBuff("SummonerExhaust"))
+                if (sourceHero.HasBuff("SummonerExhaust"))
                 {
                     amount *= 0.6;
                 }
 
                 // Urgot P
-                if (source.HasBuff("urgotentropypassive"))
+                if (sourceHero.HasBuff("urgotentropypassive"))
                 {
                     amount *= 0.85;
                 }
@@ -682,7 +691,7 @@ namespace LeagueSharp.SDK
                     }
 
                     // Phantom Dancer
-                    var phantomdancerBuff = source.GetBuff("itemphantomdancerdebuff");
+                    var phantomdancerBuff = sourceHero.GetBuff("itemphantomdancerdebuff");
                     if (phantomdancerBuff != null && phantomdancerBuff.Caster.Compare(targetHero))
                     {
                         amount *= 0.88;

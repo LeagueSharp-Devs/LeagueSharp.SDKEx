@@ -184,22 +184,13 @@ namespace LeagueSharp.SDK
                             "Akali",
                             (hero, @base) => true,
                             DamageType.Magical,
-                            (hero, @base) =>
-                            (0.06 + (Math.Abs(hero.TotalMagicalDamage / 100) * 0.16667)) * hero.TotalAttackDamage);
+                            (hero, @base) => (0.06 + (hero.TotalMagicalDamage / 100 * 0.16667)) * hero.TotalAttackDamage);
                         AddPassiveAttack(
                             "Akali",
                             (hero, @base) => @base.HasBuff("AkaliMota"),
                             DamageType.Magical,
                             (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.Q, DamageStage.Detonation),
                             true);
-                        break;
-                    case "Alistar":
-                        AddPassiveAttack(
-                            "Alistar",
-                            (hero, @base) => hero.HasBuff("alistartrample"),
-                            DamageType.Magical,
-                            (hero, @base) =>
-                            (6 + hero.Level + (0.1 * hero.TotalMagicalDamage)) * (@base is Obj_AI_Minion ? 2 : 1));
                         break;
                     case "Ashe":
                         AddPassiveAttack(
@@ -613,16 +604,16 @@ namespace LeagueSharp.SDK
                     case "Kindred":
                         AddPassiveAttack(
                             "Kindred",
-                            (hero, @base) => hero.HasBuff("KindredLegendPassive"),
+                            (hero, @base) =>
+                            hero.HasBuff("KindredLegendPassive")
+                            && hero.GetBuffCount("kindredmarkofthekindredstackcounter") > 0,
                             DamageType.Physical,
                             (hero, @base) =>
                                 {
                                     var count = hero.GetBuffCount("kindredmarkofthekindredstackcounter");
-                                    return count > 0
-                                               ? Math.Min(
-                                                   (0.125 * count) * @base.Health,
-                                                   @base is Obj_AI_Minion ? 75 + (10 * count) : @base.MaxHealth)
-                                               : 0;
+                                    return Math.Min(
+                                        (0.125 * count) * @base.Health,
+                                        @base is Obj_AI_Minion ? 75 + (10 * count) : @base.MaxHealth);
                                 });
                         break;
                     case "KogMaw":
@@ -647,6 +638,12 @@ namespace LeagueSharp.SDK
                             (hero, @base) => hero.HasBuff("LeonaShieldOfDaybreak"),
                             DamageType.Magical,
                             (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.Q),
+                            true);
+                        AddPassiveAttack(
+                            "Leona",
+                            (hero, @base) => hero.HasBuff("leonarattackbuff"),
+                            DamageType.Magical,
+                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.R, DamageStage.Empowered),
                             true);
                         break;
                     case "Lucian":
@@ -799,7 +796,7 @@ namespace LeagueSharp.SDK
                             "Poppy",
                             (hero, @base) => hero.HasBuff("PoppyPassiveBuff"),
                             DamageType.Magical,
-                            (hero, @base) => (10 * hero.Level));
+                            (hero, @base) => 10 * hero.Level);
                         break;
                     case "RekSai":
                         AddPassiveAttack(
@@ -947,11 +944,7 @@ namespace LeagueSharp.SDK
                             (hero, @base) =>
                                 {
                                     var level = hero.Level;
-                                    return (6
-                                            + ((level < 4
-                                                    ? 7
-                                                    : (level < 6 ? 8 : (level < 7 ? 9 : (level < 15 ? 10 : 15))))
-                                               * level)) + (0.2 * hero.TotalMagicalDamage);
+                                    return (5 + ((level < 8 ? 10 : 15) * level)) + (0.2 * hero.TotalMagicalDamage);
                                 });
                         AddPassiveAttack(
                             string.Empty,
@@ -962,8 +955,7 @@ namespace LeagueSharp.SDK
                                     var caster = (Obj_AI_Hero)hero.GetBuff("SonaQProcAttacker").Caster;
                                     return
                                         new[] { 20, 30, 40, 50, 60 }[caster.Spellbook.GetSpell(SpellSlot.Q).Level - 1]
-                                        + (0.2 * caster.TotalMagicalDamage)
-                                        + new[] { 0, 10, 20, 30 }[caster.Spellbook.GetSpell(SpellSlot.R).Level];
+                                        + (0.2 * caster.TotalMagicalDamage);
                                 });
                         break;
                     case "TahmKench":
