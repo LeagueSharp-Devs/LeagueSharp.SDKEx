@@ -592,7 +592,7 @@
 
                 initialized = true;
                 Drawing.OnPreReset += CircleOnPreReset;
-                Drawing.OnPreReset += CircleOnPostReset;
+                Drawing.OnPostReset += CircleOnPostReset;
                 AppDomain.CurrentDomain.DomainUnload += CircleDispose;
             }
 

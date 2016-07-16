@@ -28,7 +28,7 @@ namespace LeagueSharp.SDK.UI.Skins
     /// <summary>
     ///     Default Skin Settings.
     /// </summary>
-    public class MenuSettings
+    public abstract class MenuSettings
     {
         #region Static Fields
 
@@ -71,6 +71,27 @@ namespace LeagueSharp.SDK.UI.Skins
             HoverColor = new ColorBGRA(255, 255, 255, 50);
             RootContainerColor = new ColorBGRA(0, 0, 0, (byte)(255 / 1.5f));
             TextColor = Color.White;
+
+            Drawing.OnPreReset += Drawing_OnPreReset;
+            Drawing.OnPostReset += Drawing_OnPostReset;
+        }
+
+        /// <summary>
+        ///     PreReset.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private static void Drawing_OnPreReset(System.EventArgs args)
+        {
+            Font.OnResetDevice();
+        }
+
+        /// <summary>
+        ///     PostReset.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private static void Drawing_OnPostReset(System.EventArgs args)
+        {
+            Font.OnLostDevice();
         }
 
         #endregion

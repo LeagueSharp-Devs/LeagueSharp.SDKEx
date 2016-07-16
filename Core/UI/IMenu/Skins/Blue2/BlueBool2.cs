@@ -31,15 +31,6 @@ namespace LeagueSharp.SDK.UI.Skins.Blue2
     /// </summary>
     public class BlueBool2 : BlueBool
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     The line.
-        /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>

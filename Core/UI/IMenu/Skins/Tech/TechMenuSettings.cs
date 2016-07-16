@@ -88,6 +88,28 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
             SliderColor = new ColorBGRA(163, 202, 241, 255);
         }
 
+        /// <summary>
+        ///     PreReset.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private static void Drawing_OnPreReset(System.EventArgs args)
+        {
+            Font.OnResetDevice();
+            FontCaption.OnResetDevice();
+            FontMenuSymbol.OnResetDevice();
+        }
+
+        /// <summary>
+        ///     PostReset.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private static void Drawing_OnPostReset(System.EventArgs args)
+        {
+            Font.OnLostDevice();
+            FontCaption.OnLostDevice();
+            FontMenuSymbol.OnLostDevice();
+        }
+
         #endregion
 
         #region Public Properties

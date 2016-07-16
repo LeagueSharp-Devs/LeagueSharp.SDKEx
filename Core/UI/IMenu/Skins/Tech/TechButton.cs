@@ -179,6 +179,22 @@ namespace LeagueSharp.SDK.UI.Skins.Tech
         }
 
         /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPreReset()
+        {
+            Line.OnLostDevice();
+        }
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPostReset()
+        {
+            Line.OnResetDevice();
+        }
+
+        /// <summary>
         ///     Gets the width of the <see cref="MenuButton" />
         /// </summary>
         /// <returns>

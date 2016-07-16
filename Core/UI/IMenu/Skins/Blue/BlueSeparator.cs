@@ -87,6 +87,22 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
         }
 
         /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPreReset()
+        {
+            // Do nothing.
+        }
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPostReset()
+        {
+            // Do nothing.
+        }
+
+        /// <summary>
         ///     Calculates the Width of an AMenuComponent
         /// </summary>
         /// <returns>

@@ -99,6 +99,8 @@ namespace LeagueSharp.SDK.UI
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnEndScene += this.Drawing_OnDraw;
             Game.OnWndProc += this.Game_OnWndProc;
+            Drawing.OnPreReset += this.Drawing_OnPreReset;
+            Drawing.OnPostReset += this.Drawing_OnPostReset;
             AppDomain.CurrentDomain.DomainUnload += (sender, args) => this.SaveSettings();
             AppDomain.CurrentDomain.ProcessExit += (sender, args) => this.SaveSettings();
         }
@@ -429,6 +431,42 @@ namespace LeagueSharp.SDK.UI
             foreach (var component in this.Menus)
             {
                 component.OnWndProc(keys);
+            }
+        }
+
+        /// <summary>
+        ///     On PreReset event.
+        /// </summary>
+        /// <param name="args">
+        ///     Event data
+        /// </param>
+        private void Drawing_OnPreReset(EventArgs args)
+        {
+            this.Sprite.OnLostDevice();
+            ThemeManager.Current.OnPreReset();
+            Utils.OnPreReset();
+
+            foreach (var component in this.Menus)
+            {
+                component.OnPreReset();
+            }
+        }
+
+        /// <summary>
+        ///     On PostReset event.
+        /// </summary>
+        /// <param name="args">
+        ///     Event data
+        /// </param>
+        private void Drawing_OnPostReset(EventArgs args)
+        {
+            this.Sprite.OnResetDevice();
+            ThemeManager.Current.OnPostReset();
+            Utils.OnPostReset();
+
+            foreach (var component in this.Menus)
+            {
+                component.OnPostReset();
             }
         }
 

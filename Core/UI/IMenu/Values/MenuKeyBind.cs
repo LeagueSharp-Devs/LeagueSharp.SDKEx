@@ -197,6 +197,22 @@ namespace LeagueSharp.SDK.UI
             // do nothing, we use the fast OnWndProc for keybinds
         }
 
+        /// <summary>
+        ///     Item PreReset callback.
+        /// </summary>
+        public override void PreReset()
+        {
+            this.Handler.OnPreReset();
+        }
+
+        /// <summary>
+        ///     Item PostReset callback.
+        /// </summary>
+        public override void PostReset()
+        {
+            this.Handler.OnPostReset();
+        }
+
         #endregion
 
         #region Explicit Interface Methods

@@ -13,7 +13,7 @@
         /// <summary>
         ///     The line.
         /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
+        public static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
 
         #endregion
 
@@ -34,6 +34,22 @@
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public static void OnPreReset()
+        {
+            Line.OnLostDevice();
+        }
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public static void OnPostReset()
+        {
+            Line.OnResetDevice();
+        }
 
         /// <summary>
         ///     Draws a Box

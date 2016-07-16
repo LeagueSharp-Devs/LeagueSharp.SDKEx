@@ -94,174 +94,6 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Draws a rounded Box. If Smoothing is true it will draw also a border.
-        /// </summary>
-        /// <param name="x">Position X</param>
-        /// <param name="y">Position Y</param>
-        /// <param name="w">Width</param>
-        /// <param name="h">Height</param>
-        /// <param name="radius">Radius</param>
-        /// <param name="color">Color</param>
-        /// <param name="bcolor">Border Color</param>
-        public static void DrawBoxBotRounded(
-            float x,
-            float y,
-            float w,
-            float h,
-            float radius,
-            Color color,
-            Color bcolor)
-        {
-            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color); // Center rect.
-            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color); // Top rect.
-            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color); // Bottom rect.
-            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color); // Left rect.
-            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color); // Right rect.
-
-            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);
-            // Top-left corner
-            Utils.DrawCircleFilled(
-                x + w - radius - 1,
-                y + radius,
-                radius - 1,
-                90,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                color); // Top-right corner
-            Utils.DrawCircleFilled(
-                x + w - radius - 1,
-                y + h - radius - 1,
-                radius - 1,
-                180,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                color); // Bottom-right corner
-            Utils.DrawCircleFilled(
-                x + radius,
-                y + h - radius - 1,
-                radius - 1,
-                270,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                color); // Bottom-left corner
-
-            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);
-            // Top-left corner
-            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);
-            // Top-right corner
-            Utils.DrawCircle(
-                x + w - radius - 1,
-                y + h - radius - 1,
-                radius,
-                180,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                bcolor); // Bottom-right corner
-            Utils.DrawCircle(
-                x + radius + 1,
-                y + h - radius - 1,
-                radius,
-                270,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                bcolor); // Bottom-left corner
-
-            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor); // Top line
-            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor); // Bottom line
-            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor); // Left line
-            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor); // Right line
-        }
-
-        /// <summary>
-        ///     Draws a rounded Box. If Smoothing is true it will draw also a border.
-        /// </summary>
-        /// <param name="x">Position X</param>
-        /// <param name="y">Position Y</param>
-        /// <param name="w">Width</param>
-        /// <param name="h">Height</param>
-        /// <param name="radius">Radius</param>
-        /// <param name="color">Color</param>
-        /// <param name="bcolor">Border Color</param>
-        public static void DrawBoxTopRounded(
-            float x,
-            float y,
-            float w,
-            float h,
-            float radius,
-            Color color,
-            Color bcolor)
-        {
-            Utils.DrawBoxFilled(x + radius, y + radius, w - 2 * radius - 1, h - 2 * radius - 1, color); // Center rect.
-            Utils.DrawBoxFilled(x + radius, y + 1, w - 2 * radius - 1, radius - 1, color); // Top rect.
-            Utils.DrawBoxFilled(x + radius, y + h - radius - 1, w - 2 * radius - 1, radius, color); // Bottom rect.
-            Utils.DrawBoxFilled(x + 1, y + radius, radius - 1, h - 2 * radius - 1, color); // Left rect.
-            Utils.DrawBoxFilled(x + w - radius - 1, y + radius, radius, h - 2 * radius - 1, color); // Right rect.
-
-            Utils.DrawCircleFilled(x + radius, y + radius, radius - 1, 0, Utils.CircleType.Quarter, true, 16, color);
-            // Top-left corner
-            Utils.DrawCircleFilled(
-                x + w - radius - 1,
-                y + radius,
-                radius - 1,
-                90,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                color); // Top-right corner
-            Utils.DrawCircleFilled(
-                x + w - radius - 1,
-                y + h - radius - 1,
-                radius - 1,
-                180,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                color); // Bottom-right corner
-            Utils.DrawCircleFilled(
-                x + radius,
-                y + h - radius - 1,
-                radius - 1,
-                270,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                color); // Bottom-left corner
-
-            Utils.DrawCircle(x + radius + 1, y + radius + 1, radius, 0, Utils.CircleType.Quarter, true, 16, bcolor);
-            // Top-left corner
-            Utils.DrawCircle(x + w - radius - 1, y + radius + 1, radius, 90, Utils.CircleType.Quarter, true, 16, bcolor);
-            // Top-right corner
-            Utils.DrawCircle(
-                x + w - radius - 1,
-                y + h - radius - 1,
-                radius,
-                180,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                bcolor); // Bottom-right corner
-            Utils.DrawCircle(
-                x + radius + 1,
-                y + h - radius - 1,
-                radius,
-                270,
-                Utils.CircleType.Quarter,
-                true,
-                16,
-                bcolor); // Bottom-left corner
-
-            Utils.DrawLine(x + radius, y + 1, x + w - radius - 1, y + 1, 1, bcolor); // Top line
-            Utils.DrawLine(x + radius, y + h - 2, x + w - radius - 1, y + h - 2, 1, bcolor); // Bottom line
-            Utils.DrawLine(x + 1, y + radius, x + 1, y + h - radius - 1, 1, bcolor); // Left line
-            Utils.DrawLine(x + w - 2, y + radius, x + w - 2, y + h - radius - 1, 1, bcolor); // Right line
-        }
-
-        /// <summary>
         ///     Disposes any resources used in this handler.
         /// </summary>
         public override void Dispose()
@@ -474,6 +306,22 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
                 this.hasDragged = false;
                 this.dragging = false;
             }
+        }
+
+        /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPreReset()
+        {
+            Line.OnLostDevice();
+        }
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPostReset()
+        {
+            Line.OnResetDevice();
         }
 
         /// <summary>

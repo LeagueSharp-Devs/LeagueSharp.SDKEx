@@ -253,6 +253,22 @@ namespace LeagueSharp.SDK.UI
         }
 
         /// <summary>
+        ///     Item PreReset callback.
+        /// </summary>
+        public override void OnPreReset()
+        {
+            this.PreReset();
+        }
+
+        /// <summary>
+        ///     Item PostReset callback.
+        /// </summary>
+        public override void OnPostReset()
+        {
+            this.PostReset();
+        }
+
+        /// <summary>
         ///     Saves this instance.
         /// </summary>
         public override void Save()
@@ -268,6 +284,16 @@ namespace LeagueSharp.SDK.UI
         /// </summary>
         /// <param name="args"><see cref="WindowsKeys" /> data</param>
         public abstract void WndProc(WindowsKeys args);
+
+        /// <summary>
+        ///     Item PreReset callback.
+        /// </summary>
+        public abstract void PreReset();
+
+        /// <summary>
+        ///     Item PostReset callback.
+        /// </summary>
+        public abstract void PostReset();
 
         #endregion
 

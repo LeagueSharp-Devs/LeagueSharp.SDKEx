@@ -92,6 +92,16 @@ namespace LeagueSharp.SDK.UI.Skins
         /// </summary>
         void Draw();
 
+        /// <summary>
+        ///     PreReset.
+        /// </summary>
+        void OnPreReset();
+
+        /// <summary>
+        ///     PostReset.
+        /// </summary>
+        void OnPostReset();
+
         #endregion
     }
 }

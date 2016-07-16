@@ -164,6 +164,22 @@ namespace LeagueSharp.SDK.UI.Skins.Colored
         }
 
         /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPreReset()
+        {
+            // Do nothing.
+        }
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPostReset()
+        {
+            // Do nothing.
+        }
+
+        /// <summary>
         ///     Gets the width of the <see cref="MenuButton" />
         /// </summary>
         /// <returns>

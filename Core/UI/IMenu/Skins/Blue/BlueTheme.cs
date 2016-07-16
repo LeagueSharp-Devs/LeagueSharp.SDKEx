@@ -207,6 +207,22 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
             Line.End();
         }
 
+        /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public void OnPreReset()
+        {
+            Line.OnLostDevice();
+        }
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public void OnPostReset()
+        {
+            Line.OnResetDevice();
+        }
+
         #endregion
     }
 }

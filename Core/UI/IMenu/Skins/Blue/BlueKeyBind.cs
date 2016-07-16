@@ -266,6 +266,22 @@ namespace LeagueSharp.SDK.UI.Skins.Blue
         }
 
         /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPreReset()
+        {
+            Line.OnLostDevice();
+        }
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public override void OnPostReset()
+        {
+            Line.OnResetDevice();
+        }
+
+        /// <summary>
         ///     Gets the width of the MenuKeyBind
         /// </summary>
         /// <returns>The <see cref="int" /></returns>

@@ -207,6 +207,22 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
             Line.End();
         }
 
+        /// <summary>
+        ///     PreReset.
+        /// </summary>
+        public void OnPreReset()
+        {
+            Line.OnLostDevice();
+        }
+
+        /// <summary>
+        ///     PostReset.
+        /// </summary>
+        public void OnPostReset()
+        {
+            Line.OnResetDevice();
+        }
+
         #endregion
     }
 }

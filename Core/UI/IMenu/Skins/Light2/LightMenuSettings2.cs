@@ -65,6 +65,24 @@ namespace LeagueSharp.SDK.UI.Skins.Light2
             SliderColor = new ColorBGRA(163, 202, 241, 255);
         }
 
+        /// <summary>
+        ///     PreReset.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private static void Drawing_OnPreReset(System.EventArgs args)
+        {
+            FontCaption.OnResetDevice();
+        }
+
+        /// <summary>
+        ///     PostReset.
+        /// </summary>
+        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private static void Drawing_OnPostReset(System.EventArgs args)
+        {
+            FontCaption.OnLostDevice();
+        }
+
         #endregion
 
         #region Public Properties

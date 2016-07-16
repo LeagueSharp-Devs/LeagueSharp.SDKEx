@@ -43,6 +43,16 @@ namespace LeagueSharp.SDK.UI.Skins
         public abstract void OnWndProc(WindowsKeys args);
 
         /// <summary>
+        ///     PreReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public abstract void OnPreReset();
+
+        /// <summary>
+        ///     PostReset the <see cref="AMenuComponent" />.
+        /// </summary>
+        public abstract void OnPostReset();
+
+        /// <summary>
         ///     Calculates the width of this <see cref="AMenuComponent" />.
         /// </summary>
         /// <returns>

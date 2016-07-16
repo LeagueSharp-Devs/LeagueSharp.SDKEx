@@ -361,6 +361,34 @@ namespace LeagueSharp.SDK.UI
         }
 
         /// <summary>
+        ///     Menu PreReset callback.
+        /// </summary>
+        public override void OnPreReset()
+        {
+            this.Handler.OnPreReset();
+
+            // Pass OnPreReset on to children
+            foreach (var item in this.Components)
+            {
+                item.Value.OnPreReset();
+            }
+        }
+
+        /// <summary>
+        ///     Menu PostReset callback.
+        /// </summary>
+        public override void OnPostReset()
+        {
+            this.Handler.OnPostReset();
+
+            // Pass OnPostReset on to children
+            foreach (var item in this.Components)
+            {
+                item.Value.OnPostReset();
+            }
+        }
+
+        /// <summary>
         ///     Removes a menu component from this menu.
         /// </summary>
         /// <param name="component">

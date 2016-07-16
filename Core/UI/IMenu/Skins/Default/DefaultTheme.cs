@@ -189,6 +189,22 @@ namespace LeagueSharp.SDK.UI.Skins.Default
             Line.End();
         }
 
+        /// <summary>
+        ///     PreReset.
+        /// </summary>
+        public void OnPreReset()
+        {
+            Line.OnLostDevice();
+        }
+
+        /// <summary>
+        ///     PostReset.
+        /// </summary>
+        public void OnPostReset()
+        {
+            Line.OnResetDevice();
+        }
+
         #endregion
     }
 }

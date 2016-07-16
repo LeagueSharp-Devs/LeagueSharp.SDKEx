@@ -340,6 +340,16 @@ namespace LeagueSharp.SDK.UI
         public abstract void OnWndProc(WindowsKeys args);
 
         /// <summary>
+        ///     Component PreReset callback.
+        /// </summary>
+        public abstract void OnPreReset();
+
+        /// <summary>
+        ///     Component PostReset callback.
+        /// </summary>
+        public abstract void OnPostReset();
+
+        /// <summary>
         ///     Resets the width.
         /// </summary>
         public virtual void ResetWidth()

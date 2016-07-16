@@ -928,15 +928,6 @@
     /// </summary>
     public class VerticalColorSlider
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     The line.
-        /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
-
-        #endregion
-
         #region Fields
 
         /// <summary>
@@ -1342,13 +1333,13 @@
         /// </summary>
         private void DrawStyleBlue()
         {
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 var blue = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
                 var col = Color.FromArgb(this.mRgb.R, this.mRgb.G, blue);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -1356,7 +1347,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -1364,13 +1355,13 @@
         /// </summary>
         private void DrawStyleGreen()
         {
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 var green = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
                 var col = Color.FromArgb(this.mRgb.R, green, this.mRgb.B);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -1378,7 +1369,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -1388,13 +1379,13 @@
         {
             var hsl = new Hsl { S = 1, L = 1 };
 
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 hsl.H = 1.0d - Convert.ToDouble(iCx / (this.mHeight - 9d));
                 var col = Utilities.HslToRgb(hsl);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -1402,7 +1393,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -1412,13 +1403,13 @@
         {
             var hsl = new Hsl { H = this.mHsl.H, S = this.mHsl.S };
 
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 hsl.L = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
                 var col = Utilities.HslToRgb(hsl);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -1426,7 +1417,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -1434,13 +1425,13 @@
         /// </summary>
         private void DrawStyleRed()
         {
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 var red = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
                 var col = Color.FromArgb(red, this.mRgb.G, this.mRgb.B);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -1448,7 +1439,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -1458,13 +1449,13 @@
         {
             var hsl = new Hsl { H = this.mHsl.H, L = this.mHsl.L };
 
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 hsl.S = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
                 var col = Utilities.HslToRgb(hsl);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -1472,7 +1463,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -1579,15 +1570,6 @@
     /// </summary>
     public class VerticalAlphaSlider
     {
-        #region Static Fields
-
-        /// <summary>
-        ///     The line.
-        /// </summary>
-        private static readonly Line Line = new Line(Drawing.Direct3DDevice) { GLLines = true };
-
-        #endregion
-
         #region Fields
 
         /// <summary>
@@ -1993,13 +1975,13 @@
         /// </summary>
         private void DrawStyleBlue()
         {
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 var blue = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
                 var col = Color.FromArgb(this.mRgb.R, this.mRgb.G, blue);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -2007,7 +1989,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -2015,13 +1997,13 @@
         /// </summary>
         private void DrawStyleGreen()
         {
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 var green = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
                 var col = Color.FromArgb(this.mRgb.R, green, this.mRgb.B);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -2029,7 +2011,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -2039,13 +2021,13 @@
         {
             var hsl = new Hsl { S = 1, L = 1 };
 
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 hsl.H = 1.0d - Convert.ToDouble(iCx / (this.mHeight - 9d));
                 var col = Utilities.HslToRgb(hsl);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -2053,7 +2035,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -2063,13 +2045,13 @@
         {
             var hsl = new Hsl { H = this.mHsl.H, S = this.mHsl.S };
 
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 hsl.L = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
                 var col = Utilities.HslToRgb(hsl);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -2077,7 +2059,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -2085,13 +2067,13 @@
         /// </summary>
         private void DrawStyleRed()
         {
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 var red = Convert.ToInt32(255 - Math.Round(255 * Convert.ToDouble(iCx / (this.mHeight - 9d))));
                 var col = Color.FromArgb(red, this.mRgb.G, this.mRgb.B);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -2099,7 +2081,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>
@@ -2109,13 +2091,13 @@
         {
             var hsl = new Hsl { H = this.mHsl.H, L = this.mHsl.L };
 
-            Line.Begin();
+            Utils.Line.Begin();
             for (var iCx = 0; iCx <= this.mHeight - 9; iCx++)
             {
                 hsl.S = 1.0 - Convert.ToDouble(iCx / (this.mHeight - 9d));
                 var col = Utilities.HslToRgb(hsl);
 
-                Line.Draw(
+                Utils.Line.Draw(
                     new[]
                         {
                             new Vector2(this.Position.X + 11, this.Position.Y + iCx + 4),
@@ -2123,7 +2105,7 @@
                         },
                     col.ToSharpDxColor());
             }
-            Line.End();
+            Utils.Line.End();
         }
 
         /// <summary>

@@ -125,6 +125,22 @@ namespace LeagueSharp.SDK.UI
             this.Handler.OnWndProc(args);
         }
 
+        /// <summary>
+        ///     Boolean Item PreReset callback.
+        /// </summary>
+        public override void PreReset()
+        {
+            this.Handler.OnPreReset();
+        }
+
+        /// <summary>
+        ///     Boolean Item PreReset callback.
+        /// </summary>
+        public override void PostReset()
+        {
+            this.Handler.OnPostReset();
+        }
+
         #endregion
 
         #region Explicit Interface Methods
