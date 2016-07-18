@@ -37,8 +37,9 @@ namespace LeagueSharp.SDK.Utils
                 "illaoiw", "jaxempowertwo", "jaycehypercharge", "netherblade",
                 "leonashieldofdaybreak", "luciane", "meditate",
                 "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze",
-                "takedown", "reksaiq", "renektonpreexecute", "rengarq",
-                "rengarqemp", "riventricleave", "sejuaninorthernwinds",
+                "takedown", "aspectofthecougar", "reksaiq",
+                "renektonpreexecute", "rengarq", "rengarqemp",
+                "riventricleave", "sejuaninorthernwinds",
                 "shyvanadoubleattack", "shyvanadoubleattackdragon", "sivirw",
                 "talonnoxiandiplomacy", "blindingdart", "trundletrollsmash",
                 "vaynetumble", "vie", "volibearq", "monkeykingdoubleattack",
@@ -197,7 +198,7 @@ namespace LeagueSharp.SDK.Utils
         /// </returns>
         public static bool InAutoAttackRange(this AttackableUnit target)
         {
-            return target.IsValidTarget(target.GetRealAutoAttackRange());
+            return target.IsValidTarget() && target.Distance(GameObjects.Player) < target.GetRealAutoAttackRange();
         }
 
         /// <summary>

@@ -55,11 +55,6 @@ namespace LeagueSharp.SDK.Enumerations
         /// <summary>
         ///     Non Kill-able Minion Type.
         /// </summary>
-        NonKillableMinion,
-
-        /// <summary>
-        ///     Target Switch Type.
-        /// </summary>
-        TargetSwitch
+        NonKillableMinion
     }
 }
