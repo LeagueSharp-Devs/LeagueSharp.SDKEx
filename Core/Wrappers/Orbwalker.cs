@@ -252,7 +252,7 @@
             =>
                 GameObjects.Player.CanMove
                 && (!GameObjects.Player.IsCastingInterruptableSpell()
-                    || GameObjects.Player.IsCastingInterruptableSpell(true))
+                    || !GameObjects.Player.IsCastingInterruptableSpell(true))
                 && Variables.TickCount - this.lastAutoAttackOrderTick > 70 + Math.Min(60, Game.Ping)
                 && this.CanCancelAttack;
 
