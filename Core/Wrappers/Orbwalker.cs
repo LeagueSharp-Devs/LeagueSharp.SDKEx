@@ -223,10 +223,10 @@
                         break;
                 }
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
+                       && !GameObjects.Player.IsDashing()
                        && Variables.TickCount - this.lastAutoAttackOrderTick > 70 + Math.Min(60, Game.Ping)
                        && (!this.isStartAttack
-                           || Variables.TickCount + Game.Ping / 2 + 60
-                           >= this.LastAutoAttackTick + this.AttackDelay * 1000);
+                           || Variables.TickCount + 25 >= this.LastAutoAttackTick + this.AttackDelay * 1000);
             }
             private set
             {
@@ -240,7 +240,9 @@
                 {
                     this.isStartAttack = true;
                     this.isFinishAttack = false;
-                    this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
+                    this.LastAutoAttackTick = Variables.TickCount;
+                    this.lastAutoAttackOrderTick += 70 + Math.Min(60, Game.Ping) - 5;
+                    this.lastMovementOrderTick += Math.Max(0, this.mainMenu["advanced"]["delayMovement"] - 5);
                 }
             }
         }
@@ -274,7 +276,6 @@
                         Drawing.OnEndScene += this.OnEndScene;
                         GameObject.OnDelete += this.OnDelete;
                         Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
-                        Obj_AI_Base.OnPlayAnimation += this.OnPlayAnimation;
                         Spellbook.OnStopCast += this.OnStopCast;
                         Obj_AI_Base.OnDoCast += this.OnDoCast;
                         Obj_AI_Base.OnBuffAdd += this.OnBuffAdd;
@@ -292,6 +293,9 @@
                                 Obj_AI_Base.OnNewPath += this.RengarOnNewPath;
                                 Obj_AI_Base.OnPlayAnimation += this.RengarOnPlayAnimation;
                                 break;
+                            case "Riven":
+                                Obj_AI_Base.OnPlayAnimation += this.RivenOnPlayAnimation;
+                                break;
                         }
                     }
                     else
@@ -299,7 +303,6 @@
                         Drawing.OnEndScene -= this.OnEndScene;
                         GameObject.OnDelete -= this.OnDelete;
                         Obj_AI_Base.OnProcessSpellCast -= this.OnProcessSpellCast;
-                        Obj_AI_Base.OnPlayAnimation -= this.OnPlayAnimation;
                         Spellbook.OnStopCast -= this.OnStopCast;
                         Obj_AI_Base.OnDoCast -= this.OnDoCast;
                         Obj_AI_Base.OnBuffAdd -= this.OnBuffAdd;
@@ -314,6 +317,9 @@
                             case "Rengar":
                                 Obj_AI_Base.OnNewPath -= this.RengarOnNewPath;
                                 Obj_AI_Base.OnPlayAnimation -= this.RengarOnPlayAnimation;
+                                break;
+                            case "Riven":
+                                Obj_AI_Base.OnPlayAnimation -= this.RivenOnPlayAnimation;
                                 break;
                         }
                     }
@@ -396,7 +402,7 @@
                 }
 
                 return finishAtk
-                       || Variables.TickCount + Game.Ping / 2
+                       || Variables.TickCount
                        >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
             }
         }
@@ -419,7 +425,7 @@
 
                     if (hero.IsValidTarget() && hero.DistanceToPlayer() < hero.GetRealAutoAttackRange() + 150
                         && hero.Distance(Game.CursorPos) < Game.CursorPos.DistanceToPlayer()
-                        && hero.Distance(Game.CursorPos) < 300)
+                        && hero.Distance(Game.CursorPos) < 250)
                     {
                         return
                             Movement.GetPrediction(
@@ -800,53 +806,6 @@
             }
         }
 
-        private void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (!sender.IsMe)
-            {
-                return;
-            }
-
-            var delay = 0;
-            switch (GameObjects.Player.ChampionName)
-            {
-                case "Graves":
-                    if (args.Animation == "Spell3")
-                    {
-                        delay = 300;
-                    }
-                    break;
-                case "Riven":
-                    if (args.Animation.Contains("Spell1"))
-                    {
-                        delay = args.Animation.EndsWith("c") ? 400 : 300;
-                    }
-                    break;
-                case "Vayne":
-                    if (args.Animation == "Spell1")
-                    {
-                        delay = 300;
-                    }
-                    break;
-            }
-
-            if (delay == 0)
-            {
-                return;
-            }
-
-            DelayAction.Add(
-                delay,
-                () =>
-                    {
-                        Game.SendEmote(Emote.Dance);
-                        this.ResetSwingTimer();
-                        GameObjects.Player.IssueOrder(
-                            GameObjectOrder.MoveTo,
-                            GameObjects.Player.Position.Extend(Game.CursorPos, -10));
-                    });
-        }
-
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe)
@@ -865,7 +824,7 @@
             }
             else if (AutoAttack.IsAutoAttackReset(args.SData.Name) && !this.isRengarJumping)
             {
-                this.ResetSwingTimer();
+                DelayAction.Add(30, this.ResetSwingTimer);
             }
         }
 
@@ -927,6 +886,28 @@
             {
                 this.isRengarJumping = true;
                 this.InvokeActionOnAttack(null);
+            }
+        }
+
+        private void RivenOnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+        {
+            if (!sender.IsMe)
+            {
+                return;
+            }
+
+            if (args.Animation.Contains("Spell1") && this.ActiveMode != OrbwalkingMode.None)
+            {
+                DelayAction.Add(
+                    args.Animation.EndsWith("c") ? 380 : 285,
+                    () =>
+                        {
+                            Game.SendEmote(Emote.Dance);
+                            this.ResetSwingTimer();
+                            GameObjects.Player.IssueOrder(
+                                GameObjectOrder.MoveTo,
+                                GameObjects.Player.Position.Extend(Game.CursorPos, -10));
+                        });
             }
         }
 
@@ -1178,10 +1159,10 @@
                                                         - Variables.TickCount;
                                     var timeUntilAttackReady = this.orbwalk.LastAutoAttackTick
                                                                + (int)(this.orbwalk.AttackDelay * 1000)
-                                                               > Variables.TickCount + Game.Ping / 2 + 25
+                                                               > Variables.TickCount + 60
                                                                    ? this.orbwalk.LastAutoAttackTick
                                                                      + (int)(this.orbwalk.AttackDelay * 1000)
-                                                                     - (Variables.TickCount + Game.Ping / 2 + 25)
+                                                                     - (Variables.TickCount + 60)
                                                                    : 0;
                                     var timeToLandAttack = turretMinion.GetTimeToHit();
 
