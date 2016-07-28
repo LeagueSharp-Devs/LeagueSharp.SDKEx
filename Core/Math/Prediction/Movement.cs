@@ -326,7 +326,7 @@ namespace LeagueSharp.SDK
             if (ft)
             {
                 // Increase the delay due to the latency and server tick:
-                input.Delay += Game.Ping / 2000f + 0.06f;
+                input.Delay += Game.Ping / 2000f + 0.05f;
 
                 if (input.AoE)
                 {

@@ -238,12 +238,12 @@ namespace LeagueSharp.SDK
                             string.Empty,
                             (hero, @base) => @base.GetBuffCount("braummark") == 3,
                             DamageType.Magical,
-                            (hero, @base) => 32 + (8 * ((Obj_AI_Hero)@base.GetBuff("braummark").Caster).Level));
+                            (hero, @base) => 16 + 10 * ((Obj_AI_Hero)@base.GetBuff("braummark").Caster).Level);
                         AddPassiveAttack(
                             "Braum",
                             (hero, @base) => @base.HasBuff("braummarkstunreduction"),
                             DamageType.Magical,
-                            (hero, @base) => 6.4 + (1.6 * hero.Level));
+                            (hero, @base) => 3.2 + 2 * hero.Level);
                         break;
                     case "Caitlyn":
                         AddPassiveAttack(
