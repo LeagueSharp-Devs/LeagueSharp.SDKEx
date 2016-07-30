@@ -837,15 +837,17 @@ namespace LeagueSharp.SDK
                             (hero, @base) => hero.HasBuff("rivenpassiveaaboost"),
                             DamageType.Physical,
                             (hero, @base) =>
-                            (hero.Level < 3
-                                 ? 0.25
-                                 : (hero.Level < 6
-                                        ? 0.29167
-                                        : (hero.Level < 9
-                                               ? 0.3333
-                                               : (hero.Level < 12
-                                                      ? 0.375
-                                                      : (hero.Level < 15 ? 0.4167 : (hero.Level < 18 ? 0.4583 : 0.5))))))
+                            (hero.Level < 6
+                                ? 0.25
+                                : hero.Level < 9
+                                    ? 0.3
+                                    : hero.Level < 12
+                                        ? 0.35
+                                        : hero.Level < 15
+                                            ? 0.4
+                                            : hero.Level < 18
+                                                ? 0.45
+                                                : 0.5)
                             * hero.TotalAttackDamage);
                         break;
                     case "Rumble":
