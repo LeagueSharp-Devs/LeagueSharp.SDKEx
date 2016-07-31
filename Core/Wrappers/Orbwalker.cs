@@ -899,7 +899,7 @@
             if (args.Animation.Contains("Spell1") && this.ActiveMode != OrbwalkingMode.None)
             {
                 DelayAction.Add(
-                    args.Animation.EndsWith("c") ? 380 : 285,
+                    args.Animation.EndsWith("c") ? 350 + Game.Ping : 250 + Game.Ping,
                     () =>
                         {
                             Game.SendEmote(Emote.Dance);
