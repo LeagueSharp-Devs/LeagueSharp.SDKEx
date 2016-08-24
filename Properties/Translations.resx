@@ -2013,7 +2013,7 @@
     "Zilean": "\u6642\u5149\u5b88\u8b77\u8005-\u6975\u9748",
     "Zyra": "\u834a\u68d8\u6f2b\u904a\u8005-\u67b7\u863f",
     "Aurelion Sol": "\u661f\u969b\u6f2b\u904a\u8005-\u7ff1\u92b3\u9f8d\u7378",
-    "LeagueSharp": "\u004c\u0053\u0020\u0053\u0044\u004b\u0045\u0078\u0020\u737b\u7d66\u53f0\u7063\u4eba\u7528",
+    "LeagueSharp": "LeagueSharp SDK Ex \u4e2d\u6587",
     "Cancel": "\u53d6\u6d88",
     "ON": "\u958b",
     "OFF": "\u95dc",
@@ -3648,7 +3648,9 @@
     "Deep One Kassadin": "\u6d77\u5e95\u5169\u842c\u54e9 \u5361\u85a9\u4e01",
     "Pre-Void Kassadin": "\u865b\u7a7a\u524d\u4e16 \u5361\u85a9\u4e01",
     "Harbinger Kassadin": "\u865b\u7a7a\u9b54\u7532 \u5361\u85a9\u4e01",
-    "Cosmic Reaver Kassadin": "\u9280\u6cb3\u81f3\u5c0a \u5361\u85a9\u4e01"
+    "Cosmic Reaver Kassadin": "\u9280\u6cb3\u81f3\u5c0a \u5361\u85a9\u4e01",
+    "Magnet To Target (Melee)": "\u9b54\u6cd5\u653b\u64ca \u76ee\u6a19 (\u8fd1\u6230)",
+    "Limit Kite if Attack Speed >= 2.5": "\u9650\u5236\u98a8\u7b8f\u529f\u6483\u901f\u5ea6\u5927\u65bc 2.5",
     "Press a key": "\u9078\u64c7\u4f60\u8981\u8a2d\u5b9a\u7684\u6309\u9375",
     "Key": "\u6309\u9375"
 }
