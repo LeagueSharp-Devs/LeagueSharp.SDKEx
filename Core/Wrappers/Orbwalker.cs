@@ -98,14 +98,14 @@
             advanced.Add(new MenuSeparator("separatorMovement", "Movement"));
             advanced.Add(new MenuBool("movementMagnet", "Magnet To Target (Melee)"));
             advanced.Add(new MenuBool("movementRandomize", "Randomize Location", true));
-            advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 50, 0, 250));
+            advanced.Add(new MenuSlider("movementExtraHold", "Extra Hold Position", 100, 50, 250));
             advanced.Add(new MenuSlider("movementMaximumDistance", "Maximum Distance", 1100, 500, 1500));
             advanced.Add(new MenuBool("movementHighAS", "Limit Kite if Attack Speed >= 2.5", true));
 
             advanced.Add(new MenuSeparator("separatorDelay", "Delay"));
-            advanced.Add(new MenuSlider("delayMovement", "Movement", 100, 0, 500));
-            advanced.Add(new MenuSlider("delayWindup", "Windup", 60, 0, 200));
-            advanced.Add(new MenuSlider("delayFarm", "Farm", 30, 0, 200));
+            advanced.Add(new MenuSlider("delayMovement", "Movement", 100, 10, 500));
+            advanced.Add(new MenuSlider("delayWindup", "Windup", 60, 30, 200));
+            advanced.Add(new MenuSlider("delayFarm", "Farm", 30, 0, 160));
 
             advanced.Add(new MenuSeparator("separatorPrioritization", "Prioritization"));
             advanced.Add(new MenuBool("prioritizeFarm", "Farm Over Harass", true));
@@ -227,8 +227,8 @@
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
                        && Variables.TickCount - this.lastAutoAttackOrderTick > 70 + Math.Min(60, Game.Ping)
                        && (!this.isStartAttack
-                           || Variables.TickCount + Game.Ping / 2 + 60
-                           >= this.LastAutoAttackTick + this.AttackDelay * 1000);
+                           || Variables.TickCount + Game.Ping / 2 - this.LastAutoAttackTick + 25
+                           >= this.AttackDelay * 1000);
             }
             private set
             {
@@ -242,7 +242,9 @@
                 {
                     this.isStartAttack = true;
                     this.isFinishAttack = false;
-                    this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
+                    this.LastAutoAttackTick = Variables.TickCount;
+                    this.lastAutoAttackOrderTick -= 100 + Math.Min(60, Game.Ping);
+                    this.lastMovementOrderTick -= this.mainMenu["advanced"]["delayMovement"] + this.random.Next(15, 30);
                 }
             }
         }
@@ -276,10 +278,9 @@
                         Drawing.OnEndScene += this.OnEndScene;
                         GameObject.OnDelete += this.OnDelete;
                         Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
-                        Obj_AI_Base.OnPlayAnimation += this.OnPlayAnimation;
-                        Spellbook.OnStopCast += this.OnStopCast;
                         Obj_AI_Base.OnDoCast += this.OnDoCast;
                         Obj_AI_Base.OnBuffAdd += this.OnBuffAdd;
+                        Spellbook.OnStopCast += this.OnStopCast;
                         Game.OnUpdate += this.OnUpdate;
                         switch (GameObjects.Player.ChampionName)
                         {
@@ -287,12 +288,12 @@
                                 this.azirSoliders =
                                     GameObjects.AllyMinions.Where(
                                         i => i.Name == "AzirSoldier" && i.HasBuff("azirwspawnsound")).ToList();
-                                Obj_AI_Base.OnBuffAdd += this.AzirOnBuffAdd;
                                 Obj_AI_Base.OnPlayAnimation += this.AzirOnPlayAnimation;
+                                Obj_AI_Base.OnBuffAdd += this.AzirOnBuffAdd;
                                 break;
                             case "Rengar":
-                                Obj_AI_Base.OnNewPath += this.RengarOnNewPath;
                                 Obj_AI_Base.OnPlayAnimation += this.RengarOnPlayAnimation;
+                                Obj_AI_Base.OnNewPath += this.RengarOnNewPath;
                                 break;
                         }
                     }
@@ -301,21 +302,20 @@
                         Drawing.OnEndScene -= this.OnEndScene;
                         GameObject.OnDelete -= this.OnDelete;
                         Obj_AI_Base.OnProcessSpellCast -= this.OnProcessSpellCast;
-                        Obj_AI_Base.OnPlayAnimation -= this.OnPlayAnimation;
-                        Spellbook.OnStopCast -= this.OnStopCast;
                         Obj_AI_Base.OnDoCast -= this.OnDoCast;
                         Obj_AI_Base.OnBuffAdd -= this.OnBuffAdd;
+                        Spellbook.OnStopCast -= this.OnStopCast;
                         Game.OnUpdate -= this.OnUpdate;
                         switch (GameObjects.Player.ChampionName)
                         {
                             case "Azir":
-                                Obj_AI_Base.OnBuffAdd -= this.AzirOnBuffAdd;
                                 Obj_AI_Base.OnPlayAnimation -= this.AzirOnPlayAnimation;
+                                Obj_AI_Base.OnBuffAdd -= this.AzirOnBuffAdd;
                                 this.azirSoliders = new List<Obj_AI_Minion>();
                                 break;
                             case "Rengar":
-                                Obj_AI_Base.OnNewPath -= this.RengarOnNewPath;
                                 Obj_AI_Base.OnPlayAnimation -= this.RengarOnPlayAnimation;
+                                Obj_AI_Base.OnNewPath -= this.RengarOnNewPath;
                                 break;
                         }
                     }
@@ -371,7 +371,7 @@
                     return finishAtk;
                 }
 
-                var extraWindUp = this.mainMenu["advanced"]["delayWindup"] + 25;
+                var extraWindUp = this.mainMenu["advanced"]["delayWindup"] + 30;
                 switch (GameObjects.Player.ChampionName)
                 {
                     case "Jinx":
@@ -388,13 +388,13 @@
                 if (this.mainMenu["advanced"]["movementHighAS"] && (this.AttackDelay <= 1 / 2.5f)
                     && this.countAutoAttack % 2 != 0)
                 {
-                    extraWindUp = this.random.Next(100, 200);
+                    extraWindUp += this.random.Next(250, 350);
                     finishAtk = false;
                 }
 
                 return finishAtk
-                       || Variables.TickCount + Game.Ping / 2
-                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
+                       || Variables.TickCount + Game.Ping / 2 - this.LastAutoAttackTick
+                       >= GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
             }
         }
 
@@ -415,7 +415,7 @@
                     var hero = this.LastTarget as Obj_AI_Hero;
 
                     if (hero.InAutoAttackRange() && hero.Distance(Game.CursorPos) < Game.CursorPos.DistanceToPlayer()
-                        && hero.Distance(Game.CursorPos) < 300)
+                        && hero.Distance(Game.CursorPos) < 250)
                     {
                         this.meleeAttack.Range = hero.GetRealAutoAttackRange();
                         this.meleeAttack.Delay = GameObjects.Player.BasicAttack.SpellCastTime;
@@ -483,20 +483,24 @@
         public void Move(Vector3 position)
         {
             if (!position.IsValid() || !this.CanMove
-                || Variables.TickCount - this.lastMovementOrderTick < this.mainMenu["advanced"]["delayMovement"])
+                || Variables.TickCount - this.lastMovementOrderTick <= this.mainMenu["advanced"]["delayMovement"])
             {
                 return;
             }
 
-            if (position.Distance(GameObjects.Player.Position) < this.HoldRadius)
+            var posPlayer = GameObjects.Player.ServerPosition;
+
+            if (position.Distance(posPlayer) < GameObjects.Player.BoundingRadius)
             {
-                if (GameObjects.Player.Path.Length > 0)
+                position = posPlayer.Extend(position, GameObjects.Player.BoundingRadius + this.random.Next(0, 50));
+            }
+
+            if (position.Distance(GameObjects.Player.Position) <= this.HoldRadius)
+            {
+                if (GameObjects.Player.Path.Length > 2)
                 {
                     var eventStopArgs = new OrbwalkingActionArgs
-                                            {
-                                                Position = GameObjects.Player.ServerPosition, Process = true,
-                                                Type = OrbwalkingType.StopMovement
-                                            };
+                                            { Position = posPlayer, Process = true, Type = OrbwalkingType.StopMovement };
                     this.InvokeAction(eventStopArgs);
 
                     if (eventStopArgs.Process)
@@ -509,18 +513,11 @@
                 return;
             }
 
-            if (position.DistanceToPlayer() < GameObjects.Player.BoundingRadius)
+            if (position.Distance(posPlayer) > this.mainMenu["advanced"]["movementMaximumDistance"])
             {
-                position = GameObjects.Player.ServerPosition.Extend(
+                position = posPlayer.Extend(
                     position,
-                    GameObjects.Player.BoundingRadius + this.random.Next(0, 51));
-            }
-
-            if (position.DistanceToPlayer() > this.mainMenu["advanced"]["movementMaximumDistance"])
-            {
-                position = GameObjects.Player.ServerPosition.Extend(
-                    position,
-                    this.mainMenu["advanced"]["movementMaximumDistance"] + 25 - this.random.Next(0, 51));
+                    this.mainMenu["advanced"]["movementMaximumDistance"] + 25 - this.random.Next(0, 50));
             }
 
             if (this.mainMenu["advanced"]["movementRandomize"] && position.DistanceToPlayer() > 350)
@@ -640,18 +637,6 @@
 
         private void InvokeActionAfterAttack()
         {
-            if (Game.Ping <= 30)
-            {
-                DelayAction.Add(30 - Game.Ping, this.InvokeActionAfterAttackDelay);
-            }
-            else
-            {
-                this.InvokeActionAfterAttackDelay();
-            }
-        }
-
-        private void InvokeActionAfterAttackDelay()
-        {
             if (this.isFinishAttack)
             {
                 return;
@@ -714,11 +699,14 @@
 
             if (AutoAttack.IsAutoAttack(args.SData.Name))
             {
-                this.InvokeActionAfterAttack();
-            }
-            else if (AutoAttack.IsAutoAttackReset(args.SData.Name))
-            {
-                DelayAction.Add(30, this.ResetSwingTimer);
+                if (Game.Ping <= 30)
+                {
+                    DelayAction.Add(30 - Game.Ping, this.InvokeActionAfterAttack);
+                }
+                else
+                {
+                    this.InvokeActionAfterAttack();
+                }
             }
         }
 
@@ -794,53 +782,6 @@
             }
         }
 
-        private void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (!sender.IsMe)
-            {
-                return;
-            }
-
-            var delay = 0;
-            switch (GameObjects.Player.ChampionName)
-            {
-                case "Graves":
-                    if (args.Animation == "Spell3")
-                    {
-                        delay = 300;
-                    }
-                    break;
-                case "Riven":
-                    if (args.Animation.Contains("Spell1"))
-                    {
-                        delay = args.Animation.EndsWith("c") ? 400 : 300;
-                    }
-                    break;
-                case "Vayne":
-                    if (args.Animation == "Spell1")
-                    {
-                        delay = 300;
-                    }
-                    break;
-            }
-
-            if (delay == 0)
-            {
-                return;
-            }
-
-            DelayAction.Add(
-                delay,
-                () =>
-                    {
-                        Game.SendEmote(Emote.Dance);
-                        this.ResetSwingTimer();
-                        GameObjects.Player.IssueOrder(
-                            GameObjectOrder.MoveTo,
-                            GameObjects.Player.Position.Extend(Game.CursorPos, -10));
-                    });
-        }
-
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe)
@@ -859,7 +800,7 @@
             }
             else if (AutoAttack.IsAutoAttackReset(args.SData.Name) && !this.isRengarJumping)
             {
-                this.ResetSwingTimer();
+                DelayAction.Add(30, this.ResetSwingTimer);
             }
         }
 
@@ -906,7 +847,15 @@
             if (this.isRengarJumping && !args.IsDash)
             {
                 this.isRengarJumping = false;
-                this.InvokeActionAfterAttack();
+
+                if (Game.Ping <= 30)
+                {
+                    DelayAction.Add(30 - Game.Ping, this.InvokeActionAfterAttack);
+                }
+                else
+                {
+                    this.InvokeActionAfterAttack();
+                }
             }
         }
 
@@ -1130,18 +1079,18 @@
                             {
                                 var turretStarTick = Health.TurretAggroStartTick(turretMinion);
                                 var turretLandTick = turretStarTick + (int)(turret.AttackCastDelay * 1000)
-                                                     + 1000
-                                                     * Math.Max(
-                                                         0,
-                                                         (int)(turretMinion.Distance(turret) - turret.BoundingRadius))
-                                                     / (int)(turret.BasicAttack.MissileSpeed + 70);
+                                                     + (1000
+                                                        * Math.Max(
+                                                            0,
+                                                            (int)(turretMinion.Distance(turret) - turret.BoundingRadius))
+                                                        / (int)(turret.BasicAttack.MissileSpeed + 70));
 
                                 // calculate the HP before try to balance it
                                 for (float i = turretLandTick + 50;
-                                     i < turretLandTick + 3 * turret.AttackDelay * 1000 + 50;
-                                     i = i + turret.AttackDelay * 1000)
+                                     i < turretLandTick + (3 * turret.AttackDelay * 1000) + 50;
+                                     i = i + (turret.AttackDelay * 1000))
                                 {
-                                    var time = (int)i - Variables.TickCount + Game.Ping / 2;
+                                    var time = (int)i - Variables.TickCount + (Game.Ping / 2);
                                     var predHp =
                                         (int)
                                         Health.GetPrediction(
@@ -1168,25 +1117,25 @@
                                     var damage = (int)GameObjects.Player.GetAutoAttackDamage(turretMinion);
                                     var hits = hpLeftBeforeDie / damage;
                                     var timeBeforeDie = turretLandTick
-                                                        + (turretAttackCount + 1) * (int)(turret.AttackDelay * 1000)
+                                                        + ((turretAttackCount + 1) * (int)(turret.AttackDelay * 1000))
                                                         - Variables.TickCount;
                                     var timeUntilAttackReady = this.orbwalk.LastAutoAttackTick
                                                                + (int)(this.orbwalk.AttackDelay * 1000)
-                                                               > Variables.TickCount + Game.Ping / 2 + 25
+                                                               > (Variables.TickCount + (Game.Ping / 2) + 25)
                                                                    ? this.orbwalk.LastAutoAttackTick
                                                                      + (int)(this.orbwalk.AttackDelay * 1000)
-                                                                     - (Variables.TickCount + Game.Ping / 2 + 25)
+                                                                     - (Variables.TickCount + (Game.Ping / 2) + 25)
                                                                    : 0;
                                     var timeToLandAttack = turretMinion.GetTimeToHit();
 
                                     if (hits >= 1
-                                        && hits * this.orbwalk.AttackDelay * 1000 + timeUntilAttackReady
+                                        && (hits * this.orbwalk.AttackDelay * 1000) + timeUntilAttackReady
                                         + timeToLandAttack < timeBeforeDie)
                                     {
                                         farmUnderTurretMinion = turretMinion;
                                     }
                                     else if (hits >= 1
-                                             && hits * this.orbwalk.AttackDelay * 1000 + timeUntilAttackReady
+                                             && (hits * this.orbwalk.AttackDelay * 1000) + timeUntilAttackReady
                                              + timeToLandAttack > timeBeforeDie)
                                     {
                                         noneKillableMinion = turretMinion;
