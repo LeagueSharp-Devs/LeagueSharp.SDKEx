@@ -516,11 +516,6 @@ namespace LeagueSharp.SDK
                 {
                     return HitChance.VeryHigh;
                 }
-
-                if (GamePath.PathTracker.GetCurrentPath(hero).Time > 0.25d && input.Delay < 0.3f)
-                {
-                    return HitChance.VeryHigh;
-                }
             }
 
             if (distHeroToWaypoint > 0 && distHeroToWaypoint < 100)
@@ -541,6 +536,11 @@ namespace LeagueSharp.SDK
             }
 
             if (distHeroToFrom < 250 || hero.MoveSpeed < 250 || distFromToWaypoint < 250)
+            {
+                return HitChance.VeryHigh;
+            }
+
+            if (GamePath.PathTracker.GetCurrentPath(hero).Time > 0.25d)
             {
                 return HitChance.VeryHigh;
             }
