@@ -197,7 +197,7 @@ namespace LeagueSharp.SDK.Utils
         /// </returns>
         public static bool InAutoAttackRange(this AttackableUnit target)
         {
-            return target.IsValidTarget() && target.Distance(GameObjects.Player) < target.GetRealAutoAttackRange();
+            return target.IsValidTarget(target.GetRealAutoAttackRange());
         }
 
         /// <summary>

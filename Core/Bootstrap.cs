@@ -11,7 +11,6 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see http://www.gnu.org/licenses/
 // </copyright>
-
 namespace LeagueSharp.SDK
 {
     using System;
@@ -71,8 +70,8 @@ namespace LeagueSharp.SDK
 
             var fileTarget = new FileTarget
                                  {
-                                     FileName = Constants.LogDirectory + "\\${shortdate}.log",
-                                     Layout = "${longdate} ${uppercase:${level}} ${message}",
+                                     FileName = Constants.LogDirectory + "\\${shortdate}.log", 
+                                     Layout = "${longdate} ${uppercase:${level}} ${message}", 
                                      ReplaceFileContentsOnEachWrite = true
                                  };
 
@@ -81,34 +80,46 @@ namespace LeagueSharp.SDK
 
             var coloredConsoleTarget = new ColoredConsoleTarget
                                            {
-                                               UseDefaultRowHighlightingRules = false,
+                                               UseDefaultRowHighlightingRules = false, 
                                                Layout =
                                                    "${longdate}|${pad:padding=5:inner=${level:uppercase=true}}| ${logger}: ${message}"
                                            };
 
             coloredConsoleTarget.RowHighlightingRules.Add(
                 new ConsoleRowHighlightingRule
-                    { Condition = "Level == LogLevel.Trace", ForegroundColor = ConsoleOutputColor.DarkGray });
+                    {
+                       Condition = "Level == LogLevel.Trace", ForegroundColor = ConsoleOutputColor.DarkGray 
+                    });
 
             coloredConsoleTarget.RowHighlightingRules.Add(
                 new ConsoleRowHighlightingRule
-                    { Condition = "Level == LogLevel.Debug", ForegroundColor = ConsoleOutputColor.Gray });
+                    {
+                       Condition = "Level == LogLevel.Debug", ForegroundColor = ConsoleOutputColor.Gray 
+                    });
 
             coloredConsoleTarget.RowHighlightingRules.Add(
                 new ConsoleRowHighlightingRule
-                    { Condition = "Level == LogLevel.Info", ForegroundColor = ConsoleOutputColor.White });
+                    {
+                       Condition = "Level == LogLevel.Info", ForegroundColor = ConsoleOutputColor.White 
+                    });
 
             coloredConsoleTarget.RowHighlightingRules.Add(
                 new ConsoleRowHighlightingRule
-                    { Condition = "Level == LogLevel.Warn", ForegroundColor = ConsoleOutputColor.Yellow });
+                    {
+                       Condition = "Level == LogLevel.Warn", ForegroundColor = ConsoleOutputColor.Yellow 
+                    });
 
             coloredConsoleTarget.RowHighlightingRules.Add(
                 new ConsoleRowHighlightingRule
-                    { Condition = "Level == LogLevel.Error", ForegroundColor = ConsoleOutputColor.Red });
+                    {
+                       Condition = "Level == LogLevel.Error", ForegroundColor = ConsoleOutputColor.Red 
+                    });
 
             coloredConsoleTarget.RowHighlightingRules.Add(
                 new ConsoleRowHighlightingRule
-                    { Condition = "Level == LogLevel.Fatal", ForegroundColor = ConsoleOutputColor.Red });
+                    {
+                       Condition = "Level == LogLevel.Fatal", ForegroundColor = ConsoleOutputColor.Red 
+                    });
 
             config.AddTarget("coloredConsole", coloredConsoleTarget);
             config.AddRule(LogLevel.Trace, LogLevel.Fatal, coloredConsoleTarget);
