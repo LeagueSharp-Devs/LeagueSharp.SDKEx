@@ -54,6 +54,8 @@
 
         private readonly Menu mainMenu = new Menu("orbwalker", "Orbwalker");
 
+        private readonly Spell meleeAttack = new Spell(SpellSlot.Unknown, 0).SetTargetted(0, 0);
+
         private readonly Random random = new Random(DateTime.Now.Millisecond);
 
         private readonly OrbwalkerSelector selector;
@@ -265,7 +267,7 @@
             {
                 return this.enabled;
             }
-            set
+            private set
             {
                 if (this.enabled != value)
                 {
@@ -320,11 +322,6 @@
                 }
 
                 this.enabled = value;
-
-                if (this.mainMenu != null)
-                {
-                    this.mainMenu["enabledOption"].GetValue<MenuBool>().Value = this.enabled;
-                }
             }
         }
 
@@ -417,16 +414,13 @@
                 {
                     var hero = this.LastTarget as Obj_AI_Hero;
 
-                    if (hero.IsValidTarget() && hero.DistanceToPlayer() < hero.GetRealAutoAttackRange() + 150
-                        && hero.Distance(Game.CursorPos) < Game.CursorPos.DistanceToPlayer()
+                    if (hero.InAutoAttackRange() && hero.Distance(Game.CursorPos) < Game.CursorPos.DistanceToPlayer()
                         && hero.Distance(Game.CursorPos) < 300)
                     {
-                        return
-                            Movement.GetPrediction(
-                                hero,
-                                GameObjects.Player.BasicAttack.SpellCastTime,
-                                GameObjects.Player.GetRealAutoAttackRange(),
-                                GameObjects.Player.BasicAttack.MissileSpeed).UnitPosition;
+                        this.meleeAttack.Range = hero.GetRealAutoAttackRange();
+                        this.meleeAttack.Delay = GameObjects.Player.BasicAttack.SpellCastTime;
+                        this.meleeAttack.Speed = GameObjects.Player.BasicAttack.MissileSpeed;
+                        return this.meleeAttack.GetPrediction(hero).CastPosition;
                     }
                 }
 
