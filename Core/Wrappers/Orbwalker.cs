@@ -1342,7 +1342,10 @@
                 if (minions)
                 {
                     minionList = OrderEnemyMinions(minionList);
-                    minionList.AddRange(this.OrderJungleMinions(GameObjects.Jungle.Where(j => IsValidUnit(j)).ToList()));
+                    minionList.AddRange(
+                        this.OrderJungleMinions(
+                            GameObjects.Jungle.Where(
+                                j => IsValidUnit(j) && !j.CharData.BaseSkinName.Equals("gangplankbarrel")).ToList()));
                 }
 
                 if (attackWards)
@@ -1380,9 +1383,8 @@
                 if (this.orbwalk.mainMenu["advanced"]["attackBarrels"])
                 {
                     finalMinionList.AddRange(
-                        GameObjects.AttackableUnits.Where(
-                            j => IsValidUnit(j) && j.Health <= 1 && j.Name.Equals("Barrel"))
-                            .Cast<Obj_AI_Minion>()
+                        GameObjects.Jungle.Where(
+                            j => IsValidUnit(j) && j.Health <= 1 && j.CharData.BaseSkinName.Equals("gangplankbarrel"))
                             .ToList());
                 }
 
