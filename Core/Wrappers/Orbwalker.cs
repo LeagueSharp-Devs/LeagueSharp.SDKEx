@@ -74,7 +74,9 @@
 
         private Obj_AI_Base laneClearMinion;
 
-        private int lastAutoAttackOrderTick, lastMovementOrderTick;
+        private int lastAutoAttackTick, lastAutoAttackOrderTick, lastMovementOrderTick;
+
+        private AttackableUnit lastTarget;
 
         #endregion
 
@@ -227,7 +229,7 @@
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
                        && Variables.TickCount - this.lastAutoAttackOrderTick > 70 + Math.Min(60, Game.Ping)
                        && (!this.isStartAttack
-                           || Variables.TickCount + Game.Ping / 2 - this.LastAutoAttackTick + 25
+                           || Variables.TickCount + Game.Ping / 2 - this.lastAutoAttackTick + 25
                            >= this.AttackDelay * 1000);
             }
             private set
@@ -236,13 +238,13 @@
                 {
                     this.isStartAttack = false;
                     this.isFinishAttack = true;
-                    this.LastAutoAttackTick = this.lastAutoAttackOrderTick = this.lastMovementOrderTick = 0;
+                    this.lastAutoAttackTick = this.lastAutoAttackOrderTick = this.lastMovementOrderTick = 0;
                 }
                 else
                 {
                     this.isStartAttack = true;
                     this.isFinishAttack = false;
-                    this.LastAutoAttackTick = Variables.TickCount;
+                    this.lastAutoAttackTick = Variables.TickCount;
                     this.lastAutoAttackOrderTick -= 100 + Math.Min(60, Game.Ping);
                     this.lastMovementOrderTick -= this.mainMenu["advanced"]["delayMovement"] + this.random.Next(15, 30);
                 }
@@ -269,7 +271,7 @@
             {
                 return this.enabled;
             }
-            private set
+            internal set
             {
                 if (this.enabled != value)
                 {
@@ -336,16 +338,6 @@
         public AttackableUnit ForceTarget { get; set; }
 
         /// <summary>
-        ///     Gets the last auto attack tick.
-        /// </summary>
-        public int LastAutoAttackTick { get; private set; }
-
-        /// <summary>
-        ///     Gets the last target.
-        /// </summary>
-        public AttackableUnit LastTarget { get; private set; }
-
-        /// <summary>
         ///     Gets or sets a value indicating whether attack.
         /// </summary>
         public bool MovementState { get; set; } = true;
@@ -393,7 +385,7 @@
                 }
 
                 return finishAtk
-                       || Variables.TickCount + Game.Ping / 2 - this.LastAutoAttackTick
+                       || Variables.TickCount + Game.Ping / 2 - this.lastAutoAttackTick
                        >= GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
             }
         }
@@ -409,10 +401,10 @@
                     return this.ForceOrbwalkPoint.Value;
                 }
 
-                if (this.mainMenu["advanced"]["movementMagnet"] && this.LastTarget != null
+                if (this.mainMenu["advanced"]["movementMagnet"] && this.lastTarget != null
                     && GameObjects.Player.IsMelee() && this.ActiveMode == OrbwalkingMode.Combo)
                 {
-                    var hero = this.LastTarget as Obj_AI_Hero;
+                    var hero = this.lastTarget as Obj_AI_Hero;
 
                     if (hero.InAutoAttackRange() && hero.Distance(Game.CursorPos) < Game.CursorPos.DistanceToPlayer()
                         && hero.Distance(Game.CursorPos) < 250)
@@ -463,7 +455,7 @@
             {
                 this.isStartAttack = false;
                 this.lastAutoAttackOrderTick = Variables.TickCount;
-                this.LastTarget = eventArgs.Target;
+                this.lastTarget = eventArgs.Target;
             }
         }
 
@@ -642,14 +634,14 @@
                 return;
             }
 
-            this.InvokeAction(new OrbwalkingActionArgs { Target = this.LastTarget, Type = OrbwalkingType.AfterAttack });
+            this.InvokeAction(new OrbwalkingActionArgs { Target = this.lastTarget, Type = OrbwalkingType.AfterAttack });
             this.isFinishAttack = true;
         }
 
         private void InvokeActionOnAttack(AttackableUnit target)
         {
             this.CanAttack = false;
-            var unit = target ?? this.LastTarget;
+            var unit = target ?? this.lastTarget;
 
             if (unit == null)
             {
@@ -657,7 +649,7 @@
             }
 
             this.countAutoAttack++;
-            this.LastTarget = unit;
+            this.lastTarget = unit;
             this.InvokeAction(new OrbwalkingActionArgs { Target = unit, Type = OrbwalkingType.OnAttack });
         }
 
@@ -680,9 +672,9 @@
             {
                 this.laneClearMinion = null;
             }
-            else if (sender.Compare(this.LastTarget))
+            else if (sender.Compare(this.lastTarget))
             {
-                this.LastTarget = null;
+                this.lastTarget = null;
             }
             else if (sender.Compare(this.ForceTarget))
             {
@@ -819,12 +811,12 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.LastTarget != null && !this.LastTarget.IsValidTarget())
+            if (this.lastTarget != null && !this.lastTarget.IsValidTarget())
             {
-                this.LastTarget = null;
+                this.lastTarget = null;
             }
 
-            if (!this.CanMove && this.LastTarget == null)
+            if (!this.CanMove && this.lastTarget == null)
             {
                 this.isFinishAttack = true;
             }
@@ -1119,10 +1111,10 @@
                                     var timeBeforeDie = turretLandTick
                                                         + ((turretAttackCount + 1) * (int)(turret.AttackDelay * 1000))
                                                         - Variables.TickCount;
-                                    var timeUntilAttackReady = this.orbwalk.LastAutoAttackTick
+                                    var timeUntilAttackReady = this.orbwalk.lastAutoAttackTick
                                                                + (int)(this.orbwalk.AttackDelay * 1000)
                                                                > (Variables.TickCount + (Game.Ping / 2) + 25)
-                                                                   ? this.orbwalk.LastAutoAttackTick
+                                                                   ? this.orbwalk.lastAutoAttackTick
                                                                      + (int)(this.orbwalk.AttackDelay * 1000)
                                                                      - (Variables.TickCount + (Game.Ping / 2) + 25)
                                                                    : 0;
