@@ -383,7 +383,7 @@
                 }
 
                 return finishAtk || Variables.TickCount + Game.Ping / 2
-                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindup;
+                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
             }
         }
 
