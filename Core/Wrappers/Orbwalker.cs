@@ -236,7 +236,6 @@
         public bool CanMove
             =>
                 GameObjects.Player.CanMove
-                && !this.CanAttack
                 && (!GameObjects.Player.IsCastingInterruptableSpell()
                     || !GameObjects.Player.IsCastingInterruptableSpell(true))
                 && Variables.TickCount - this.lastMovementOrderTick >= this.mainMenu["advanced"]["delayMovement"]
@@ -383,7 +382,8 @@
                     finishAtk = false;
                 }
 
-                return finishAtk;
+                return finishAtk || Variables.TickCount + Game.Ping / 2
+                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindup;
             }
         }
 
