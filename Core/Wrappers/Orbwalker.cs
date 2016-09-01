@@ -236,6 +236,7 @@
         public bool CanMove
             =>
                 GameObjects.Player.CanMove
+                && !this.CanAttack
                 && (!GameObjects.Player.IsCastingInterruptableSpell()
                     || !GameObjects.Player.IsCastingInterruptableSpell(true))
                 && Variables.TickCount - this.lastMovementOrderTick >= this.mainMenu["advanced"]["delayMovement"]
@@ -359,17 +360,9 @@
             {
                 var finishAtk = this.isFinishAttack;
 
-                if (!GameObjects.Player.CanCancelAutoAttack())
-                {
-                    return finishAtk;
-                }
-
                 var extraWindUp = this.mainMenu["advanced"]["delayWindup"].GetValue<MenuSlider>().Value;
                 switch (GameObjects.Player.ChampionName)
                 {
-                    case "Jinx":
-                        extraWindUp += 100;
-                        break;
                     case "Rengar":
                         if (GameObjects.Player.HasBuff("rengarqbase") || GameObjects.Player.HasBuff("rengarqemp"))
                         {
@@ -385,9 +378,9 @@
                     finishAtk = false;
                 }
 
-                return finishAtk
-                       || Variables.TickCount
-                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
+                return GameObjects.Player.CanCancelAutoAttack() || finishAtk;
+                       /*|| Variables.TickCount
+                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;*/
             }
         }
 
