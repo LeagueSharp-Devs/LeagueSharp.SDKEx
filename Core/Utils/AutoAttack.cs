@@ -43,7 +43,7 @@ namespace LeagueSharp.SDK.Utils
                 "talonnoxiandiplomacy", "blindingdart", "trundletrollsmash",
                 "vaynetumble", "vie", "volibearq", "monkeykingdoubleattack",
                 "xenzhaocombotarget", "yorickspectral",
-                "itemtitanichydracleave"
+                "itemtitanichydracleave", "asheq"
             };
 
         /// <summary>
