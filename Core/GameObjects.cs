@@ -451,7 +451,8 @@ namespace LeagueSharp.SDK
                     InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
                     JungleList.AddRange(
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(o => o.Team == GameObjectTeam.Neutral && o.Name != "WardCorpse"));
+                            .Where(
+                                o => o.Team == GameObjectTeam.Neutral && o.Name != "WardCorpse" && o.Name != "Barrel"));
                     WardsList.AddRange(
                         ObjectManager.Get<Obj_AI_Minion>().Where(o => o.GetMinionType().HasFlag(MinionTypes.Ward)));
                     ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
@@ -564,7 +565,7 @@ namespace LeagueSharp.SDK
                         }
                     }
                 }
-                else if (minion.Name != "WardCorpse")
+                else if (minion.Name != "WardCorpse" && minion.Name != "Barrel")
                 {
                     JungleList.Add(minion);
                     switch (minion.GetJungleType())

@@ -390,13 +390,14 @@ namespace LeagueSharp.SDK
         }
 
         /// <summary>
-        ///     Return whether the specific unit is melee
+        ///     Return whether the specific hero is melee
         /// </summary>
         /// <param name="unit">Extended unit</param>
         /// <returns>Returns if the unit is melee</returns>
-        public static bool IsMelee(this Obj_AI_Base unit)
+        public static bool IsMelee(this Obj_AI_Hero unit)
         {
-            return unit.IsMelee && unit.AttackRange < 500;
+            return unit.IsMelee
+                   && (unit.AttackRange < 500 || (unit.ChampionName == "Rengar" && unit.HasBuff("RengarPassiveBuff")));
         }
 
         /// <summary>
@@ -486,7 +487,7 @@ namespace LeagueSharp.SDK
             }
 
             return
-                (@from.IsValid() ? @from : GameObjects.Player.ServerPosition).DistanceSquared(
+                (from.IsValid() ? from : GameObjects.Player.ServerPosition).DistanceSquared(
                     @base?.ServerPosition ?? unit.Position) < range * range;
         }
 
