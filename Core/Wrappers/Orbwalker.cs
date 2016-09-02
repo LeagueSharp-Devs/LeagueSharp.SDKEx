@@ -407,9 +407,11 @@
                 {
                     var hero = this.LastTarget as Obj_AI_Hero;
 
-                    if (hero.IsValidTarget() && hero.DistanceToPlayer() < hero.GetRealAutoAttackRange() + 100
+                    if (hero != null && hero.IsValidTarget() && hero.Path.Length > 0
+                        && hero.DistanceToPlayer() > hero.GetRealAutoAttackRange() / 2
+                        && hero.DistanceToPlayer() < hero.GetRealAutoAttackRange() + 100
                         && hero.Distance(Game.CursorPos) < Game.CursorPos.DistanceToPlayer()
-                        && hero.Distance(Game.CursorPos) < 250)
+                        && hero.Distance(Game.CursorPos) < 300)
                     {
                         return
                             Movement.GetPrediction(
