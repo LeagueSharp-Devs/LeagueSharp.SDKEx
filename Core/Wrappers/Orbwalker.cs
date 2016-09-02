@@ -209,8 +209,8 @@
             {
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
                        && !GameObjects.Player.IsDashing()
-                       && Variables.TickCount - this.lastAutoAttackOrderTick > 70 + Math.Min(60, Game.Ping)
-                       && Variables.TickCount + Game.Ping / 2 + 25 >= this.LastAutoAttackTick + this.AttackDelay * 1000;
+                       && Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
+                       && Variables.TickCount - this.LastAutoAttackTick + Game.Ping / 2 + 25 >= this.AttackDelay * 1000;
             }
             private set
             {
@@ -222,7 +222,7 @@
                 else
                 {
                     this.isFinishAttack = false;
-                    this.LastAutoAttackTick = Variables.TickCount;
+                    this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
                     this.lastAutoAttackOrderTick -= 70 + Math.Min(60, Game.Ping);
                     this.lastMovementOrderTick -=
                         this.mainMenu["advanced"]["delayMovement"].GetValue<MenuSlider>().Value;
@@ -239,7 +239,7 @@
                 && (!GameObjects.Player.IsCastingInterruptableSpell()
                     || !GameObjects.Player.IsCastingInterruptableSpell(true))
                 && Variables.TickCount - this.lastMovementOrderTick >= this.mainMenu["advanced"]["delayMovement"]
-                && Variables.TickCount - this.lastAutoAttackOrderTick > 70 + Math.Min(60, Game.Ping)
+                && Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
                 && this.CanCancelAttack;
 
         /// <summary>
@@ -361,12 +361,15 @@
 
                 if (!GameObjects.Player.CanCancelAutoAttack())
                 {
-                    return finishAtk;
+                    return finishAtk || Variables.TickCount - this.LastAutoAttackTick + Game.Ping / 2 >= 100;
                 }
 
                 var extraWindUp = this.mainMenu["advanced"]["delayWindup"].GetValue<MenuSlider>().Value;
                 switch (GameObjects.Player.ChampionName)
                 {
+                    case "Jinx":
+                        extraWindUp += 100;
+                        break;
                     case "Rengar":
                         if (GameObjects.Player.HasBuff("rengarqbase") || GameObjects.Player.HasBuff("rengarqemp"))
                         {
@@ -382,8 +385,9 @@
                     finishAtk = false;
                 }
 
-                return finishAtk || Variables.TickCount + Game.Ping / 2
-                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
+                return finishAtk
+                       || Variables.TickCount - this.LastAutoAttackTick + Game.Ping / 2
+                       >= GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
             }
         }
 
@@ -448,6 +452,11 @@
             if (!eventArgs.Process)
             {
                 return;
+            }
+
+            if (GameObjects.Player.CanCancelAutoAttack())
+            {
+                this.isFinishAttack = false;
             }
 
             if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, eventArgs.Target))
@@ -676,7 +685,7 @@
             {
                 case "SonaPassiveReady":
                 case "GravesEGrit":
-                    this.ResetSwingTimer();
+                    DelayAction.Add(30, this.ResetSwingTimer);
                     break;
             }
         }
@@ -793,7 +802,8 @@
             {
                 this.InvokeActionOnAttack(args.Target);
             }
-            else if (AutoAttack.IsAutoAttackReset(args.SData.Name) && !this.isRengarJumping)
+
+            if (AutoAttack.IsAutoAttackReset(args.SData.Name) && !this.isRengarJumping)
             {
                 this.ResetSwingTimer();
             }
@@ -1083,9 +1093,11 @@
                             var hpLeftBeforeDie = 0;
                             var hpLeft = 0;
                             var turretAttackCount = 0;
-                            var turret = Health.GetAggroTurret(turretMinion);
+                            var turret = Health.GetAggroTurret(turretMinion) as Obj_AI_Turret;
 
-                            if (turret != null)
+                            if (turret != null
+                                && (turret.GetTurretType() == TurretType.TierOne
+                                    || turret.GetTurretType() == TurretType.TierTwo))
                             {
                                 var turretStarTick = Health.TurretAggroStartTick(turretMinion);
                                 var turretLandTick = turretStarTick + (int)(turret.AttackCastDelay * 1000)
@@ -1189,7 +1201,10 @@
                             return (from minion in turretMinions.Where(x => !Health.HasMinionAggro(x))
                                     let turret =
                                         GameObjects.AllyTurrets.FirstOrDefault(
-                                            x => x.IsValidTarget(950, false, minion.Position))
+                                            x =>
+                                            x.IsValidTarget(950, false, minion.Position)
+                                            && (x.GetTurretType() == TurretType.TierOne
+                                                || x.GetTurretType() == TurretType.TierTwo))
                                     where
                                         turret != null
                                         && (int)minion.Health % (int)turret.GetAutoAttackDamage(minion)
