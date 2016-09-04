@@ -209,23 +209,27 @@
             {
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
                        && !GameObjects.Player.IsDashing()
-                       && Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
-                       && Variables.TickCount - this.LastAutoAttackTick + Game.Ping / 2 + 25 >= this.AttackDelay * 1000;
+                       //&& Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
+                       && this.lastAutoAttackOrderTick - Variables.TickCount <= 0
+                       && Variables.TickCount + Game.Ping / 2 + 25 >= this.LastAutoAttackTick + this.AttackDelay * 1000;
             }
             private set
             {
                 if (value)
                 {
                     this.isFinishAttack = true;
-                    this.LastAutoAttackTick = this.lastAutoAttackOrderTick = this.lastMovementOrderTick = 0;
+                    //this.LastAutoAttackTick = this.lastAutoAttackOrderTick = this.lastMovementOrderTick= 0;
+                    this.LastAutoAttackTick =   0;
+                    LastTarget = null;
                 }
                 else
                 {
                     this.isFinishAttack = false;
                     this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
-                    this.lastAutoAttackOrderTick -= 70 + Math.Min(60, Game.Ping);
-                    this.lastMovementOrderTick -=
-                        this.mainMenu["advanced"]["delayMovement"].GetValue<MenuSlider>().Value;
+                    //this.lastAutoAttackOrderTick -= 70 + Math.Min(60, Game.Ping);
+                    //this.lastMovementOrderTick -=
+                     //  this.mainMenu["advanced"]["delayMovement"].GetValue<MenuSlider>().Value;
+                     this.lastMovementOrderTick = 0;
                 }
             }
         }
@@ -236,10 +240,10 @@
         public bool CanMove
             =>
                 GameObjects.Player.CanMove
-                && (!GameObjects.Player.IsCastingInterruptableSpell()
-                    || !GameObjects.Player.IsCastingInterruptableSpell(true))
+                && !GameObjects.Player.IsCastingInterruptableSpell(true)
                 && Variables.TickCount - this.lastMovementOrderTick >= this.mainMenu["advanced"]["delayMovement"]
-                && Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
+                //&& Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
+                && this.lastAutoAttackOrderTick-Variables.TickCount<=0
                 && this.CanCancelAttack;
 
         /// <summary>
@@ -361,7 +365,7 @@
 
                 if (!GameObjects.Player.CanCancelAutoAttack())
                 {
-                    return finishAtk || Variables.TickCount - this.LastAutoAttackTick + Game.Ping / 2 >= 100;
+                    return finishAtk || Variables.TickCount  + Game.Ping / 2 >= this.LastAutoAttackTick + 100;
                 }
 
                 var extraWindUp = this.mainMenu["advanced"]["delayWindup"].GetValue<MenuSlider>().Value;
@@ -386,8 +390,8 @@
                 }
 
                 return finishAtk
-                       || Variables.TickCount - this.LastAutoAttackTick + Game.Ping / 2
-                       >= GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
+                       || Variables.TickCount  + Game.Ping / 2
+                       >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
             }
         }
 
@@ -463,9 +467,13 @@
 
             if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, eventArgs.Target))
             {
-                this.lastAutoAttackOrderTick = Variables.TickCount;
+                //this.lastAutoAttackOrderTick = Variables.TickCount;
                 this.LastTarget = eventArgs.Target;
             }
+
+            //LastTarget = eventArgs.Target;
+            this.lastAutoAttackOrderTick = Variables.TickCount + 70 +Math.Min(60, Game.Ping);
+            //GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, eventArgs.Target);
         }
 
         /// <summary>
@@ -831,10 +839,10 @@
                 this.LastTarget = null;
             }
 
-            if (!this.CanMove && this.LastTarget == null)
+            /*if (!this.CanMove && this.LastTarget == null)
             {
                 this.isFinishAttack = true;
-            }
+            }*/
 
             if (GameObjects.Player.IsDead || MenuGUI.IsChatOpen || MenuGUI.IsShopOpen
                 || this.ActiveMode == OrbwalkingMode.None)
@@ -883,14 +891,14 @@
             if (args.Animation.Contains("Spell1") && this.ActiveMode != OrbwalkingMode.None)
             {
                 DelayAction.Add(
-                    args.Animation.EndsWith("c") ? 380 : 285,
+                    args.Animation.EndsWith("c") ? 383 : 281,
                     () =>
                         {
                             Game.SendEmote(Emote.Dance);
                             this.ResetSwingTimer();
                             GameObjects.Player.IssueOrder(
                                 GameObjectOrder.MoveTo,
-                                GameObjects.Player.Position.Extend(Game.CursorPos, -10));
+                                GameObjects.Player.Position.Extend(Game.CursorPos, -10), false);
                         });
             }
         }
