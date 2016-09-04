@@ -166,6 +166,12 @@ namespace LeagueSharp.SDK
                     case "Kalista":
                         dmgPhysical *= 0.9;
                         break;
+                    case "Kled":
+                        if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
+                        {
+                            dmgPhysical *= 0.8;
+                        }
+                        break;
                     case "Jhin":
                         dmgPhysical +=
                             Math.Round(
