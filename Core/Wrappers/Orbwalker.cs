@@ -217,7 +217,7 @@
             {
                 if (value)
                 {
-                    this.isFinishAttack = true;
+                    //this.isFinishAttack = true;
                     //this.LastAutoAttackTick = this.lastAutoAttackOrderTick = this.lastMovementOrderTick= 0;
                     this.LastAutoAttackTick =   0;
                     LastTarget = null;

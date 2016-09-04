@@ -156,6 +156,7 @@ namespace LeagueSharp.SDK
                 // Bonus Damage (Passive)
                 var passiveInfo = hero.GetPassiveDamageInfo(target);
                 dmgPassive += passiveInfo.Value;
+
                 if (passiveInfo.Override)
                 {
                     return dmgPassive;
@@ -167,7 +168,7 @@ namespace LeagueSharp.SDK
                         dmgPhysical *= 0.9;
                         break;
                     case "Kled":
-                        if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
+                        if (hero.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
                         {
                             dmgPhysical *= 0.8;
                         }
