@@ -66,13 +66,13 @@
 
         private bool enabled;
 
-        private bool isFinishAttack;
+        private bool isFinishAttack, isResetAttack;
 
         private bool isRengarJumping;
 
         private Obj_AI_Base laneClearMinion;
 
-        private int lastAutoAttackOrderTick, lastMovementOrderTick;
+        private int lastBlockOrderTick, lastMovementOrderTick;
 
         #endregion
 
@@ -208,27 +208,21 @@
             get
             {
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
-                       && !GameObjects.Player.IsDashing()
-                       //&& Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
-                       && this.lastAutoAttackOrderTick - Variables.TickCount <= 0
+                       && (!GameObjects.Player.IsDashing()|| isResetAttack)
+                       && this.lastBlockOrderTick - Variables.TickCount <= 0
                        && Variables.TickCount + Game.Ping / 2 + 25 >= this.LastAutoAttackTick + this.AttackDelay * 1000;
             }
             private set
             {
                 if (value)
                 {
-                    //this.isFinishAttack = true;
-                    //this.LastAutoAttackTick = this.lastAutoAttackOrderTick = this.lastMovementOrderTick= 0;
                     this.LastAutoAttackTick =   0;
                     LastTarget = null;
                 }
                 else
                 {
-                    this.isFinishAttack = false;
+                    this.isFinishAttack=this.isResetAttack = false;
                     this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
-                    //this.lastAutoAttackOrderTick -= 70 + Math.Min(60, Game.Ping);
-                    //this.lastMovementOrderTick -=
-                     //  this.mainMenu["advanced"]["delayMovement"].GetValue<MenuSlider>().Value;
                      this.lastMovementOrderTick = 0;
                 }
             }
@@ -242,8 +236,7 @@
                 GameObjects.Player.CanMove
                 && !GameObjects.Player.IsCastingInterruptableSpell(true)
                 && Variables.TickCount - this.lastMovementOrderTick >= this.mainMenu["advanced"]["delayMovement"]
-                //&& Variables.TickCount - this.lastAutoAttackOrderTick >= 70 + Math.Min(60, Game.Ping)
-                && this.lastAutoAttackOrderTick-Variables.TickCount<=0
+                && this.lastBlockOrderTick-Variables.TickCount<=0
                 && this.CanCancelAttack;
 
         /// <summary>
@@ -467,13 +460,10 @@
 
             if (GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, eventArgs.Target))
             {
-                //this.lastAutoAttackOrderTick = Variables.TickCount;
                 this.LastTarget = eventArgs.Target;
             }
 
-            //LastTarget = eventArgs.Target;
-            this.lastAutoAttackOrderTick = Variables.TickCount + 70 +Math.Min(60, Game.Ping);
-            //GameObjects.Player.IssueOrder(GameObjectOrder.AttackUnit, eventArgs.Target);
+            this.lastBlockOrderTick = Variables.TickCount + 70 +Math.Min(60, Game.Ping);
         }
 
         /// <summary>
@@ -694,7 +684,7 @@
             switch (args.Buff.DisplayName)
             {
                 case "SonaPassiveReady":
-                case "GravesEGrit":
+                    case "GravesEGrit":
                     DelayAction.Add(30, this.ResetSwingTimer);
                     break;
             }
@@ -816,6 +806,20 @@
             if (AutoAttack.IsAutoAttackReset(args.SData.Name) && !this.isRengarJumping)
             {
                 this.ResetSwingTimer();
+                switch (GameObjects.Player.ChampionName)
+                {
+                    case "Graves":
+                    case "Lucian":
+                        if (args.Slot == SpellSlot.E)
+                        {
+                            this.isResetAttack = true;
+                        }
+                        break;
+                    case "Vayne":
+                        if (args.Slot == SpellSlot.Q)
+                        { this.isResetAttack = true; }
+                        break;
+                }
             }
         }
 
@@ -838,11 +842,6 @@
             {
                 this.LastTarget = null;
             }
-
-            /*if (!this.CanMove && this.LastTarget == null)
-            {
-                this.isFinishAttack = true;
-            }*/
 
             if (GameObjects.Player.IsDead || MenuGUI.IsChatOpen || MenuGUI.IsShopOpen
                 || this.ActiveMode == OrbwalkingMode.None)
