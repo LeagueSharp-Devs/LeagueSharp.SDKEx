@@ -69,7 +69,22 @@ namespace LeagueSharp.SDK
                     hero.ChampionName) && Math.Abs(hero.Crit - 1) < float.Epsilon,
                 DamageType.Physical,
                 (hero, @base) =>
-                (hero.TotalAttackDamage * (hero.ChampionName == "Kalista" ? 0.9 : 1)) * hero.GetCritMultiplier());
+                    {
+                        double d = 1;
+                        switch (hero.ChampionName)
+                        {
+                            case "Kalista":
+                                d = 0.9;
+                                break;
+                            case "Kled":
+                                if (hero.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
+                                {
+                                    d = 0.8;
+                                }
+                                break;
+                        }
+                        return hero.TotalAttackDamage * d * hero.GetCritMultiplier();
+                    });
             AddPassiveAttack(
                 string.Empty,
                 (hero, @base) => Items.HasItem((int)ItemId.Blade_of_the_Ruined_King, hero),

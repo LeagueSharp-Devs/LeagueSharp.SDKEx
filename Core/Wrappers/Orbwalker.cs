@@ -66,7 +66,7 @@
 
         private bool enabled;
 
-        private bool isFinishAttack, isResetAttack;
+        private bool isFinishAttack, isDashResetAttack;
 
         private bool isRengarJumping;
 
@@ -208,7 +208,7 @@
             get
             {
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
-                       && (!GameObjects.Player.IsDashing()|| isResetAttack)
+                       && (!GameObjects.Player.IsDashing() || this.isDashResetAttack)
                        && this.lastBlockOrderTick - Variables.TickCount <= 0
                        && Variables.TickCount + Game.Ping / 2 + 25 >= this.LastAutoAttackTick + this.AttackDelay * 1000;
             }
@@ -216,14 +216,15 @@
             {
                 if (value)
                 {
-                    this.LastAutoAttackTick =   0;
-                    LastTarget = null;
+                    this.isFinishAttack = true;
+                    this.LastAutoAttackTick = this.lastBlockOrderTick = 0;
+                    this.LastTarget = null;
                 }
                 else
                 {
-                    this.isFinishAttack=this.isResetAttack = false;
+                    this.isFinishAttack = false;
                     this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
-                     this.lastMovementOrderTick = 0;
+                    this.lastMovementOrderTick = 0;
                 }
             }
         }
@@ -233,11 +234,9 @@
         /// </summary>
         public bool CanMove
             =>
-                GameObjects.Player.CanMove
-                && !GameObjects.Player.IsCastingInterruptableSpell(true)
+                GameObjects.Player.CanMove && !GameObjects.Player.IsCastingInterruptableSpell(true)
                 && Variables.TickCount - this.lastMovementOrderTick >= this.mainMenu["advanced"]["delayMovement"]
-                && this.lastBlockOrderTick-Variables.TickCount<=0
-                && this.CanCancelAttack;
+                && this.lastBlockOrderTick - Variables.TickCount <= 0 && this.CanCancelAttack;
 
         /// <summary>
         ///     Gets a value indicating whether this <see cref="Orbwalker" /> is enabled.
@@ -358,7 +357,7 @@
 
                 if (!GameObjects.Player.CanCancelAutoAttack())
                 {
-                    return finishAtk || Variables.TickCount  + Game.Ping / 2 >= this.LastAutoAttackTick + 100;
+                    return finishAtk || Variables.TickCount + Game.Ping / 2 >= this.LastAutoAttackTick + 100;
                 }
 
                 var extraWindUp = this.mainMenu["advanced"]["delayWindup"].GetValue<MenuSlider>().Value;
@@ -383,7 +382,7 @@
                 }
 
                 return finishAtk
-                       || Variables.TickCount  + Game.Ping / 2
+                       || Variables.TickCount + Game.Ping / 2
                        >= this.LastAutoAttackTick + GameObjects.Player.AttackCastDelay * 1000 + extraWindUp;
             }
         }
@@ -463,7 +462,7 @@
                 this.LastTarget = eventArgs.Target;
             }
 
-            this.lastBlockOrderTick = Variables.TickCount + 70 +Math.Min(60, Game.Ping);
+            this.lastBlockOrderTick = Variables.TickCount + 70 + Math.Min(60, Game.Ping);
         }
 
         /// <summary>
@@ -655,6 +654,7 @@
         private void InvokeActionAfterAttackDelay()
         {
             this.isFinishAttack = true;
+            this.isDashResetAttack = false;
             this.InvokeAction(new OrbwalkingActionArgs { Target = this.LastTarget, Type = OrbwalkingType.AfterAttack });
         }
 
@@ -684,7 +684,6 @@
             switch (args.Buff.DisplayName)
             {
                 case "SonaPassiveReady":
-                    case "GravesEGrit":
                     DelayAction.Add(30, this.ResetSwingTimer);
                     break;
             }
@@ -805,21 +804,23 @@
 
             if (AutoAttack.IsAutoAttackReset(args.SData.Name) && !this.isRengarJumping)
             {
-                this.ResetSwingTimer();
                 switch (GameObjects.Player.ChampionName)
                 {
                     case "Graves":
                     case "Lucian":
                         if (args.Slot == SpellSlot.E)
                         {
-                            this.isResetAttack = true;
+                            this.isDashResetAttack = true;
                         }
                         break;
                     case "Vayne":
                         if (args.Slot == SpellSlot.Q)
-                        { this.isResetAttack = true; }
+                        {
+                            this.isDashResetAttack = true;
+                        }
                         break;
                 }
+                this.ResetSwingTimer();
             }
         }
 
@@ -897,7 +898,8 @@
                             this.ResetSwingTimer();
                             GameObjects.Player.IssueOrder(
                                 GameObjectOrder.MoveTo,
-                                GameObjects.Player.Position.Extend(Game.CursorPos, -10), false);
+                                GameObjects.Player.Position.Extend(Game.CursorPos, -10),
+                                false);
                         });
             }
         }
