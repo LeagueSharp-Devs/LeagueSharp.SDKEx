@@ -66,7 +66,7 @@
 
         private bool enabled;
 
-        private bool isFinishAttack, isDashResetAttack;
+        private bool isFinishAttack;
 
         private bool isRengarJumping;
 
@@ -208,7 +208,6 @@
             get
             {
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
-                       && (!GameObjects.Player.IsDashing() || this.isDashResetAttack)
                        && this.lastBlockOrderTick - Variables.TickCount <= 0
                        && Variables.TickCount + Game.Ping / 2 + 25 >= this.LastAutoAttackTick + this.AttackDelay * 1000;
             }
@@ -216,8 +215,7 @@
             {
                 if (value)
                 {
-                    this.isFinishAttack = true;
-                    this.LastAutoAttackTick = this.lastBlockOrderTick = 0;
+                    this.LastAutoAttackTick = 0;
                     this.LastTarget = null;
                 }
                 else
@@ -501,10 +499,8 @@
                         return;
                     }
 
-                    if (GameObjects.Player.IssueOrder(GameObjectOrder.Stop, eventStopArgs.Position))
-                    {
-                        this.lastMovementOrderTick = Variables.TickCount - 70;
-                    }
+                    GameObjects.Player.IssueOrder(GameObjectOrder.Stop, eventStopArgs.Position);
+                    this.lastMovementOrderTick = Variables.TickCount - 70;
                 }
 
                 return;
@@ -517,11 +513,12 @@
                     GameObjects.Player.BoundingRadius + this.random.Next(0, 51));
             }
 
-            if (position.DistanceToPlayer() > this.mainMenu["advanced"]["movementMaximumDistance"])
+            var maximumDistance = this.mainMenu["advanced"]["movementMaximumDistance"].GetValue<MenuSlider>().Value;
+            if (position.DistanceToPlayer() > maximumDistance)
             {
                 position = GameObjects.Player.ServerPosition.Extend(
                     position,
-                    this.mainMenu["advanced"]["movementMaximumDistance"] + 25 - this.random.Next(0, 51));
+                    maximumDistance + 25 - this.random.Next(0, 51));
             }
 
             if (this.mainMenu["advanced"]["movementRandomize"] && position.DistanceToPlayer() > 350)
@@ -552,9 +549,12 @@
                 }
             }
 
-            if (angle < 60
-                    ? Variables.TickCount - this.lastMovementOrderTick < 70 + Math.Min(60, Game.Ping)
-                    : Variables.TickCount - this.lastMovementOrderTick < 60)
+            if (Variables.TickCount - this.lastMovementOrderTick < 70 + Math.Min(60, Game.Ping) && angle < 60)
+            {
+                return;
+            }
+
+            if (angle >= 60 && Variables.TickCount - this.lastMovementOrderTick < 60)
             {
                 return;
             }
@@ -568,10 +568,8 @@
                 return;
             }
 
-            if (GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventMoveArgs.Position))
-            {
-                this.lastMovementOrderTick = Variables.TickCount;
-            }
+            GameObjects.Player.IssueOrder(GameObjectOrder.MoveTo, eventMoveArgs.Position);
+            this.lastMovementOrderTick = Variables.TickCount;
         }
 
         /// <summary>
@@ -625,12 +623,7 @@
 
             if (solider != null && solider.IsAlly && solider.Name == "AzirSolider" && args.Animation == "Death")
             {
-                var index = this.azirSoliders.FindIndex(i => i.Compare(solider));
-
-                if (index != -1)
-                {
-                    this.azirSoliders.RemoveAt(index);
-                }
+                this.azirSoliders.RemoveAll(i => i.Compare(solider));
             }
         }
 
@@ -639,28 +632,34 @@
             this.OnAction?.Invoke(MethodBase.GetCurrentMethod().DeclaringType, e);
         }
 
-        private void InvokeActionAfterAttack()
+        private void InvokeActionAfterAttack(GameObject target)
         {
             if (Game.Ping <= 30)
             {
-                DelayAction.Add(30 - Game.Ping, this.InvokeActionAfterAttackDelay);
+                DelayAction.Add(30 - Game.Ping, () => this.InvokeActionAfterAttackDelay(target));
             }
             else
             {
-                this.InvokeActionAfterAttackDelay();
+                this.InvokeActionAfterAttackDelay(target);
             }
         }
 
-        private void InvokeActionAfterAttackDelay()
+        private void InvokeActionAfterAttackDelay(GameObject target)
         {
+            var unit = target as AttackableUnit;
+            var gTarget = unit != null && unit.IsValid ? unit : this.LastTarget;
+
+            if (!gTarget.Compare(this.LastTarget))
+            {
+                this.LastTarget = gTarget;
+            }
+
             this.isFinishAttack = true;
-            this.isDashResetAttack = false;
             this.InvokeAction(new OrbwalkingActionArgs { Target = this.LastTarget, Type = OrbwalkingType.AfterAttack });
         }
 
         private void InvokeActionOnAttack(GameObject target)
         {
-            this.CanAttack = false;
             var unit = target as AttackableUnit;
             var gTarget = unit != null && unit.IsValid ? unit : this.LastTarget;
 
@@ -669,8 +668,14 @@
                 return;
             }
 
+            this.CanAttack = false;
             this.countAutoAttack++;
-            this.LastTarget = gTarget;
+
+            if (!gTarget.Compare(this.LastTarget))
+            {
+                this.LastTarget = gTarget;
+            }
+
             this.InvokeAction(new OrbwalkingActionArgs { Target = gTarget, Type = OrbwalkingType.OnAttack });
         }
 
@@ -714,7 +719,12 @@
 
             if (AutoAttack.IsAutoAttack(args.SData.Name))
             {
-                this.InvokeActionAfterAttack();
+                this.InvokeActionAfterAttack(args.Target);
+            }
+
+            if (AutoAttack.IsAutoAttackReset(args.SData.Name))
+            {
+                DelayAction.Add(30, this.ResetSwingTimer);
             }
         }
 
@@ -804,22 +814,6 @@
 
             if (AutoAttack.IsAutoAttackReset(args.SData.Name) && !this.isRengarJumping)
             {
-                switch (GameObjects.Player.ChampionName)
-                {
-                    case "Graves":
-                    case "Lucian":
-                        if (args.Slot == SpellSlot.E)
-                        {
-                            this.isDashResetAttack = true;
-                        }
-                        break;
-                    case "Vayne":
-                        if (args.Slot == SpellSlot.Q)
-                        {
-                            this.isDashResetAttack = true;
-                        }
-                        break;
-                }
                 this.ResetSwingTimer();
             }
         }
@@ -839,11 +833,6 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.LastTarget != null && !this.LastTarget.IsValidTarget())
-            {
-                this.LastTarget = null;
-            }
-
             if (GameObjects.Player.IsDead || MenuGUI.IsChatOpen || MenuGUI.IsShopOpen
                 || this.ActiveMode == OrbwalkingMode.None)
             {
@@ -863,7 +852,7 @@
             if (this.isRengarJumping && !args.IsDash)
             {
                 this.isRengarJumping = false;
-                this.InvokeActionAfterAttack();
+                this.InvokeActionAfterAttack(null);
             }
         }
 
