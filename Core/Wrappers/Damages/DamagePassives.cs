@@ -1211,20 +1211,7 @@ namespace LeagueSharp.SDK
                     case "Yorick":
                         AddPassiveAttack(
                             "Yorick",
-                            (hero, @base) => hero.HasBuff("YorickUnholySymbiosis"),
-                            DamageType.Physical,
-                            (hero, @base) =>
-                            (0.05
-                             * GameObjects.Minions.Count(
-                                 g =>
-                                 g.Team == hero.Team
-                                 && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")
-                                     || (g.HasBuff("yorickunholysymbiosis")
-                                         && g.GetBuff("yorickunholysymbiosis").Caster.Compare(hero)))))
-                            * hero.TotalAttackDamage);
-                        AddPassiveAttack(
-                            "Yorick",
-                            (hero, @base) => hero.HasBuff("YorickSpectral"),
+                            (hero, @base) => hero.HasBuff("yorickqbuff"),
                             DamageType.Physical,
                             (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.Q),
                             true);
