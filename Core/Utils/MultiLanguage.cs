@@ -72,6 +72,10 @@
                 {
                     LoadLanguage("TraditionalChinese");
                 }
+                else if (selectLanguage.StartsWith("zh"))
+                {
+                    LoadLanguage("Chinese");
+                }
                 else
                 {
                     // ignore
