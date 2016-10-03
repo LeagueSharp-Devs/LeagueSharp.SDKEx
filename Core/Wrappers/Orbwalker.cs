@@ -208,21 +208,22 @@
             get
             {
                 return GameObjects.Player.CanAttack && !GameObjects.Player.IsCastingInterruptableSpell()
-                       && this.lastBlockOrderTick - Variables.TickCount <= 0
+                       && this.lastBlockOrderTick - Variables.TickCount < 0
                        && Variables.TickCount + Game.Ping / 2 + 25 >= this.LastAutoAttackTick + this.AttackDelay * 1000;
             }
             private set
             {
                 if (value)
                 {
-                    this.LastAutoAttackTick = 0;
                     this.LastTarget = null;
+                    this.LastAutoAttackTick = 0;
                 }
                 else
                 {
-                    this.isFinishAttack = false;
                     this.LastAutoAttackTick = Variables.TickCount - Game.Ping / 2;
+                    this.isFinishAttack = false;
                     this.lastMovementOrderTick = 0;
+                    this.countAutoAttack++;
                 }
             }
         }
@@ -233,8 +234,9 @@
         public bool CanMove
             =>
                 GameObjects.Player.CanMove && !GameObjects.Player.IsCastingInterruptableSpell(true)
-                && Variables.TickCount - this.lastMovementOrderTick >= this.mainMenu["advanced"]["delayMovement"]
-                && this.lastBlockOrderTick - Variables.TickCount <= 0 && this.CanCancelAttack;
+                && Variables.TickCount - this.lastMovementOrderTick
+                >= this.mainMenu["advanced"]["delayMovement"].GetValue<MenuSlider>().Value
+                && this.lastBlockOrderTick - Variables.TickCount < 0 && this.CanCancelAttack;
 
         /// <summary>
         ///     Gets a value indicating whether this <see cref="Orbwalker" /> is enabled.
@@ -252,7 +254,6 @@
                     if (value)
                     {
                         Drawing.OnEndScene += this.OnEndScene;
-                        GameObject.OnDelete += this.OnDelete;
                         Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
                         Spellbook.OnStopCast += this.OnStopCast;
                         Obj_AI_Base.OnDoCast += this.OnDoCast;
@@ -279,7 +280,6 @@
                     else
                     {
                         Drawing.OnEndScene -= this.OnEndScene;
-                        GameObject.OnDelete -= this.OnDelete;
                         Obj_AI_Base.OnProcessSpellCast -= this.OnProcessSpellCast;
                         Spellbook.OnStopCast -= this.OnStopCast;
                         Obj_AI_Base.OnDoCast -= this.OnDoCast;
@@ -351,13 +351,12 @@
         {
             get
             {
-                var finishAtk = this.isFinishAttack;
-
                 if (!GameObjects.Player.CanCancelAutoAttack())
                 {
-                    return finishAtk || Variables.TickCount + Game.Ping / 2 >= this.LastAutoAttackTick + 100;
+                    return Variables.TickCount + Game.Ping / 2 >= this.LastAutoAttackTick + 100;
                 }
 
+                var finishAtk = this.isFinishAttack;
                 var extraWindUp = this.mainMenu["advanced"]["delayWindup"].GetValue<MenuSlider>().Value;
                 switch (GameObjects.Player.ChampionName)
                 {
@@ -669,7 +668,6 @@
             }
 
             this.CanAttack = false;
-            this.countAutoAttack++;
 
             if (!gTarget.Compare(this.LastTarget))
             {
@@ -691,22 +689,6 @@
                 case "SonaPassiveReady":
                     DelayAction.Add(30, this.ResetSwingTimer);
                     break;
-            }
-        }
-
-        private void OnDelete(GameObject sender, EventArgs args)
-        {
-            if (sender.Compare(this.laneClearMinion))
-            {
-                this.laneClearMinion = null;
-            }
-            else if (sender.Compare(this.LastTarget))
-            {
-                this.LastTarget = null;
-            }
-            else if (sender.Compare(this.ForceTarget))
-            {
-                this.ForceTarget = null;
             }
         }
 

@@ -118,8 +118,8 @@ namespace LeagueSharp.SDK
             }
 
             var dmg = origin
-                      * (percent > 0 || percent < 0
-                             ? (percent > 0 ? percent : 0)
+                      * (percent > 0
+                             ? percent
                                + (spellBonus.ScalePer100Ap > 0
                                       ? source.TotalMagicalDamage / 100 * spellBonus.ScalePer100Ap
                                       : 0)

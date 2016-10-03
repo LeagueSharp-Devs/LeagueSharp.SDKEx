@@ -275,7 +275,7 @@ namespace LeagueSharp.SDK
 
                         var p = pos + input.RealRadius * direction;
 
-                        /*if (input.Type == SkillshotType.SkillshotLine)
+                        if (input.Type == SkillshotType.SkillshotLine)
                         {
                             var alpha = (input.From.ToVector2() - p).AngleBetween(a - b);
 
@@ -287,7 +287,7 @@ namespace LeagueSharp.SDK
 
                                 pos = cp1.DistanceSquared(pos) < cp2.DistanceSquared(pos) ? cp1 : cp2;
                             }
-                        }*/
+                        }
 
                         return new PredictionOutput
                                    {

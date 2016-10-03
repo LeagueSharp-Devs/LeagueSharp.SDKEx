@@ -77,7 +77,7 @@ namespace LeagueSharp.SDK
                                 d = 0.9;
                                 break;
                             case "Kled":
-                                if (hero.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
+                                if (@base is Obj_AI_Hero && hero.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
                                 {
                                     d = 0.8;
                                 }
@@ -636,8 +636,7 @@ namespace LeagueSharp.SDK
                             "KogMaw",
                             (hero, @base) => hero.HasBuff("KogMawBioArcaneBarrage"),
                             DamageType.Magical,
-                            (hero, @base) =>
-                            hero.GetSpellDamage(@base, SpellSlot.W) * (@base is Obj_AI_Minion ? 1 : 0.55),
+                            (hero, @base) => hero.GetSpellDamage(@base, SpellSlot.W),
                             true);
                         break;
                     case "Leona":
