@@ -62,14 +62,11 @@
         {
             try
             {
-                // leaguesharp
-                if (SandboxConfig.SelectedLanguage == "Chinese")
+                if (SandboxConfig.SelectedLanguage == "Traditional-Chinese" || SandboxConfig.SelectedLanguage == "zh-Hant")
                 {
-                    LoadLanguage("Chinese");
+                    LoadLanguage("TraditionalChinese");
                 }
-                
-                // playsharp
-                if (SandboxConfig.SelectedLanguage.StartsWith("zh"))
+                else if (SandboxConfig.SelectedLanguage == "Chinese" || SandboxConfig.SelectedLanguage == "zh-Hans")
                 {
                     LoadLanguage("Chinese");
                 }
