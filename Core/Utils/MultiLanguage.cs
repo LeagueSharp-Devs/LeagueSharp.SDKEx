@@ -62,19 +62,16 @@
         {
             try
             {
-                var selectLanguage = SandboxConfig.SelectedLanguage;
-
-                if (selectLanguage == "Chinese")
+                // leaguesharp
+                if (SandboxConfig.SelectedLanguage == "Chinese")
                 {
                     LoadLanguage("Chinese");
                 }
-                else if (selectLanguage == "Traditional-Chinese")
+                
+                // playsharp
+                if (SandboxConfig.SelectedLanguage.StartsWith("zh"))
                 {
-                    LoadLanguage("TraditionalChinese");
-                }
-                else
-                {
-                    // ignore
+                    LoadLanguage("Chinese");
                 }
             }
             catch (Exception ex)
