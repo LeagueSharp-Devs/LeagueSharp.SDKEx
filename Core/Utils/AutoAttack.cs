@@ -32,7 +32,7 @@ namespace LeagueSharp.SDK.Utils
         /// </summary>
         private static readonly string[] AttackResets =
             {
-                "asheq", "powerfist", "dariusnoxiantacticsonh", "masochism",
+                "powerfist", "dariusnoxiantacticsonh", "masochism",
                 "fiorae", "gangplankqwrapper", "garenq", "gravesmove",
                 "hecarimramp", "illaoiw", "jaxempowertwo", "jaycehypercharge",
                 "netherblade", "leonashieldofdaybreak", "luciane", "meditate",
@@ -42,8 +42,7 @@ namespace LeagueSharp.SDK.Utils
                 "shyvanadoubleattack", "shyvanadoubleattackdragon", "sivirw",
                 "talonnoxiandiplomacy", "blindingdart", "trundletrollsmash",
                 "vaynetumble", "vie", "volibearq", "monkeykingdoubleattack",
-                "xenzhaocombotarget", "yorickspectral",
-                "itemtitanichydracleave"
+                "xenzhaocombotarget", "yorickspectral", "itemtitanichydracleave"
             };
 
         /// <summary>
