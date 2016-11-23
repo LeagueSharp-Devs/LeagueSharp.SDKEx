@@ -80,7 +80,7 @@ namespace LeagueSharp.SDK
         /// </returns>
         public static InventorySlot GetWardSlot()
         {
-            var wardIds = new[] { 2049, 2045, 2301, 2302, 2303, 3711, 1408, 1409, 1410, 1411, 3932, 3340, 2043 };
+            var wardIds = new[] { 2049, 2045, 2301, 2302, 2303, 3711, 1408, 1409, 1410, 1411, 3932, 3340, 2043, 2055 };
             return (from wardId in wardIds
                     where CanUseItem(wardId)
                     select GameObjects.Player.InventoryItems.FirstOrDefault(slot => slot.Id == (ItemId)wardId))
