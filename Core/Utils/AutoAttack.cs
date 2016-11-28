@@ -74,8 +74,7 @@ namespace LeagueSharp.SDK.Utils
                 "monkeykingdoubleattack", "yorickspectralghoulbasicattack",
                 "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
                 "zyragraspingplantattack", "zyragraspingplantattack2",
-                "zyragraspingplantattackfire", "zyragraspingplantattack2fire",
-                "gravesautoattackrecoil"
+                "zyragraspingplantattackfire", "zyragraspingplantattack2fire"
             };
 
         /// <summary>
