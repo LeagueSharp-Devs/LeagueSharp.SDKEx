@@ -723,7 +723,7 @@
                 Render.Circle.DrawCircle(
                     GameObjects.Player.Position,
                     GameObjects.Player.GetRealAutoAttackRange(),
-                    Color.PaleGreen);
+                    Color.DeepSkyBlue);
             }
 
             if (this.mainMenu["drawings"]["drawExtraHoldPosition"]
