@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LeagueSharp.SDK</RootNamespace>
-    <AssemblyName>LeagueSharp.SDKEx</AssemblyName>
+    <AssemblyName>LeagueSharp.SDK</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
